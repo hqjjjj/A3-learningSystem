@@ -113,7 +113,7 @@ system_prompt="""
     "code_example": {
       "type": "code",
       "language": "python",
-      "content": "print('Hello World')",
+      "content": "content": "print(\"Hello World\")",
       "description": "代码功能说明及操作步骤..."
     }
   }
@@ -121,11 +121,14 @@ system_prompt="""
 注意事项：
 请严格按照JSON格式输出。输出内容必须以 { 开始，以 } 结束。即使某字段内容为空，
 也必须保留字段本身。
+特别注意：
+在 code_example 的 content 字段中，如果代码包含双引号 "，必须使用反斜杠转义为 \"
+另外，JSON 中任何地方都不能出现未转义的控制字符（包括换行、制表符等）。
 """
 
 USER_PROMPT_TABEL="""
 当前课程：
-{course}
+操作系统
 
 当前模块：
 {module}
@@ -214,8 +217,7 @@ USER_PROMPT_TABEL="""
 
 def user_prompt_build(user_input,topic):
     return USER_PROMPT_TABEL.format(
-          course=topic["course"],
-        module=topic["module"],
+        module=user_input["module"],
 
         topic_id=topic["id"],
         topic_name=topic["name"],
@@ -262,14 +264,6 @@ def user_prompt_build(user_input,topic):
     )
     
 def build_prompt(user_input,topic):
-    return [
-      {
-        "type":"system_prompt",
-        "content":system_prompt
-      },
-      {
-          "type":"user_prompt",
-          "content":  user_prompt_build(user_input,topic)
-      }
+    return system_prompt, user_prompt_build(user_input, topic)
      
-    ]
+    
