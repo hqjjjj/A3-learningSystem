@@ -1,0 +1,241 @@
+{
+  "course": "操作系统",
+  "module": "内存管理-分页机制",
+  "topics": [
+    {
+      "id": "os_mem_01",
+      "name": "地址空间基本概念",
+      "difficulty": "easy",
+      "prerequisites": [],
+      "learning_style": ["text"],
+      "content": {
+        "explanation": "地址空间是程序可访问的内存范围，分为逻辑地址空间和物理地址空间。",
+        "example": "程序中使用的变量地址属于逻辑地址，需要映射到物理内存。",
+        "summary": "逻辑地址需要转换为物理地址才能访问内存。"
+      },
+      "common_mistakes": [
+        "认为逻辑地址可以直接访问物理内存"
+      ],
+      "questions": [
+        {
+          "type": "choice",
+          "question": "逻辑地址需要经过什么才能访问物理内存？",
+          "options": ["编译器", "地址映射", "缓存", "寄存器"],
+          "answer": "地址映射",
+          "analysis": "逻辑地址必须通过地址转换机制映射到物理地址。"
+        }
+      ]
+    },
+    {
+      "id": "os_mem_02",
+      "name": "分页基本概念",
+      "difficulty": "easy",
+      "prerequisites": ["os_mem_01"],
+      "learning_style": ["text", "diagram"],
+      "content": {
+        "explanation": "分页是将内存划分为固定大小的页和页框。",
+        "example": "逻辑地址被分为页号和页内偏移。",
+        "summary": "分页实现离散分配，避免外部碎片。"
+      },
+      "common_mistakes": [
+        "混淆分页和分段"
+      ],
+      "questions": [
+        {
+          "type": "short",
+          "question": "分页的主要优点是什么？",
+          "answer": "避免外部碎片",
+          "analysis": "分页采用固定大小块分配，减少外部碎片。"
+        }
+      ]
+    },
+    {
+      "id": "os_mem_03",
+      "name": "地址结构（页号+偏移）",
+      "difficulty": "medium",
+      "prerequisites": ["os_mem_02"],
+      "learning_style": ["text"],
+      "content": {
+        "explanation": "逻辑地址由页号和页内偏移组成。",
+        "example": "64页 → 页号需要6位。",
+        "summary": "页号决定页，偏移决定页内位置。"
+      },
+      "common_mistakes": [
+        "不会计算位数"
+      ],
+      "questions": [
+        {
+          "type": "calculation",
+          "question": "64页系统中页号占多少位？",
+          "answer": "6位",
+          "analysis": "log2(64)=6"
+        }
+      ]
+    },
+    {
+      "id": "os_mem_04",
+      "name": "页表",
+      "difficulty": "medium",
+      "prerequisites": ["os_mem_03"],
+      "learning_style": ["diagram"],
+      "content": {
+        "explanation": "页表用于记录页号到页框号的映射。",
+        "example": "页号1 → 页框5",
+        "summary": "页表是地址转换核心结构。"
+      },
+      "common_mistakes": [
+        "认为页表存储完整地址"
+      ],
+      "questions": [
+        {
+          "type": "choice",
+          "question": "页表的作用是？",
+          "options": ["存储数据", "地址映射", "缓存数据", "管理CPU"],
+          "answer": "地址映射",
+          "analysis": "页表用于逻辑页到物理页框映射。"
+        }
+      ]
+    },
+    {
+      "id": "os_mem_05",
+      "name": "快表（TLB）",
+      "difficulty": "medium",
+      "prerequisites": ["os_mem_04"],
+      "learning_style": ["diagram"],
+      "content": {
+        "explanation": "TLB是页表的高速缓存。",
+        "example": "命中TLB可减少一次访存。",
+        "summary": "TLB提高地址转换效率。"
+      },
+      "common_mistakes": [
+        "认为TLB存储所有页表"
+      ],
+      "questions": [
+        {
+          "type": "short",
+          "question": "TLB的作用是什么？",
+          "answer": "加速地址转换",
+          "analysis": "减少访问页表次数。"
+        }
+      ]
+    },
+    {
+      "id": "os_mem_06",
+      "name": "缺页中断",
+      "difficulty": "medium",
+      "prerequisites": ["os_mem_04"],
+      "learning_style": ["text"],
+      "content": {
+        "explanation": "访问未加载页面时触发缺页中断。",
+        "example": "访问磁盘调入页面。",
+        "summary": "缺页中断是虚拟内存核心机制。"
+      },
+      "common_mistakes": [
+        "认为是错误而非正常机制"
+      ],
+      "questions": [
+        {
+          "type": "choice",
+          "question": "缺页中断属于？",
+          "options": ["错误", "正常机制", "硬件故障", "缓存问题"],
+          "answer": "正常机制",
+          "analysis": "缺页是虚拟内存正常行为。"
+        }
+      ]
+    },
+    {
+      "id": "os_mem_07",
+      "name": "页面置换算法",
+      "difficulty": "hard",
+      "prerequisites": ["os_mem_06"],
+      "learning_style": ["text"],
+      "content": {
+        "explanation": "用于决定淘汰哪个页面。",
+        "example": "FIFO、LRU。",
+        "summary": "影响系统性能。"
+      },
+      "common_mistakes": [
+        "混淆不同算法"
+      ],
+      "questions": [
+        {
+          "type": "choice",
+          "question": "LRU表示什么？",
+          "options": ["最近最少使用", "最早进入", "随机", "先进先出"],
+          "answer": "最近最少使用",
+          "analysis": "LRU淘汰最久未使用页面。"
+        }
+      ]
+    },
+    {
+      "id": "os_mem_08",
+      "name": "内部碎片",
+      "difficulty": "easy",
+      "prerequisites": ["os_mem_02"],
+      "learning_style": ["text"],
+      "content": {
+        "explanation": "页内未使用空间。",
+        "example": "页大小4KB，使用3KB。",
+        "summary": "分页会产生内部碎片。"
+      },
+      "common_mistakes": [
+        "与外部碎片混淆"
+      ],
+      "questions": [
+        {
+          "type": "short",
+          "question": "分页会产生哪种碎片？",
+          "answer": "内部碎片",
+          "analysis": "固定分配导致页内浪费。"
+        }
+      ]
+    },
+    {
+      "id": "os_mem_09",
+      "name": "外部碎片",
+      "difficulty": "easy",
+      "prerequisites": ["os_mem_01"],
+      "learning_style": ["text"],
+      "content": {
+        "explanation": "内存中不连续空闲区域。",
+        "example": "分段系统常见。",
+        "summary": "分页避免外部碎片。"
+      },
+      "common_mistakes": [
+        "认为分页也有外部碎片"
+      ],
+      "questions": [
+        {
+          "type": "choice",
+          "question": "分页是否存在外部碎片？",
+          "options": ["是", "否"],
+          "answer": "否",
+          "analysis": "分页采用固定块避免外部碎片。"
+        }
+      ]
+    },
+    {
+      "id": "os_mem_10",
+      "name": "虚拟内存",
+      "difficulty": "hard",
+      "prerequisites": ["os_mem_06"],
+      "learning_style": ["text"],
+      "content": {
+        "explanation": "通过磁盘扩展内存空间。",
+        "example": "程序大于物理内存仍可运行。",
+        "summary": "虚拟内存提高资源利用率。"
+      },
+      "common_mistakes": [
+        "认为虚拟内存就是物理内存"
+      ],
+      "questions": [
+        {
+          "type": "short",
+          "question": "虚拟内存的核心作用是什么？",
+          "answer": "扩展内存空间",
+          "analysis": "通过磁盘实现逻辑扩展。"
+        }
+      ]
+    }
+  ]
+}
