@@ -2,7 +2,7 @@
 from prompts import build_prompt
 from data.knowledge.KnowledgeBaseManager import KnowledgeBaseManager
 kb=KnowledgeBaseManager()
-
+# 1111
 class agentInput:
     topic_id:str
     module:str
@@ -47,3 +47,4 @@ class agentCore:
         return parse_output(result)
 
 
+print("111")
