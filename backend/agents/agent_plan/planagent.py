@@ -1,195 +1,190 @@
 import json
 import os
-from typing import List, Dict, Optional, Any
+from typing import List, Dict, Optional, Set, Tuple, Any
 from datetime import datetime, timedelta
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 import uvicorn
+import networkx as nx
 from openai import OpenAI
 
-# ==================== 数据模型（API 输入输出） ====================
+# ==================== 数据模型 ====================
 
 class UserProfile(BaseModel):
-    """用户画像"""
     user_id: str
-    mastered: List[str] = []           # 已掌握的知识点ID
-    weak_points: List[str] = []        # 薄弱点ID
+    mastered: List[str] = []
+    weak_points: List[str] = []
     learning_style: str = "text"       # visual / text / hybrid
-    cognitive_level: str = "intermediate"  # beginner / intermediate / advanced
-    learning_pace: str = "normal"      # slow / normal / fast
-    preference: Dict[str, Any] = {}    # 资源偏好
-    error_patterns: List[str] = []     # 常见错误模式
+    cognitive_level: str = "intermediate"
+    learning_pace: str = "normal"
+    error_patterns: List[str] = []
+    preference: Dict[str, Any] = {}
 
 class PlanRequest(BaseModel):
-    """规划请求"""
     user_profile: UserProfile
-    target_topic: Optional[str] = None  # 目标知识点（可选）
-    is_review: bool = False              # 是否为复习模式
-
-class LearningPathResponse(BaseModel):
-    """学习路径响应"""
-    learning_path: List[str]            # 知识点ID顺序
-    path_details: List[Dict]            # 带名称的详细路径
-    reasoning: str                      # 规划理由
-
-class DailyPlanItem(BaseModel):
-    """每日计划项"""
-    day: int
-    date: str
-    topics: List[str]
-    topics_detail: List[Dict]
-    estimated_minutes: int
-
-class ResourceItem(BaseModel):
-    """资源项"""
-    type: str        # video / text / exercise / diagram
-    title: str
-    description: str
-    url: str = ""
+    target_topic: Optional[str] = None
+    is_review: bool = False
 
 class PlanResponse(BaseModel):
-    """完整规划响应"""
-    learning_path: LearningPathResponse
-    daily_plan: List[DailyPlanItem]
+    learning_path: List[Dict]
+    daily_plan: List[Dict]
     resource_recommendations: List[Dict]
     teaching_strategy: Dict[str, Any]
+    reasoning: str
 
-# ==================== Planner Agent 核心 ====================
+# ==================== 知识图谱 ====================
+
+class KnowledgeGraph:
+    
+    def __init__(self, memory_path: str):
+        self.graph = nx.DiGraph()  # 有向图
+        self.topics = {}
+        self._load_from_memory(memory_path)
+    
+    def _load_from_memory(self, memory_path: str):
+        with open(memory_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        
+        for topic in data.get("topics", []):
+            topic_id = topic["id"]
+            self.topics[topic_id] = topic
+            
+            # 添加节点，属性存入
+            self.graph.add_node(
+                topic_id,
+                name=topic.get("name", topic_id),
+                difficulty=topic.get("difficulty", "medium"),
+                content=str(topic.get("content", {})),
+                common_mistakes=topic.get("common_mistakes", [])
+            )
+            
+            # 添加边（前置依赖关系）
+            for prereq in topic.get("prerequisites", []):
+                if prereq in self.topics or prereq in [t["id"] for t in data.get("topics", [])]:
+                    self.graph.add_edge(prereq, topic_id, relation="prerequisite")
+    
+    def get_prerequisites(self, topic_id: str) -> List[str]:
+        """获取直接前置依赖"""
+        return list(self.graph.predecessors(topic_id))
+    
+    def get_all_dependencies(self, topic_id: str) -> Set[str]:
+        """获取所有前置依赖（递归）"""
+        return set(nx.ancestors(self.graph, topic_id))
+    
+    def get_dependents(self, topic_id: str) -> List[str]:
+        """获取依赖此知识点的其他知识点"""
+        return list(self.graph.successors(topic_id))
+    
+    def get_learning_order(self, topic_ids: List[str]) -> List[str]:
+        """拓扑排序（基于子图）"""
+        subgraph = self.graph.subgraph(topic_ids)
+        try:
+            return list(nx.topological_sort(subgraph))
+        except nx.NetworkXUnfeasible:
+            # 存在循环依赖，返回原顺序
+            return topic_ids
+    
+    def get_prerequisite_chain(self, topic_id: str) -> List[str]:
+        """获取完整前置链（从基础到目标）"""
+        ancestors = nx.ancestors(self.graph, topic_id)
+        chain = list(ancestors)
+        chain.append(topic_id)
+        return self.get_learning_order(chain)
+    
+    def find_related_topics(self, topic_id: str, max_depth: int = 2) -> List[str]:
+        """查找相关知识点（BFS，用于推荐）"""
+        related = set()
+        current = {topic_id}
+        for _ in range(max_depth):
+            neighbors = set()
+            for node in current:
+                neighbors.update(self.graph.predecessors(node))
+                neighbors.update(self.graph.successors(node))
+            related.update(neighbors)
+            current = neighbors
+        related.discard(topic_id)
+        return list(related)
+    
+    def get_node_info(self, topic_id: str) -> Dict:
+        """获取节点详细信息"""
+        if topic_id not in self.graph:
+            return {}
+        return {
+            "id": topic_id,
+            **self.graph.nodes[topic_id],
+            "prerequisites": self.get_prerequisites(topic_id),
+            "dependents": self.get_dependents(topic_id)
+        }
+
+# ==================== Planner Agent（带LLM） ====================
 
 class PlannerAgent:
-    def __init__(self, memory_path: str = None, api_key: str = None):
-        # 获取当前文件所在目录
-        if memory_path is None:
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            memory_path = os.path.join(current_dir, "memory.json")
+    def __init__(self, memory_path: str, api_key: str = None):
+        # 构建知识图谱
+        self.kg = KnowledgeGraph(memory_path)
+        print(f"[知识图谱] 已加载 {self.kg.graph.number_of_nodes()} 个节点，{self.kg.graph.number_of_edges()} 条依赖边")
         
-        # 加载知识库
-        with open(memory_path, "r", encoding="utf-8") as f:
-            self.memory = json.load(f)
-        
-        self.topics = {topic["id"]: topic for topic in self.memory.get("topics", [])}
-        
-        # 构建前置依赖图
-        self.prerequisite_graph = {}
-        for topic_id, topic in self.topics.items():
-            self.prerequisite_graph[topic_id] = topic.get("prerequisites", [])
-        
-        # 初始化讯飞星火 LLM
+        # 初始化 LLM
+        self.llm = None
+        self.llm_enabled = False
         if api_key:
-            self.llm = OpenAI(
-                api_key="9ab992eba3c8116b816509185aa54fae",
-                base_url="https://spark-api-open.xf-yun.com/v1",
-            )
-            self.llm_enabled = True
+            try:
+                self.llm = OpenAI(
+                    api_key=api_key,
+                    base_url="https://spark-api-open.xf-yun.com/v1",
+                )
+                self.llm_enabled = True
+                print("[LLM] 讯飞星火已就绪")
+            except Exception as e:
+                print(f"[LLM] 初始化失败: {e}")
         else:
-            self.llm = None
-            self.llm_enabled = False
-            print("[警告] 未提供API Key，将使用规则模式（不调用LLM）")
+            print("[LLM] 未提供API Key，将使用规则模式")
     
-    def _get_prerequisites(self, topic_id: str) -> List[str]:
-        return self.prerequisite_graph.get(topic_id, [])
-    
-    def _get_all_dependencies(self, topic_id: str, visited: set = None) -> set:
-        """获取某个知识点的所有前置依赖"""
-        if visited is None:
-            visited = set()
-        for prereq in self._get_prerequisites(topic_id):
-            if prereq not in visited:
-                visited.add(prereq)
-                self._get_all_dependencies(prereq, visited)
-        return visited
-    
-    def _topological_sort(self, topic_ids: List[str]) -> List[str]:
-        """拓扑排序（按依赖关系）"""
-        if not topic_ids:
-            return []
-        
-        # 构建图
-        graph = {tid: [] for tid in topic_ids}
-        in_degree = {tid: 0 for tid in topic_ids}
-        
-        for tid in topic_ids:
-            for prereq in self._get_prerequisites(tid):
-                if prereq in topic_ids:
-                    graph.setdefault(prereq, []).append(tid)
-                    in_degree[tid] += 1
-        
-        # Kahn算法
-        queue = [tid for tid in topic_ids if in_degree[tid] == 0]
-        result = []
-        
-        while queue:
-            node = queue.pop(0)
-            result.append(node)
-            for neighbor in graph.get(node, []):
-                in_degree[neighbor] -= 1
-                if in_degree[neighbor] == 0:
-                    queue.append(neighbor)
-        
-        # 如果有未处理的，追加
-        for tid in topic_ids:
-            if tid not in result:
-                result.append(tid)
-        
-        return result
-    
-    def _get_difficulty_weight(self, difficulty: str) -> float:
-        """获取难度权重"""
-        weights = {"easy": 1.0, "medium": 1.5, "hard": 2.0}
-        return weights.get(difficulty, 1.0)
-    
-    def _plan_with_llm(self, profile: UserProfile, needed_topics: List[str], target: str = None) -> Dict:
+    def _get_llm_plan(self, profile: UserProfile, target: str = None) -> Dict:
         """使用 LLM 进行智能规划"""
         if not self.llm_enabled:
             return None
         
-        # 构建提示词
-        topics_info = []
-        for tid in needed_topics:
-            topic = self.topics.get(tid, {})
-            topics_info.append({
-                "id": tid,
-                "name": topic.get("name", tid),
-                "difficulty": topic.get("difficulty", "medium"),
-                "prerequisites": topic.get("prerequisites", [])
-            })
+        # 获取知识图谱摘要
+        graph_summary = self._get_graph_summary()
         
-        system_prompt = """你是一位专业的操作系统课程教学规划专家。
-你的任务是根据学生的用户画像和课程知识结构，规划个性化的学习路径。
+        # 构建 Prompt
+        system_prompt = """你是一位专业的操作系统教学规划专家。你的任务是根据学生的用户画像和知识图谱，进行个性化的学习路径规划。
+
+你拥有一个完整的内存管理分页机制知识图谱，包含了知识点之间的前置依赖关系（边表示"A是B的前置知识"）。
+
+请严格遵守以下规则：
+1. 学习路径必须尊重知识图谱中的依赖关系（不能先学B再学A如果A是B的前置）
+2. 薄弱点应该优先安排
+3. 难度从易到难递进
+4. 每天安排2-3个知识点
 
 输出格式要求（严格JSON）：
 {
     "learning_path": ["知识点ID1", "知识点ID2", ...],
-    "reasoning": "规划理由说明",
-    "strategy": {
-        "explanation_depth": "讲解深度（beginner/intermediate/advanced）",
-        "focus_points": ["重点知识点ID"],
-        "suggested_pace": "建议节奏（slow/normal/fast）"
-    }
-}
-
-注意：
-1. 学习路径必须遵循前置依赖关系
-2. 薄弱点应该优先安排
-3. 考虑学生的认知水平和学习节奏"""
+    "reasoning": "详细的规划理由（说明为什么这样安排，如何考虑了依赖关系和用户画像）",
+    "focus_points": ["重点强调的知识点ID"],
+    "estimated_days": 数字,
+    "difficulty_progression": "难度递进说明"
+}"""
 
         user_prompt = f"""
-学生画像：
-- 已掌握知识点：{profile.mastered}
+用户画像：
+- 已掌握：{profile.mastered}
 - 薄弱点：{profile.weak_points}
 - 学习风格：{profile.learning_style}
 - 认知水平：{profile.cognitive_level}
 - 学习节奏：{profile.learning_pace}
-- 常见错误模式：{profile.error_patterns}
-{"- 目标知识点：" + target if target else "- 无特定目标，建议完整学习路径"}
+- 错误模式：{profile.error_patterns}
+{"- 学习目标：" + target if target else "- 无特定目标（建议完整学习）"}
 
-课程知识结构（需要学习的内容）：
-{json.dumps(topics_info, ensure_ascii=False, indent=2)}
+知识图谱摘要：
+{graph_summary}
 
 请规划学习路径。
 """
-                
+        
         try:
             response = self.llm.chat.completions.create(
                 model="spark-lite",
@@ -198,11 +193,11 @@ class PlannerAgent:
                     {"role": "user", "content": user_prompt}
                 ],
                 temperature=0.7,
-                max_tokens=2000
+                max_tokens=2048
             )
             
             result_text = response.choices[0].message.content
-            # 提取JSON
+            # 提取 JSON
             import re
             json_match = re.search(r'\{[\s\S]*\}', result_text)
             if json_match:
@@ -211,288 +206,235 @@ class PlannerAgent:
         except Exception as e:
             print(f"[LLM规划失败] {e}")
             return None
+        
+    def _get_graph_summary(self) -> str:
+        """获取知识图谱摘要供 LLM 参考"""
+        nodes = []
+        for node_id in self.kg.graph.nodes:
+            node_data = self.kg.graph.nodes[node_id]
+            nodes.append({
+                "id": node_id,
+                "name": node_data.get("name", node_id),
+                "difficulty": node_data.get("difficulty", "medium"),
+                "prerequisites": self.kg.get_prerequisites(node_id)
+            })
+        return json.dumps(nodes, ensure_ascii=False, indent=2)
     
-    def _plan_with_rules(self, profile: UserProfile, needed_topics: List[str]) -> List[str]:
-        """使用规则进行规划（备用方案）"""
+    def _plan_with_rules(self, profile: UserProfile, target: str = None) -> Tuple[List[str], str]:
+        """规则规划（备用/增强）"""
+        all_topics = set(self.kg.graph.nodes)
         mastered_set = set(profile.mastered)
         weak_set = set(profile.weak_points)
         
-        # 先拓扑排序
-        sorted_topics = self._topological_sort(needed_topics)
-        
-        # 根据薄弱点调整优先级
-        weak_first = [tid for tid in sorted_topics if tid in weak_set]
-        others = [tid for tid in sorted_topics if tid not in weak_set]
-        
-        return weak_first + others
-    
-    def plan(self, profile: UserProfile, target_topic: str = None, is_review: bool = False) -> PlanResponse:
-        """核心规划方法"""
-        mastered_set = set(profile.mastered)
-        
-        # 1. 确定需要学习的知识点
-        if target_topic and target_topic in self.topics:
-            # 有目标：包含所有前置依赖
-            dependencies = self._get_all_dependencies(target_topic)
-            needed = dependencies.union({target_topic})
-            # 过滤已掌握的（复习模式除外）
-            if not is_review:
+        # 确定需要学习的内容
+        if target and target in all_topics:
+            needed = self.kg.get_all_dependencies(target)
+            needed.add(target)
+            if not profile.is_review:
                 needed = needed - mastered_set
-            needed = list(needed)
         else:
-            # 无目标：学习所有未掌握的
-            all_topics = set(self.topics.keys())
-            if is_review:
-                needed = list(all_topics)
-            else:
-                needed = list(all_topics - mastered_set)
+            needed = all_topics - mastered_set
         
         if not needed:
-            # 没有需要学习的内容
-            empty_response = LearningPathResponse(
-                learning_path=[],
-                path_details=[],
-                reasoning="所有知识点均已掌握，无需学习"
-            )
-            return PlanResponse(
-                learning_path=empty_response,
-                daily_plan=[],
-                resource_recommendations=[],
-                teaching_strategy={}
-            )
+            return [], "所有知识点均已掌握"
         
-        # 2. 尝试用LLM规划
-        llm_result = self._plan_with_llm(profile, needed, target_topic)
+        # 拓扑排序
+        needed_list = list(needed)
+        sorted_topics = self.kg.get_learning_order(needed_list)
+        
+        # 薄弱点优先
+        weak_first = [t for t in sorted_topics if t in weak_set]
+        others = [t for t in sorted_topics if t not in weak_set]
+        final_order = weak_first + others
+        
+        reasoning = f"基于知识图谱拓扑排序，共{len(final_order)}个知识点。薄弱点({len(weak_first)}个)已优先安排。"
+        
+        return final_order, reasoning
+    
+    def plan(self, profile: UserProfile, target_topic: str = None, is_review: bool = False) -> PlanResponse:
+        """主规划方法"""
+        profile.is_review = is_review
+        
+        # 1. 尝试 LLM 规划
+        llm_result = self._get_llm_plan(profile, target_topic)
         
         if llm_result and "learning_path" in llm_result:
             learning_path_ids = llm_result["learning_path"]
             reasoning = llm_result.get("reasoning", "基于LLM智能规划")
-            strategy = llm_result.get("strategy", {})
+            focus_points = llm_result.get("focus_points", profile.weak_points)
         else:
-            # 规则规划
-            learning_path_ids = self._plan_with_rules(profile, needed)
-            reasoning = "基于规则引擎规划（前置依赖优先，薄弱点优先）"
-            strategy = {
-                "explanation_depth": profile.cognitive_level,
-                "focus_points": profile.weak_points,
-                "suggested_pace": profile.learning_pace
-            }
+            # 回退到规则规划
+            learning_path_ids, reasoning = self._plan_with_rules(profile, target_topic)
+            focus_points = profile.weak_points
         
-        # 3. 生成详细路径（带名称）
+        # 2. 构建路径详情（加入知识图谱信息）
         path_details = []
         for tid in learning_path_ids:
-            topic = self.topics.get(tid, {})
+            node_info = self.kg.get_node_info(tid)
             path_details.append({
                 "id": tid,
-                "name": topic.get("name", tid),
-                "difficulty": topic.get("difficulty", "medium")
+                "name": node_info.get("name", tid),
+                "difficulty": node_info.get("difficulty", "medium"),
+                "prerequisites": node_info.get("prerequisites", [])
             })
         
-        learning_path_resp = LearningPathResponse(
-            learning_path=learning_path_ids,
-            path_details=path_details,
-            reasoning=reasoning
-        )
-        
-        # 4. 生成每日计划
+        # 3. 生成每日计划
         daily_plan = self._generate_daily_plan(learning_path_ids, profile)
         
-        # 5. 生成资源推荐
-        resources = self._recommend_resources(learning_path_ids, profile)
+        # 4. 资源推荐（基于知识图谱的相关性）
+        resources = self._recommend_resources(learning_path_ids, profile, focus_points)
         
-        # 6. 生成教学策略
-        teaching_strategy = self._generate_teaching_strategy(profile, strategy)
+        # 5. 教学策略
+        teaching_strategy = self._generate_teaching_strategy(profile)
         
         return PlanResponse(
-            learning_path=learning_path_resp,
+            learning_path=path_details,
             daily_plan=daily_plan,
             resource_recommendations=resources,
-            teaching_strategy=teaching_strategy
+            teaching_strategy=teaching_strategy,
+            reasoning=reasoning
         )
     
-    def _generate_daily_plan(self, learning_path: List[str], profile: UserProfile) -> List[DailyPlanItem]:
-        """生成每日学习计划"""
-        if not learning_path:
+    def _generate_daily_plan(self, path: List[str], profile: UserProfile) -> List[Dict]:
+        """生成每日计划"""
+        if not path:
             return []
         
-        # 根据学习节奏确定每天学习时长（分钟）
         pace_minutes = {"slow": 60, "normal": 90, "fast": 120}
         daily_capacity = pace_minutes.get(profile.learning_pace, 90)
         
-        # 估算每个知识点所需时间
-        topic_times = {}
-        for tid in learning_path:
-            topic = self.topics.get(tid, {})
-            difficulty = topic.get("difficulty", "medium")
-            base_time = {"easy": 20, "medium": 35, "hard": 50}
-            minutes = base_time.get(difficulty, 35)
-            
-            # 薄弱点额外加时
-            if tid in profile.weak_points:
-                minutes = int(minutes * 1.3)
-            
-            # 快节奏减时
-            if profile.learning_pace == "fast":
-                minutes = int(minutes * 0.8)
-            elif profile.learning_pace == "slow":
-                minutes = int(minutes * 1.2)
-            
-            topic_times[tid] = minutes
+        difficulty_time = {"easy": 20, "medium": 35, "hard": 50}
         
-        # 按天拆分
         daily_plans = []
         current_day = 1
         current_date = datetime.now()
         current_topics = []
         current_total = 0
         
-        for tid in learning_path:
-            time_needed = topic_times[tid]
+        for tid in path:
+            node = self.kg.graph.nodes.get(tid, {})
+            difficulty = node.get("difficulty", "medium")
+            minutes = difficulty_time.get(difficulty, 35)
             
-            if current_total + time_needed > daily_capacity and current_topics:
-                # 超出容量，保存当天计划
-                daily_plans.append(DailyPlanItem(
-                    day=current_day,
-                    date=current_date.strftime("%Y-%m-%d"),
-                    topics=current_topics,
-                    topics_detail=[
-                        {"id": t, "name": self.topics.get(t, {}).get("name", t)}
-                        for t in current_topics
-                    ],
-                    estimated_minutes=current_total
-                ))
+            if tid in profile.weak_points:
+                minutes = int(minutes * 1.3)
+            if profile.learning_pace == "fast":
+                minutes = int(minutes * 0.8)
+            elif profile.learning_pace == "slow":
+                minutes = int(minutes * 1.2)
+            
+            if current_total + minutes > daily_capacity and current_topics:
+                daily_plans.append({
+                    "day": current_day,
+                    "date": current_date.strftime("%Y-%m-%d"),
+                    "topics": current_topics,
+                    "topics_name": [self.kg.graph.nodes.get(t, {}).get("name", t) for t in current_topics],
+                    "estimated_minutes": current_total
+                })
                 current_day += 1
                 current_date += timedelta(days=1)
                 current_topics = []
                 current_total = 0
             
             current_topics.append(tid)
-            current_total += time_needed
+            current_total += minutes
         
-        # 最后一天
         if current_topics:
-            daily_plans.append(DailyPlanItem(
-                day=current_day,
-                date=current_date.strftime("%Y-%m-%d"),
-                topics=current_topics,
-                topics_detail=[
-                    {"id": t, "name": self.topics.get(t, {}).get("name", t)}
-                    for t in current_topics
-                ],
-                estimated_minutes=current_total
-            ))
+            daily_plans.append({
+                "day": current_day,
+                "date": current_date.strftime("%Y-%m-%d"),
+                "topics": current_topics,
+                "topics_name": [self.kg.graph.nodes.get(t, {}).get("name", t) for t in current_topics],
+                "estimated_minutes": current_total
+            })
         
         return daily_plans
-
-    def _recommend_resources(self, learning_path: List[str], profile: UserProfile) -> List[Dict]:
-        """推荐学习资源"""
+    
+    def _recommend_resources(self, path: List[str], profile: UserProfile, focus_points: List[str]) -> List[Dict]:
+        """资源推荐（基于知识图谱关系）"""
         recommendations = []
         
-        # 资源类型权重
-        type_weights = {
-            "text": 0.3,
-            "diagram": 0.2,
-            "exercise": 0.3,
-            "video": 0.2
-        }
-        
-        # 根据用户偏好调整
-        pref = profile.preference
-        if pref.get("prefer_video"):
-            type_weights["video"] += 0.2
-            type_weights["text"] -= 0.1
-        if pref.get("prefer_exercise"):
-            type_weights["exercise"] += 0.2
-        if profile.learning_style == "visual":
-            type_weights["diagram"] += 0.2
-            type_weights["text"] -= 0.1
-        
-        for tid in learning_path[:10]:  # 限制数量
-            topic = self.topics.get(tid, {})
+        for tid in path[:8]:
+            node = self.kg.graph.nodes.get(tid, {})
+            topic_name = node.get("name", tid)
+            
+            # 查找相关知识点（用于扩展推荐）
+            related = self.kg.find_related_topics(tid, max_depth=1)
+            
             resources = []
             
-            # 文本资源
-            if type_weights.get("text", 0) > 0.1:
-                resources.append(ResourceItem(
-                    type="text",
-                    title=f"{topic.get('name', tid)} - 文字讲解",
-                    description=topic.get("content", {}).get("explanation", "核心知识点讲解")
-                ))
+            # 文本讲解
+            resources.append({
+                "type": "text",
+                "title": f"{topic_name} - 核心讲解",
+                "description": node.get("content", "")[:200] if node.get("content") else f"{topic_name}的核心概念讲解"
+            })
             
-            # 图解资源
-            if type_weights.get("diagram", 0) > 0.1:
-                resources.append(ResourceItem(
-                    type="diagram",
-                    title=f"{topic.get('name', tid)} - 原理图解",
-                    description="可视化展示核心概念"
-                ))
+            # 练习（如果有关联的练习题）
+            resources.append({
+                "type": "exercise",
+                "title": f"{topic_name} - 随堂练习",
+                "description": f"检验对{topic_name}的理解"
+            })
             
-            # 练习题
-            if type_weights.get("exercise", 0) > 0.1:
-                questions = topic.get("questions", [])
-                if questions:
-                    resources.append(ResourceItem(
-                        type="exercise",
-                        title=f"{topic.get('name', tid)} - 随堂练习",
-                        description=questions[0].get("question", "测试你的理解")
-                    ))
+            # 如果有关联知识点，推荐复习
+            if related and tid in profile.weak_points:
+                related_names = [self.kg.graph.nodes.get(r, {}).get("name", r) for r in related[:2]]
+                resources.append({
+                    "type": "review",
+                    "title": f"关联知识复习",
+                    "description": f"建议先复习：{', '.join(related_names)}"
+                })
             
-            # 常见错误提醒
-            if topic.get("common_mistakes") and tid in profile.weak_points:
-                resources.append(ResourceItem(
-                    type="text",
-                    title=f"{topic.get('name', tid)} - 常见错误",
-                    description=f"注意避免：{', '.join(topic.get('common_mistakes', []))}"
-                ))
+            # 如果是重点，添加强调
+            if tid in focus_points:
+                resources.append({
+                    "type": "warning",
+                    "title": "⭐ 重点掌握",
+                    "description": f"{topic_name}是本次学习的核心，请多加练习"
+                })
             
             recommendations.append({
                 "topic_id": tid,
-                "topic_name": topic.get("name", tid),
-                "resources": [res.dict() for res in resources]
+                "topic_name": topic_name,
+                "resources": resources
             })
         
         return recommendations
     
-    def _generate_teaching_strategy(self, profile: UserProfile, llm_strategy: Dict = None) -> Dict[str, Any]:
+    def _generate_teaching_strategy(self, profile: UserProfile) -> Dict[str, Any]:
         """生成教学策略"""
-        depth_map = {
-            "beginner": "详细讲解基础概念，多举例说明",
-            "intermediate": "讲清核心原理，适当对比分析",
-            "advanced": "深入底层原理，扩展高级知识"
-        }
-        
-        format_map = {
-            "visual": "多用图表和动画演示",
-            "text": "以文字讲解为主",
-            "hybrid": "图文结合，根据内容选择"
+        style_map = {
+            "visual": {"format": "图表+动画", "resource_priority": ["diagram", "video"]},
+            "text": {"format": "文字讲解", "resource_priority": ["text", "exercise"]},
+            "hybrid": {"format": "图文结合", "resource_priority": ["text", "diagram", "exercise"]}
         }
         
         pace_map = {
-            "slow": "每分钟拆解，多停顿检查理解",
-            "normal": "知识点为单位，连贯讲解",
-            "fast": "整体概述，重点突出"
+            "slow": "细致讲解，多停顿检查",
+            "normal": "正常节奏",
+            "fast": "快速推进，重点突出"
         }
         
-        strategy = {
-            "explanation_depth": depth_map.get(profile.cognitive_level, depth_map["intermediate"]),
-            "output_format": format_map.get(profile.learning_style, format_map["hybrid"]),
-            "learning_pace_strategy": pace_map.get(profile.learning_pace, pace_map["normal"]),
-            "focus_topics": profile.weak_points,
-            "error_warnings": profile.error_patterns,
-            "resource_preference": profile.preference
+        depth_map = {
+            "beginner": "基础概念为主，多举例",
+            "intermediate": "原理分析，适当深入",
+            "advanced": "底层机制，优化分析"
         }
         
-        if llm_strategy:
-            strategy.update(llm_strategy)
-        
-        return strategy
+        return {
+            "learning_style_strategy": style_map.get(profile.learning_style, style_map["hybrid"]),
+            "pace_strategy": pace_map.get(profile.learning_pace, "正常节奏"),
+            "depth_strategy": depth_map.get(profile.cognitive_level, "原理分析"),
+            "weak_points_emphasis": profile.weak_points,
+            "error_prevention": profile.error_patterns
+        }
+    
 
+# ==================== FastAPI 应用 ====================
 
-# ==================== FastAPI 接口 ====================
+app = FastAPI(title="Planner Agent with Knowledge Graph & LLM")
 
-app = FastAPI(title="Planner Agent", description="个性化学习路径规划服务")
-
-# 允许跨域
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -500,64 +442,49 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 全局 Agent 实例
 agent = None
 
 @app.on_event("startup")
-async def startup_event():
+async def startup():
     global agent
-    api_key = os.environ.get("XF_API_KEY")  # 从环境变量读取
-    agent = PlannerAgent(api_key=api_key)
-    print("[Planner Agent] 初始化完成")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    memory_path = os.path.join(current_dir, "memory.json")
+    api_key = os.environ.get("XF_API_KEY")
+    agent = PlannerAgent(memory_path, api_key)
+    print("[Planner Agent] 启动完成")
 
 @app.get("/")
 async def root():
-    return {"service": "Planner Agent", "status": "running", "version": "1.0"}
+    return {
+        "service": "Planner Agent",
+        "features": ["Knowledge Graph", "LLM Planning", "Recommendation"],
+        "llm_enabled": agent.llm_enabled if agent else False,
+        "nodes_count": agent.kg.graph.number_of_nodes() if agent else 0
+    }
 
 @app.get("/health")
 async def health():
-    return {"status": "healthy", "topics_count": len(agent.topics) if agent else 0}
+    return {"status": "healthy", "nodes": agent.kg.graph.number_of_nodes(), "edges": agent.kg.graph.number_of_edges()}
 
-@app.get("/topics")
-async def get_topics():
-    """获取所有知识点"""
-    return {"topics": list(agent.topics.values()) if agent else []}
+@app.get("/graph")
+async def get_graph():
+    """获取知识图谱结构"""
+    nodes = []
+    for node_id in agent.kg.graph.nodes:
+        nodes.append(agent.kg.get_node_info(node_id))
+    edges = [{"source": u, "target": v} for u, v in agent.kg.graph.edges]
+    return {"nodes": nodes, "edges": edges}
 
 @app.post("/plan", response_model=PlanResponse)
-async def create_plan(request: PlanRequest):
-    """规划学习路径"""
-    if not agent:
-        raise HTTPException(status_code=503, detail="Agent未初始化")
-    
-    try:
-        result = agent.plan(
-            profile=request.user_profile,
-            target_topic=request.target_topic,
-            is_review=request.is_review
-        )
-        return result
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+async def plan(request: PlanRequest):
+    result = agent.plan(request.user_profile, request.target_topic, request.is_review)
+    return result
 
-@app.post("/plan/simple")
-async def simple_plan(user_profile: UserProfile, target_topic: str = None):
-    """简化版规划（快速测试）"""
-    if not agent:
-        raise HTTPException(status_code=503, detail="Agent未初始化")
-    
-    result = agent.plan(profile=user_profile, target_topic=target_topic)
-    
-    return {
-        "learning_path": result.learning_path.learning_path,
-        "daily_plan_summary": [
-            {"day": d.day, "topics": d.topics, "minutes": d.estimated_minutes}
-            for d in result.daily_plan
-        ],
-        "reasoning": result.learning_path.reasoning
-    }
-
-
-# ==================== 启动 ====================
+@app.get("/prerequisites/{topic_id}")
+async def get_prerequisites(topic_id: str):
+    """获取某个知识点的前置依赖链"""
+    chain = agent.kg.get_prerequisite_chain(topic_id)
+    return {"topic": topic_id, "prerequisite_chain": chain}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
