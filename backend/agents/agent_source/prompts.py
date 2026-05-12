@@ -166,8 +166,7 @@ USER_PROMPT_TABEL="""
 
 学生画像：
 
-学习目标：
-{learning_goal}
+
 
 学习风格：
 {learning_style}
@@ -247,7 +246,7 @@ def user_prompt_build(user_input,topic):
             indent=2
         ),
 
-        learning_goal=user_input["learning_goal"],
+        
 
         learning_style=user_input["learning_style"],
 

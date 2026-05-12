@@ -15,7 +15,6 @@ llm=SparkLLM()
 class agentInput:
     topic_id:str
     module:str
-    learning_goal: str
     difficulty: str
     learning_style:str
     weak_points: list
@@ -25,14 +24,13 @@ class agentInput:
 #输入参数示例
 test_input={
     "topic_id": "os_mem_04",
-    "learning_goal": "理解页表结构",
     "module":"内存管理-分页机制",
     "difficulty": "medium",
     "learning_style": "visual",
     "weak_points": ["页表映射"],
     "understanding": 0.6,
     "current_progress":"learning"
-  
+    # "resource_type":""
 
 }
 
