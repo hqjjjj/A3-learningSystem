@@ -37,16 +37,21 @@ hard:
 2. 只允许输出JSON
 3. 不允许输出额外说明
 
-输出格式：
+exercise必须严格使用以下结构：
+其中type为short和choice二选一
 {
-    "exercise":{
-      "type":"",
-      "question":"",
-      "options":[],
-      "answer":"",
-      "analysis":""
-    }
-    }
+  "exercise":{
+    "type":"",
+    "question":"",
+    "options":[],
+    "answer":"",
+    "analysis":""
+  }
+}
+禁止输出：
+- content
+- text类型
+- 其他字段
 输出示例：
 {
     exercise": {
@@ -57,7 +62,11 @@ hard:
       "analysis":"逻辑地址必须通过地址转换机制映射到物理地址..."
     }
     }
+注意事项，选择题的option中，不要出现形如“A. ”的字样，直接写选项，不要前缀
+生成后必须自行验证：
+1. answer
+2. analysis
+3. 计算过程
 
-    注意事项：
-如果
+三者必须一致。
 """

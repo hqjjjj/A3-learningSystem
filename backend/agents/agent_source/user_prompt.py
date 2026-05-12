@@ -52,6 +52,9 @@ USER_PROMPT_TABEL="""
 
 目标难度：
 {difficulty}
+如果{difficulty}为"esay"，参考难度： "单知识点","直接概念","无需计算"
+如果{difficulty}为"medium"，参考难度：   "需要推理",  "简单计算", "知识点结合"
+如果{difficulty}为"hard"，  "多步骤推导",  "跨知识点", "真实场景"
 
 当前学习阶段：
 {current_progress}
@@ -59,22 +62,23 @@ USER_PROMPT_TABEL="""
 生成资源类型：
 {resource_type}
 
-生成要求补充：
 
-1. explanation
+注意事项：
+只生成{resource_type}中符合你生成任务的资源类型，禁止生成其他资源。绝对不能生成{resource_type}以外的资源
+
+
+
+如果你的任务是生成explanation且{resource_type}中包含"explanation"，请注意，如果不是直接忽略这条：
 如果当前知识点{topic_name}在{weak_points}
 中必须重点解析
-
-
 如果当前知识点的{prerequisites}在{weak_points}
 中必须重点解析
-
-- 内容难度符合：
+-内容难度符合：
 {difficulty}
 
 
 
-3. exercise
+如果你的任务是生成 exercise{resource_type}中包含"exercise"，请注意，如果不是直接忽略这条：
 - 请参考已有习题风格
 - 不允许直接复制已有题目
 - 生成一道新的题目
@@ -124,7 +128,10 @@ def user_prompt_build(user_input,topic,kb):
         ),
 
         
-        resource_type=user_input["resource_type"],
+        resource_type=json.dumps(
+            user_input["resource_type"],
+            ensure_ascii=False
+            ),
         learning_style=user_input["learning_style"],
 
         weak_points=json.dumps(
