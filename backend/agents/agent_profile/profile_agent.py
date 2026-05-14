@@ -130,10 +130,9 @@ class ProfileAgent:
            - 说"看文档/看书"→textual高0.6-0.7，其他各0.15-0.2
            - 无明确偏好→三者均匀分配
         6. learning_pace: "normal"/"slow"/"fast"，从语气和行为推断
-        7. preference.resource_type: "video"/"document"/"exercise"之一
-        8. preference.difficulty: "easy"/"medium"/"hard"
-        9. preference.active_hours: 无法推断填null
-        10. learning_goal: 无法推断填null
+        7. resource_type: "video"/"document"/"exercise"之一
+        8. difficulty: "easy"/"medium"/"hard"
+        9. learning_goal: 无法推断填null
 
         ## 输出要求
         必须是合法JSON，无说明文字，无代码块包裹。"""
@@ -185,15 +184,10 @@ class ProfileAgent:
         if extraction.get("learning_pace"):
             profile.learning_pace = extraction["learning_pace"]
 
-        # === 偏好更新 ===
-        if "preference" in extraction:
-            pref = extraction["preference"]
-            if pref.get("resource_type"):
-                profile.preference.resource_type = pref["resource_type"]
-            if pref.get("difficulty"):
-                profile.preference.difficulty = pref["difficulty"]
-            if pref.get("active_hours") is not None:
-                profile.preference.active_hours = pref["active_hours"]
+        if "resource_type" in extraction:
+            profile.resource_type = extraction["resource_type"]
+        if "difficulty" in extraction:
+            profile.difficulty = extraction["difficulty"]
 
         # === 进度更新 ===
         if "progress" in extraction:
