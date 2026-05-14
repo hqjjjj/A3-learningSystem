@@ -1,0 +1,39 @@
+{
+  "user_id": "test_stu_001",
+  "major": "计算机",
+  "grade": "大三",
+  "course": "操作系统",
+  "knowledge_level": {
+    "地址空间基本概念": 0.0,
+    "分页基本概念": 0.4,
+    "地址结构（页号+偏移）": 0.0,
+    "页表": 0.0,
+    "快表（TLB）": 0.0,
+    "缺页中断": 0.0,
+    "页面置换算法": 0.0,
+    "内部碎片": 0.0,
+    "外部碎片": 0.0,
+    "虚拟内存": 0.0
+  },
+  "weak_points": [],
+  "error_tags": [],
+  "learning_style": "diagram",
+  "cognitive_style": {
+    "visual": 0.7,
+    "textual": 0.15,
+    "auditory": 0.15
+  },
+  "learning_pace": "slow",
+  "resource_type": [
+    "exercise",
+    "explanation"
+  ],
+  "difficulty": "easy",
+  "progress": {
+    "current_topic": "分页基本概念",
+    "completed_topics": []
+  },
+  "learning_goal": null,
+  "created_at": "2026-05-14T23:17:05.853347",
+  "updated_at": "2026-05-14T23:17:05.853763"
+}

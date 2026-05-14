@@ -23,33 +23,14 @@ agent = ProfileAgent(
 user_id = "test_stu_001"
 
 # 模拟第一次对话
-print("=" * 60)
-print("📝 第一次对话：初始构建画像")
-print("=" * 60)
 result1 = agent.build_profile(
     user_id=user_id,
-    user_input="我计算机专业大三，在学操作系统，分页机制完全不会，我喜欢看视频学。"
+    user_input="我计算机专业大三，在学操作系统。分页机制完全不会，喜欢看视频。缺页中断做题正确率很低。虚拟内存感觉简单一些，正确率上来了。",
+    behavior={"correct_rate": 0.5}
 )
 print(result1.profile.model_dump_json(indent=2))
 
-# 模拟第二次对话（带行为数据）
-print("\n" + "=" * 60)
-print("📝 第二次对话：增量更新画像")
-print("=" * 60)
-result2 = agent.build_profile(
-    user_id=user_id,
-    user_input="缺页中断还是搞不懂，做题正确率很低。",
-    behavior={"correct_rate": 0.3, "recent_actions": ["错题:缺页中断"]}
-)
-print(result2.profile.model_dump_json(indent=2))
-
-# 模拟第三次对话
-print("\n" + "=" * 60)
-print("📝 第三次对话：继续更新画像")
-print("=" * 60)
-result3 = agent.build_profile(
-    user_id=user_id,
-    user_input="今天学了虚拟内存，感觉比缺页中断简单，正确率上来了。",
-    behavior={"correct_rate": 0.75, "recent_actions": ["完成练习:虚拟内存"]}
-)
-print(result3.profile.model_dump_json(indent=2))
+# 保存成 JSON 文件
+with open("profile_output.json", "w", encoding="utf-8") as f:
+    f.write(result1.profile.model_dump_json(indent=2))
+print("已保存到 profile_output.json")
