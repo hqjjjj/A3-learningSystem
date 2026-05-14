@@ -31,6 +31,7 @@ result1 = agent.build_profile(
 print(result1.profile.model_dump_json(indent=2))
 
 # 保存成 JSON 文件
-with open("profile_output.json", "w", encoding="utf-8") as f:
+output_path = os.path.join(project_root, "data", "profile_output.json")
+with open(output_path, "w", encoding="utf-8") as f:
     f.write(result1.profile.model_dump_json(indent=2))
 print("已保存到 profile_output.json")
