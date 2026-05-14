@@ -41,7 +41,7 @@ class StudentProfile(BaseModel):
     cognitive_style: CognitiveStyle = Field(default_factory=CognitiveStyle, description="认知风格内部量化数据")
     
     learning_pace: str = Field(default="normal", description="学习节奏: fast, normal, slow")
-    resource_type: Optional[str] = Field(default="document", description="偏好的资源类型: video, document, exercise")
+    resource_type: List[str] = Field(default_factory=lambda: ["explanation"], description="偏好的资源类型列表: explanation, mindmap, exercise, code_example")
     difficulty: Optional[str] = Field(default="medium", description="偏好的难度: easy, medium, hard")
     progress: Progress = Field(default_factory=Progress, description="学习进度追踪")
     learning_goal: Optional[str] = Field(default=None, description="学习目标")

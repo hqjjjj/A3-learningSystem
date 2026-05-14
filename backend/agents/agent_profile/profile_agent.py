@@ -15,8 +15,9 @@ os.environ["no_proxy"] = "*"
 # ============ 加载课程知识图谱 ============
 KNOWLEDGE_GRAPH = {}
 try:
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    memory_path = os.path.join(base_dir, "memory.json")
+    agent_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(agent_dir)))
+    memory_path = os.path.join(project_root, "data", "knowledge", "memory.json")
     with open(memory_path, "r", encoding="utf-8") as f:
         data = json.load(f)
         for topic in data.get("topics", []):
@@ -130,12 +131,12 @@ class ProfileAgent:
            - 说"看文档/看书"→textual高0.6-0.7，其他各0.15-0.2
            - 无明确偏好→三者均匀分配
         6. learning_pace: "normal"/"slow"/"fast"，从语气和行为推断
-        7. resource_type: "video"/"document"/"exercise"之一
+        7. resource_type: 资源类型列表，从["explanation", "mindmap", "exercise", "code_example"]中选择。根据学生偏好和行为动态推断，如喜欢看视频→["explanation", "mindmap"]，做题正确率低→["explanation", "exercise"]
         8. difficulty: "easy"/"medium"/"hard"
         9. learning_goal: 无法推断填null
 
         ## 输出要求
-        必须是合法JSON，无说明文字，无代码块包裹。"""
+        必须是合法JSON，无说明文字，无markdown代码块包裹，直接输出纯JSON。"""
 
         user_message = f"学生输入：{user_input}\n行为数据：{json.dumps(behavior or {}, ensure_ascii=False)}\n旧画像：{old_profile.model_dump() if old_profile else '无'}"
 
@@ -151,6 +152,9 @@ class ProfileAgent:
         # 初始化或获取旧画像
         if not old_profile:
             profile = StudentProfile(user_id=user_id, created_at=datetime.datetime.now())
+            # 初始化所有知识点掌握度为 0.0
+            for topic_name in KNOWLEDGE_GRAPH:
+                profile.knowledge_level[topic_name] = 0.0
             update_type = "init"
         else:
             profile = old_profile
@@ -184,8 +188,9 @@ class ProfileAgent:
         if extraction.get("learning_pace"):
             profile.learning_pace = extraction["learning_pace"]
 
-        if "resource_type" in extraction:
-            profile.resource_type = extraction["resource_type"]
+        if "resource_type" in extraction and isinstance(extraction["resource_type"], list):
+            merged = list(set(profile.resource_type + extraction["resource_type"]))
+            profile.resource_type = merged
         if "difficulty" in extraction:
             profile.difficulty = extraction["difficulty"]
 
@@ -227,8 +232,8 @@ class ProfileAgent:
                 profile.knowledge_level[current_topic] = round(old_score * 0.7 + base_score * 0.3, 2)
 
         # 薄弱点与错误标签
-        profile.weak_points = [name for name, score in profile.knowledge_level.items() if score <= 0.3]
-        profile.error_tags = [name for name, score in profile.knowledge_level.items() if score <= 0.2]
+        profile.weak_points = [name for name, score in profile.knowledge_level.items() if 0.0 < score <= 0.3]
+        profile.error_tags = [name for name, score in profile.knowledge_level.items() if 0.0 < score <= 0.2]
 
         profile.updated_at = datetime.datetime.now()
         self.profiles[user_id] = profile
