@@ -1,4 +1,5 @@
-#输入参数定义
+#输入参数转为字典传入
+#主控函数，调用多agent,输出所需资源
 from backend.agents.agent_source.code_agent import agentcode
 from backend.agents.agent_source.exercise_agent import agentexercise
 from backend.agents.agent_source.kn_agent import agentkn

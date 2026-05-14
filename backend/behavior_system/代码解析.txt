@@ -1,0 +1,5 @@
+models.py定义行为事件类型
+logger.py负责接收总控参数（参数类型已经由models.py定义）
+把行为类记录到behavior.json中
+analyse分析behavior.json，将行为记录转为用户画像参数
+最后由总控将用户画像参数传给agent_profile
