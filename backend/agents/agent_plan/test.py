@@ -1,234 +1,143 @@
 import json
 import os
-from datetime import datetime, timedelta
+from agentplan import KnowledgeGraph, PlannerAgent, save_json, run_planner
 
-# ==================== 简单的 Planner Agent ====================
+# ==================== 测试数据 ====================
 
-class SimplePlanner:
-    def __init__(self):
-        # 读取 memory.json
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        memory_path = os.path.join(current_dir, "memory.json")
-        
-        with open(memory_path, "r", encoding="utf-8") as f:
-            self.kg = json.load(f)
-        
-        # 构建知识点字典
-        self.topics = {topic["id"]: topic for topic in self.kg.get("topics", [])}
-        
-        # 构建前置依赖
-        self.prerequisites = {}
-        for topic_id, topic in self.topics.items():
-            self.prerequisites[topic_id] = topic.get("prerequisites", [])
-    
-    def get_learning_order(self, mastered: list, target: str = None):
-        """获取学习顺序"""
-        all_topics = set(self.topics.keys())
-        mastered_set = set(mastered)
-        
-        # 确定需要学习的知识点
-        if target and target in self.topics:
-            needed = self._get_dependencies(target)
-            needed.add(target)
-            needed = needed - mastered_set
-        else:
-            needed = all_topics - mastered_set
-        
-        if not needed:
-            return []
-        
-        # 拓扑排序
-        return self._topological_sort(list(needed))
-    
-    def _get_dependencies(self, topic_id: str, visited=None):
-        """递归获取所有前置依赖"""
-        if visited is None:
-            visited = set()
-        for prereq in self.prerequisites.get(topic_id, []):
-            if prereq not in visited:
-                visited.add(prereq)
-                self._get_dependencies(prereq, visited)
-        return visited
-    
-    def _topological_sort(self, topic_ids):
-        """简单的拓扑排序"""
-        if not topic_ids:
-            return []
-        
-        # 构建依赖计数
-        in_degree = {tid: 0 for tid in topic_ids}
-        graph = {tid: [] for tid in topic_ids}
-        
-        for tid in topic_ids:
-            for prereq in self.prerequisites.get(tid, []):
-                if prereq in topic_ids:
-                    graph[prereq].append(tid)
-                    in_degree[tid] += 1
-        
-        # Kahn算法
-        queue = [tid for tid in topic_ids if in_degree[tid] == 0]
-        result = []
-        
-        while queue:
-            node = queue.pop(0)
-            result.append(node)
-            for neighbor in graph.get(node, []):
-                in_degree[neighbor] -= 1
-                if in_degree[neighbor] == 0:
-                    queue.append(neighbor)
-        
-        # 剩余的追加
-        for tid in topic_ids:
-            if tid not in result:
-                result.append(tid)
-        
-        return result
-    
-    def generate_plan(self, mastered: list, weak_points: list = None, target: str = None):
-        """生成学习计划"""
-        if weak_points is None:
-            weak_points = []
-        
-        # 获取学习顺序
-        order = self.get_learning_order(mastered, target)
-        
-        # 将薄弱点提前
-        weak_in_order = [t for t in order if t in weak_points]
-        others = [t for t in order if t not in weak_points]
-        final_order = weak_in_order + others
-        
-        # 生成带名称的路径
-        path_details = []
-        for tid in final_order:
-            topic = self.topics.get(tid, {})
-            path_details.append({
-                "id": tid,
-                "name": topic.get("name", tid),
-                "difficulty": topic.get("difficulty", "medium")
-            })
-        
-        # 生成每日计划（简单版本）
-        daily_plan = self._make_daily_plan(final_order)
-        
-        # 生成资源推荐
-        resources = self._recommend_resources(final_order, weak_points)
-        
-        return {
-            "learning_path": final_order,
-            "path_details": path_details,
-            "daily_plan": daily_plan,
-            "resources": resources,
-            "total_topics": len(final_order)
-        }
-    
-    def _make_daily_plan(self, order):
-        """生成每日计划"""
-        if not order:
-            return []
-        
-        # 每天2个知识点
-        daily = []
-        day = 1
-        for i in range(0, len(order), 2):
-            day_topics = order[i:i+2]
-            daily.append({
-                "day": day,
-                "topics": day_topics,
-                "topics_name": [self.topics.get(t, {}).get("name", t) for t in day_topics]
-            })
-            day += 1
-        return daily
-    
-    def _recommend_resources(self, order, weak_points):
-        """推荐资源"""
-        resources = []
-        for tid in order[:5]:  # 只推荐前5个
-            topic = self.topics.get(tid, {})
-            rec = {
-                "topic_id": tid,
-                "topic_name": topic.get("name", tid),
-                "resources": []
-            }
-            
-            # 文本资源
-            if topic.get("content", {}).get("explanation"):
-                rec["resources"].append({
-                    "type": "text",
-                    "title": f"{topic.get('name', tid)} - 文字讲解",
-                    "content": topic["content"]["explanation"][:100] + "..."
-                })
-            
-            # 练习题
-            questions = topic.get("questions", [])
-            if questions:
-                rec["resources"].append({
-                    "type": "exercise",
-                    "title": f"{topic.get('name', tid)} - 练习题",
-                    "question": questions[0].get("question", "")
-                })
-            
-            # 常见错误提醒
-            if tid in weak_points and topic.get("common_mistakes"):
-                rec["resources"].append({
-                    "type": "warning",
-                    "title": "⚠️ 常见错误提醒",
-                    "content": ", ".join(topic["common_mistakes"])
-                })
-            
-            resources.append(rec)
-        return resources
+# 模拟用户画像（从图片中提取的真实数据）
+test_user_profile = {
+    "user_id": "test_stu_001",
+    "major": "计算机",
+    "grade": "大三",
+    "course": "操作系统",
+    "knowledge_level": {
+        "分页基本概念": 0.45,
+        "缺页中断": 0.25,
+        "虚拟内存": 0.45
+    },
+    "weak_points": ["缺页中断"],
+    "error_tags": [],
+    "learning_style": "diagram",
+    "cognitive_style": {
+        "visual": 0.7,
+        "textual": 0.15,
+        "auditory": 0.15
+    },
+    "learning_pace": "normal",
+    "resource_type": "exercise",
+    "difficulty": "hard",
+    "progress": {
+        "current_topic": "虚拟内存",
+        "completed_topics": []
+    },
+    "learning_goal": None,
+    "created_at": "2026-05-11T20:59:57.359796",
+    "updated_at": "2026-05-11T21:00:14.359359"
+}
+
+# 测试数据2：做题错误后的场景
+test_user_profile_with_error = {
+    "user_id": "test_stu_001",
+    "major": "计算机",
+    "grade": "大三",
+    "course": "操作系统",
+    "knowledge_level": {
+        "地址空间基本概念": 0.85,
+        "分页基本概念": 0.65,
+        "页表": 0.25,
+        "缺页中断": 0.05,
+        "虚拟内存": 0.45
+    },
+    "weak_points": ["缺页中断", "页表"],
+    "error_tags": ["不理解缺页中断触发时机"],
+    "learning_style": "diagram",
+    "cognitive_style": {"visual": 0.7, "textual": 0.15, "auditory": 0.15},
+    "learning_pace": "normal",
+    "resource_type": "video",
+    "difficulty": "medium",
+    "progress": {
+        "current_topic": None,
+        "completed_topics": ["os_mem_01"]
+    },
+    "learning_goal": "虚拟内存"
+}
 
 
-# ==================== 测试代码 ====================
+# ==================== 运行测试 ====================
+
+def main():
+    # 路径设置
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    memory_path = os.path.join(current_dir, "memory.json")
+    output_dir = current_dir
+    
+    print("=" * 60)
+    print("Planner Agent 测试")
+    print("=" * 60)
+    
+    # 测试1：正常场景
+    print("\n【测试1】正常用户画像")
+    print("-" * 40)
+    
+    kg = KnowledgeGraph(memory_path)
+    planner = PlannerAgent(kg)
+    
+    # 输出知识图谱
+    save_json(kg.to_json(), os.path.join(output_dir, "knowledge_graph.json"))
+    
+    # 计算下一个知识点
+    next_topic = planner.get_next_topic(test_user_profile)
+    print(f"\n下一个知识点: {next_topic}")
+    
+    # 输出给资源生成模块
+    teaching_output = planner.get_teaching_output(test_user_profile, next_topic)
+    save_json(teaching_output, os.path.join(output_dir, "teaching_output.json"))
+    
+    # 输出学习路径
+    learning_path = planner.get_learning_path(test_user_profile)
+    save_json(learning_path, os.path.join(output_dir, "learning_path.json"))
+    
+    # 测试2：做题错误后动态调整
+    print("\n" + "=" * 60)
+    print("【测试2】做题错误动态调整")
+    print("-" * 40)
+    
+    error_topic = "缺页中断"
+    print(f"\n学生做错: {error_topic}")
+    
+    updated_profile = planner.update_from_error(test_user_profile, error_topic)
+    
+    new_next_topic = planner.get_next_topic(updated_profile)
+    print(f"\n重新规划后的下一个知识点: {new_next_topic}")
+    
+    new_teaching_output = planner.get_teaching_output(updated_profile, new_next_topic)
+    save_json(new_teaching_output, os.path.join(output_dir, "teaching_output_after_error.json"))
+    
+    # 测试3：完整学习路径
+    print("\n" + "=" * 60)
+    print("【测试3】完整学习路径")
+    print("-" * 40)
+    
+    learning_path_result = planner.get_learning_path(updated_profile)
+    print(f"\n学习路径: {learning_path_result['learning_path']}")
+    print(f"当前步骤: {learning_path_result['current_step']}")
+    print(f"下一步骤: {learning_path_result['next_step']}")
+    
+    # 测试4：LLM 规划（如果启用）
+    if planner.llm_enabled:
+        print("\n" + "=" * 60)
+        print("【测试4】LLM 智能规划")
+        print("-" * 40)
+        
+        llm_result = planner.plan_with_llm(test_user_profile)
+        if llm_result:
+            save_json(llm_result, os.path.join(output_dir, "llm_plan.json"))
+            print(f"\nLLM 规划结果: {llm_result}")
+    
+    print("\n" + "=" * 60)
+    print("所有测试完成！")
+    print("=" * 60)
+
 
 if __name__ == "__main__":
-    print("=" * 60)
-    print("🎓 Planner Agent 测试程序")
-    print("=" * 60)
-    
-    # 创建 agent
-    agent = SimplePlanner()
-    
-    # 模拟用户数据
-    mastered = ["os_mem_01", "os_mem_02"]  # 已掌握地址空间和分页概念
-    weak_points = ["os_mem_04"]            # 页表是薄弱点
-    target = "os_mem_10"                  # 目标是虚拟内存
-    
-    print(f"\n📊 用户画像:")
-    print(f"   已掌握: {mastered}")
-    print(f"   薄弱点: {weak_points}")
-    print(f"   学习目标: {target}")
-    
-    # 生成计划
-    result = agent.generate_plan(mastered, weak_points, target)
-    
-    # ========== 输出结果 ==========
-    
-    print("\n" + "=" * 60)
-    print("📋 学习路径")
-    print("=" * 60)
-    
-    for i, detail in enumerate(result["path_details"], 1):
-        print(f"   {i}. {detail['name']} ({detail['id']}) - 难度: {detail['difficulty']}")
-    
-    print("\n" + "=" * 60)
-    print("📅 学习计划")
-    print("=" * 60)
-    
-    for day in result["daily_plan"]:
-        print(f"\n   第{day['day']}天:")
-        for name in day["topics_name"]:
-            print(f"      - {name}")
-    
-    print("\n" + "=" * 60)
-    print("📚 资源推荐")
-    print("=" * 60)
-    
-    for rec in result["resources"]:
-        print(f"\n   【{rec['topic_name']}】")
-        for res in rec["resources"]:
-            print(f"      [{res['type']}] {res['title']}")
-    
-    print("\n" + "=" * 60)
-    print(f"✅ 规划完成！共 {result['total_topics']} 个知识点需要学习")
-    print("=" * 60)
+    main()
