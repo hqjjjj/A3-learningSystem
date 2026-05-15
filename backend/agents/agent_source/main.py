@@ -33,11 +33,11 @@ test_input={
     "topic_id": "os_mem_04",
     "module":"内存管理-分页机制",
     "difficulty": "medium",
-    "learning_style": "diagram",
+    "learning_style": "txt",
     "weak_points": ["页表映射"],
     "understanding": 0.6,
     "current_progress":"learning",
-    "resource_type":["mindmap","exercise","materials","code_example"]
+    "resource_type":["explanation","mindmap","exercise","materials","code_example"]
 
 }
 

@@ -132,7 +132,7 @@ def user_prompt_build(user_input,topic,kb):
             user_input["resource_type"],
             ensure_ascii=False
             ),
-        learning_style=user_input["learning_style"],
+        learning_style="txt",
 
         weak_points=json.dumps(
             user_input["weak_points"],
