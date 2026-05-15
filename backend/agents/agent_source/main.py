@@ -1,4 +1,5 @@
-#输入参数定义
+#输入参数转为字典传入
+#主控函数，调用多agent,输出所需资源
 from backend.agents.agent_source.code_agent import agentcode
 from backend.agents.agent_source.exercise_agent import agentexercise
 from backend.agents.agent_source.kn_agent import agentkn
@@ -32,11 +33,11 @@ test_input={
     "topic_id": "os_mem_04",
     "module":"内存管理-分页机制",
     "difficulty": "medium",
-    "learning_style": "diagram",
+    "learning_style": "txt",
     "weak_points": ["页表映射"],
     "understanding": 0.6,
     "current_progress":"learning",
-    "resource_type":["mindmap","exercise","materials","code_example"]
+    "resource_type":["explanation","mindmap","exercise","materials","code_example"]
 
 }
 

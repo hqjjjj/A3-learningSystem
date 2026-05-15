@@ -1,0 +1,79 @@
+models.py定义行为事件类型，看窝注释！！！
+
+logger.py负责接收总控参数（参数类型已经由models.py定义）
+把行为类记录到user_events/user_id.json中
+其中resource_type为用户点击的资源（如果是message就没有资源）
+用户行为记录触发时机（参数从哪来？）：
+1.使用完"resource_type":["explanation","mindmap","exercise","materials","code_example"]
+中的任意一个资源
+2.将提问输入对话框点击“提问：resource_type为空，此时只需记录message（详见注释）
+
+cleanup维护窗口,删除多余记录
+
+analyse分析user_events/user_id.json，将行为记录转为用户画像参数
+最后由总控将用户画像参数传给agent_profile
+包含三个参数
+"knowledge_level": knowledge_level, (字典，str:list)
+"resource_type": resource_type, (list[str])
+"learning_pace": learning_pace (str)
+
+
+
+--------------调用流程-----------------------------------------------
+调用时机（参数从哪来？）
+1.使用完"resource_type":["explanation","mindmap","exercise","materials","code_example"]
+中的任意一个资源
+2.将提问输入对话框点击“提问：resource_type为空，此时只需记录message（详见注释）
+
+此时
+1.调用logger写入
+2.cleanup 维护窗口
+3.analyzer(调用看时机)
+-----------------------------------------------------------------
+------------------------关键行为”才触发 analyzer------------------------------
+例如：
+1. exercise
+需要：
+logger
+cleanup
+analyzer
+profile update
+
+因为：
+正确率变化
+掌握度变化
+2. 长时间浏览资源
+
+也可以触发 analyzer。
+因为：
+资源偏好变化
+
+3. 普通点击
+只 logger 即可。
+-------------------------------------------------------------------------
+
+----------------------------ProfileAgent 接收什么-------------------
+同时接收两类信息
+1. message(如果是发消息的话)
+
+用于：
+
+LLM语义理解
+
+例如：
+
+学习目标
+自然语言偏好
+困惑点
+2. behavior
+
+用于：
+
+行为统计更新
+
+例如：
+
+knowledge_level
+preferred_resources
+learning_pace
+--------------------------------------------------------------------------
