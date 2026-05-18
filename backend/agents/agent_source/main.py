@@ -16,32 +16,20 @@ kb = KnowledgeBaseManager(
     os.path.join(BASE_DIR, "data/knowledge")
 )
 llm=SparkLLM()
-# class agentInput:
-#     input_data = {
-#     "topic_id": source_data.get("topic_id"),
-#     "module": source_data.get("module"),
-#     "difficulty": source_data.get("difficulty"),
-#     "learning_style": source_data.get("learning_style"),
-#     "weak_points": source_data.get("weak_points", []),
-#     "understanding": source_data.get("understanding", 0.5),
-#     "current_progress": source_data.get("current_progress", "learning"),
-#     "resource_type": source_data.get("resource_type", [])
-#     }
 
 #输入参数示例
-test_input={
-    "topic_id": "os_mem_04",
-    "module":"内存管理-分页机制",
-    "difficulty": "medium",
-    "learning_style": "txt",
-    "weak_points": ["页表映射"],
-    "understanding": 0.6,
-    "current_progress":"learning",
-    "resource_type":["explanation","mindmap","exercise","materials","code_example"]
+# test_input={
+#     "topic_id": "os_mem_04",
+#     "module":"内存管理-分页机制",
+#     "difficulty": "medium",
+#     "learning_style": "txt",
+#     "weak_points": ["页表映射"],
+#     "understanding": 0.6,
+#     "current_progress":"learning",
+#     "resource_type":["explanation","mindmap","exercise","materials","code_example"]
 
-}
+# }
 
-input_data=test_input
 
 
 def parse_output(result):
@@ -57,14 +45,52 @@ def parse_output(result):
             "fixed": fixed,
             "error": str(e)
         }
-    
+def validate_input(data):
+
+    required_fields = [
+        "topic_id",
+        "module",
+        "difficulty",
+        "resource_type"
+    ]
+
+    for field in required_fields:
+
+        if field not in data:
+
+            raise ValueError(
+                f"缺少必要字段: {field}"
+            )
+def normalize_input(data):
+
+    data.setdefault("learning_style", "txt")
+
+    data.setdefault("weak_points", [])
+
+    data.setdefault("understanding", 0.5)
+
+    data.setdefault("current_progress", "learning")
+
+    data.setdefault(
+        "resource_type",
+        ["explanation"]
+    )
+
+    return data   
 class agentCore:
-    def __init__(self):
-        self.finaloutput = {}
+
     # system和user 双层结构
     #需要从知识库传递一整个topic内容
-    def run(self,input_data):
+    def run(self,input_data:dict):
+        self.finaloutput = {}
+
+        # 1. 参数标准化
+        input_data = normalize_input(input_data)
+
+        # 2. 参数校验
+        validate_input(input_data)
         topic = kb.get_topic_by_id(input_data["topic_id"])
+        
         if "code_example" in input_data["resource_type"]:
             code=agentcode()
             self.finaloutput.update(code.run(input_data,topic))
@@ -80,7 +106,6 @@ class agentCore:
 
 
 
-
 agent=agentCore()
-result=agent.run(input_data)
-print(result)
+# result=agent.run(input_data)
+# print(result)
