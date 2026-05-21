@@ -1,0 +1,58 @@
+这是资源生成的结构
+其中subtype为资源名称包括mindmap、materials、code_example、exercise、explanation，
+type为资源内容的类型
+
+{
+  "resources": [
+    // 代码示例
+    {
+      "type": "code",
+      "title": "string",
+      "language": "string",
+      "code_lines": ["string"],
+      "description": "string",
+      "subtype": "code_example"
+    },
+    // 练习题 - 选择题
+    {
+      "type": "choice",
+      "title": "string",
+      "question": "string",
+      "options": ["string"],
+      "answer": "string",
+      "analysis": "string",
+      "subtype": "exercise"
+    },
+    // 练习题 - 简答题
+    {
+      "type": "short",
+      "title": "string",
+      "question": "string",
+      "answer": "string",
+      "analysis": "string",
+      "subtype": "exercise"
+    },
+    // 知识点讲解
+    {
+      "type": "text",
+      "title": "string",
+      "content": "string",
+      "subtype": "explanation"
+    },
+    // 思维导图（Markdown格式）
+    {
+      "type": "markdown",
+      "title": "string",
+      "content": "string",   // Markdown 文本，要求包含 #、##、- 等层次结构
+      "subtype": "mindmap"
+    },
+    // 扩展材料
+    {
+      "type": "text",
+      "title": "string",
+      "content": "string",
+      "subtype": "materials"
+    }
+    // 可扩展其他资源类型...
+  ]
+}

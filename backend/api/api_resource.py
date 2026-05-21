@@ -31,15 +31,17 @@ def generate(rr:ResourceRequest):
 # 用户使用完资源
 class FinishViewRequest(BaseModel):
         user_id: str
-        resource_id: str
+        resource_type: str
+        topic:str
         duration: int
 @router.post("/finish_view")
 def finish_view(req: FinishViewRequest):
 
     result = finish_view_resource(
         user_id=req.user_id,
-        resource_id=req.resource_id,
-        duration=req.duration
+        resource_type=req.resource_type,
+        duration=req.duration,
+        topic=req.topic
     )
 
     return {
