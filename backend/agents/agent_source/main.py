@@ -17,19 +17,19 @@ kb = KnowledgeBaseManager(
 )
 llm=SparkLLM()
 
-# #输入参数示例
-# test_input={
-#     "topic_id": "os_mem_04",
-#     "module":"内存管理-分页机制",
-#     "difficulty": "medium",
-#     "learning_style": "txt",
-#     "weak_points": ["页表映射"],
-#     "understanding": 0.6,
-#     "current_progress":"learning",
-#     "resource_type":["explanation","mindmap","exercise","materials","code_example"]
+#输入参数示例
+test_input={
+    "topic_id": "os_mem_04",
+    "module":"内存管理-分页机制",
+    "difficulty": "medium",
+    "learning_style": "txt",
+    "weak_points": ["页表映射"],
+    "understanding": 0.6,
+    "current_progress":"learning",
+    "resource_type":["explanation","mindmap","exercise","materials","code_example"]
 
-# }
-# input_data=test_input
+}
+input_data=test_input
 
 
 def parse_output(result):
@@ -84,11 +84,11 @@ class agentCore:
     def run(self,input_data:dict):
         self.finaloutput = {}
 
-        # 1. 参数标准化
-        input_data = normalize_input(input_data)
+        # # 1. 参数标准化
+        # input_data = normalize_input(input_data)
 
-        # 2. 参数校验
-        validate_input(input_data)
+        # # 2. 参数校验
+        # validate_input(input_data)
 
         topic = kb.get_topic_by_id(input_data["topic_id"])
         
@@ -127,9 +127,10 @@ class agentCore:
 # 返回json,最外层仅一个resources字段
 
 
-agent=agentCore()
-# result=agent.run(input_data)
-# print(result)
+if __name__ == "__main__":
+    agent=agentCore()
+    result=agent.run(input_data)
+    print(result)
 
 # 调用提示
 # data.resources.forEach(res => {
