@@ -6,18 +6,21 @@ def build_kn_prompt(alloweds):
     if "explanation" in alloweds:
         schema["explanation"] = {
             "type":"text",
+             "title":"",
             "content":""
         }
 
     if "mindmap" in alloweds:
         schema["mindmap"] = {
             "type":"markdown",
-            "content":""
+             "title":"",
+            "content":"# 中心主题\n## 分支1\n- 要点1\n- 要点2\n## 分支2\n..."
         }
 
     if "materials" in alloweds:
         schema["materials"] = {
             "type":"text",
+             "title":"",
             "content":""
         }
 
@@ -35,8 +38,7 @@ def build_kn_prompt(alloweds):
 根据知识库内容与学生画像，
 生成知识讲解类学习资源。
 
-只允许生成：
-{alloweds}
+**重要**：你必须且只能生成以下资源类型：{alloweds}
 
 禁止生成其他资源。
 
@@ -44,7 +46,11 @@ def build_kn_prompt(alloweds):
 1. 输出必须为合法JSON
 2. 只输出JSON
 3. 禁止输出未请求资源
-
+4.每个资源对象必须包含 type、title、content 字段。
+    - type 固定为 "text"（对 explanation/materials）或 "markdown"（对 mindmap）
+    - title 不能为空，要能概括该资源内容。
+    - content 不能为空。
+    - **对于 mindmap，content 必须使用 Markdown 格式，包含至少一个一级标题（#）、若干二级标题（##）和列表（-），以清晰展示层次结构。**
 输出格式：
 {schema_str}
 """

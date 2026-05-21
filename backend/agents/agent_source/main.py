@@ -18,18 +18,18 @@ kb = KnowledgeBaseManager(
 llm=SparkLLM()
 
 #输入参数示例
-# test_input={
-#     "topic_id": "os_mem_04",
-#     "module":"内存管理-分页机制",
-#     "difficulty": "medium",
-#     "learning_style": "txt",
-#     "weak_points": ["页表映射"],
-#     "understanding": 0.6,
-#     "current_progress":"learning",
-#     "resource_type":["explanation","mindmap","exercise","materials","code_example"]
+test_input={
+    "topic_id": "os_mem_04",
+    "module":"内存管理-分页机制",
+    "difficulty": "medium",
+    "learning_style": "txt",
+    "weak_points": ["页表映射"],
+    "understanding": 0.6,
+    "current_progress":"learning",
+    "resource_type":["explanation","mindmap","exercise","materials","code_example"]
 
-# }
-
+}
+input_data=test_input
 
 
 def parse_output(result):
@@ -84,11 +84,12 @@ class agentCore:
     def run(self,input_data:dict):
         self.finaloutput = {}
 
-        # 1. 参数标准化
-        input_data = normalize_input(input_data)
+        # # 1. 参数标准化
+        # input_data = normalize_input(input_data)
 
-        # 2. 参数校验
-        validate_input(input_data)
+        # # 2. 参数校验
+        # validate_input(input_data)
+
         topic = kb.get_topic_by_id(input_data["topic_id"])
         
         if "code_example" in input_data["resource_type"]:
@@ -97,15 +98,48 @@ class agentCore:
         if"exercise"in input_data["resource_type"]:
             exercise=agentexercise()
             self.finaloutput.update(exercise.run(input_data,topic))
-        if "explanation" in input_data["resource_type"] or "mindmap" in input_data["resource_type"] or "materials" in input_data["resource_type"]:
-            kn=agentkn()
-            self.finaloutput.update(kn.run(input_data,topic,input_data["resource_type"]))
-        return self.finaloutput
+        
+        kn_types = ["explanation", "mindmap", "materials"]
 
+        for rtype in kn_types:
 
+            # 只处理用户真正请求的资源
+            if rtype in input_data["resource_type"]:
 
+                kn = agentkn()
+
+                result = kn.run(
+                    input_data,
+                    topic,
+                    [rtype]   # 这里只传一个资源类型
+                )
+
+                self.finaloutput.update(result)
+        # 格式化输出
+        resources = []
+        for key, resource_obj in self.finaloutput.items():
+            if key == "error" or not isinstance(resource_obj, dict):
+                continue
+            resource_obj["subtype"] = key
+            resources.append(resource_obj)
+
+        return {"resources": resources}
+# 返回json,最外层仅一个resources字段
 
 
 agent=agentCore()
-# result=agent.run(input_data)
-# print(result)
+result=agent.run(input_data)
+print(result)
+
+# 调用提示
+# data.resources.forEach(res => {
+#   switch(res.type) {
+#     case "code": renderCode(res); break;
+#     case "choice": renderExercise(res); break;
+#     case "markdown": renderMarkdown(res); break;
+#     case "text": 
+#       if (res.subtype === "explanation") renderExplanation(res);
+#       else if (res.subtype === "materials") renderMaterials(res);
+#       break;
+#   }
+# });

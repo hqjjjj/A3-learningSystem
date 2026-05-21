@@ -36,12 +36,17 @@ hard:
 1. 输出必须为合法JSON
 2. 只允许输出JSON
 3. 不允许输出额外说明
+4. **必须**包含以下所有字段：type, title, question, answer, analysis
+   - type 必须是 "choice" 或 "short"
+   - title 不能为空字符串
+ 
 
 exercise必须严格使用以下结构：
 其中type为short和choice二选一
 {
   "exercise":{
     "type":"",
+     "title":"",
     "question":"",
     "options":[],
     "answer":"",
@@ -52,17 +57,28 @@ exercise必须严格使用以下结构：
 - content
 - text类型
 - 其他字段
-输出示例：
+输出示例1，choice类型有options：
 {
     exercise": {
       "type": "choice",
+      "title": "页表地址转换练习",
       "question": "题目描述...",
       "options": ["选项A", "选项B", "选项C", "选项D"],
       "answer": "选项C"
       "analysis":"逻辑地址必须通过地址转换机制映射到物理地址..."
     }
     }
-注意事项，选择题的option中，不要出现形如“A. ”的字样，直接写选项，不要前缀
+输出示例2，short类型，无options：
+{
+    exercise": {
+      "type": "short",
+      "title": "页表地址转换练习",
+      "question": "题目描述...",
+      "answer": "答案..."
+      "analysis":"解析..."
+    }
+    }
+注意事项:选择题的option中，不要出现形如“A. ”的字样，直接写选项，不要前缀
 生成后必须自行验证：
 1. answer
 2. analysis

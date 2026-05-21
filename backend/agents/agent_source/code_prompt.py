@@ -25,16 +25,19 @@ code_lines中：
 
 1. 输出必须为合法JSON
 2. 只输出JSON
-
+3. **必须**包含以下所有字段：type, title, language, code_lines, description
+   - type 的值必须是 "code"
+   - title 不能为空字符串
+   - language 填写具体语言（如 "python"）
+  
 输出格式：
 
     "code_example":{
       "type":"code",
+      "title": "代码示例标题（简要概括代码功能）",
       "language":"",
-      "code_lines":[
-        ""
-      ],
-      "description":""
+      "code_lines": ["第一行代码", "第二行代码"],
+       "description": "代码说明"
     }
 
 """
