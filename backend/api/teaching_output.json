@@ -1,0 +1,22 @@
+{
+  "learning_style": "visual",
+  "weak_points": [],
+  "cognitive_level": {
+    "level": "beginner",
+    "understanding_avg": 0.04
+  },
+  "error_patterns": [],
+  "preference": {
+    "resource_type": [
+      "explanation",
+      "mindmap"
+    ],
+    "difficulty": "easy"
+  },
+  "learning_pace": "normal",
+  "current_topic": {
+    "id": "os_mem_01",
+    "name": "地址空间基本概念",
+    "is_review": true
+  }
+}

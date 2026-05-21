@@ -1,0 +1,250 @@
+# 前端 API 使用文档
+
+## 一、概述
+
+本项目提供以下核心接口：
+
+| 接口 | 方法 | URL | 说明 |
+|------|------|-----|------|
+| 聊天接口 | POST | /api/chat/ | 用户发消息，触发完整流程 |
+| 学习路径接口 | GET | /api/path/{user_id} | 获取学习路径 |
+| 资源生成接口 | POST | /api/resource/generate | 生成单个资源 |
+| 资源浏览完成接口 | POST | /api/resource/finish_view | 上报浏览时长 |
+| 题目作答接口 | POST | /api/answer/submit | 上报做题结果 |
+
+**工作流程：**
+1. 用户交互 → 调用对应 API
+2. 后端更新画像、规划路径、生成资源
+3. 返回新状态 → 前端更新 UI
+4. 用户继续操作，循环
+
+---
+
+## 二、前端状态结构
+
+```javascript
+const appstate = {
+    profile: {},                    // 用户画像
+    topic: "",                      // 当前知识点
+    recommended_resources: [],      // 推送区资源列表
+    generated_resource: {},         // 用户点击生成的单个资源
+    current_progress: ""            // 当前学习进度
+}
+
+三、接口详情
+1. 聊天接口
+POST /api/chat/
+
+用户发送自然语言消息，后端进行行为记录、画像更新、路径规划、资源生成。
+
+请求体：
+json
+{
+  "user_id": "string",
+  "message": "string"
+}
+
+返回示例：
+json
+{
+  "state": "success",
+  "result": {
+    "reply": "当前学习分页基本概念，下一步建议学习地址空间基本概念。",
+    "profile_update": {
+      "weak_points": []
+    },
+    "learning_path": {
+      "current": "分页基本概念",
+      "next": "地址空间基本概念"
+    },
+    "recommended_resources": [
+      {
+        "type": "text",
+        "title": "分页基本概念详解",
+        "content": "分页是一种内存管理技术...",
+        "subtype": "explanation"
+      },
+      {
+        "type": "markdown",
+        "title": "分页基本概念知识图谱",
+        "content": "# 分页基本概念\n## 核心定义\n...",
+        "subtype": "mindmap"
+      }
+    ],
+    "topic": "分页基本概念",
+    "current_progress": "分页基本概念"
+  }
+}
+
+字段说明：
+
+字段	                 类型	           说明
+reply	                string	        回复话术
+profile_update	        object	     画像更新（含weak_points）
+learning_path	        object	     学习路径（current/next）
+recommended_resources	array	     推荐资源列表（推送区用）
+topic	                string      	当前知识点
+current_progress	    string	       当前学习进度
+
+前端处理： 用返回的 profile、learning_path、recommended_resources、topic、current_progress 更新全局状态。
+
+2. 学习路径接口
+GET /api/path/{user_id}
+直接获取用户当前的学习路径。
+
+路径参数： user_id - 用户唯一标识
+
+返回示例：
+
+json
+{
+  "status": "success",
+  "data": {
+    "learning_path": {
+      "current": "分页基本概念",
+      "next": "地址空间基本概念",
+      "current_progress": "分页基本概念"
+    },
+    "topic": "分页基本概念",
+    "current_progress": "分页基本概念"
+  }
+}
+字段说明：
+
+字段	              类型	         说明
+learning_path      	object   	路径数据（current/next/current_progress）
+topic	            string	      当前知识点
+current_progress	string	     当前学习进度
+
+前端处理： 更新全局状态中的 path，并重新渲染路径组件。
+
+3. 资源生成接口
+POST /api/resource/generate
+
+用户主动点击生成某一类型的资源。
+
+请求体：
+
+json
+{
+  "user_id": "string",
+  "topic": "string",
+  "resource_type": "string"
+}
+返回示例：
+
+json
+{
+  "status": "success",
+  "result": {
+    "generated_resource": {
+      "type": "text",
+      "title": "分页基本概念详解",
+      "content": "分页是一种内存管理技术...",
+      "subtype": "explanation"
+    },
+    "topic": "分页基本概念",
+    "current_progress": "分页基本概念"
+  }
+}
+字段说明：
+
+字段	             类型	          说明
+generated_resource	object	       生成的单个资源
+topic	            string	       当前知识点
+current_progress	string	       当前学习进度
+
+前端处理： 用 generated_resource 直接展示资源内容。可加入本地"已生成资源"列表。
+
+4. 资源浏览完成接口
+POST /api/resource/finish_view
+
+用户关闭或离开资源页面时，上报浏览时长（秒）。
+
+请求体：
+
+json
+{
+  "user_id": "string",
+  "resource_id": "string",
+  "duration": 120
+}
+返回示例：
+
+json
+{
+  "status": "success",
+  "data": {
+    "profile_update": {
+      "weak_points": []
+    },
+    "learning_path": {
+      "current": "分页基本概念",
+      "next": "地址空间基本概念"
+    },
+    "recommended_resources": [
+      {
+        "type": "text",
+        "title": "分页基本概念详解",
+        "content": "...",
+        "subtype": "explanation"
+      }
+    ],
+    "topic": "分页基本概念",
+    "current_progress": "分页基本概念"
+  }
+}
+字段说明： 同聊天接口（不含 reply）
+
+前端处理： 更新推送区 recommended_resources 和路径状态。前端需自己记录打开资源的时间，离开时计算差值并调用此接口。
+
+5. 题目作答接口
+POST /api/answer/submit
+
+用户提交练习后，上报正确率和耗时。
+
+请求体：
+
+json
+{
+  "user_id": "string",
+  "topic": "string",
+  "correct_rate": 0.75,
+  "duration": 180
+}
+返回示例：
+
+json
+{
+  "status": "success",
+  "data": {
+    "profile_update": {
+      "weak_points": ["分页基本概念"]
+    },
+    "learning_path": {
+      "current": "分页基本概念",
+      "next": "地址空间基本概念"
+    },
+    "recommended_resources": [
+      {
+        "type": "exercise",
+        "title": "分页机制练习题",
+        "subtype": "exercise"
+      }
+    ],
+    "topic": "分页基本概念",
+    "current_progress": "分页基本概念"
+  }
+}
+字段说明： 同资源浏览完成接口
+
+前端处理： 更新推送区和路径。如果正确率低，weak_points 会包含对应知识点。
+
+四、资源类型说明 
+type	      subtype	       说明
+text	      explanation	知识点讲解
+text	      materials	     扩展材料
+markdown      mindmap	  思维导图（Markdown格式）
+code	   code_example	     代码示例
+choice	     exercise	      选择题
+short	     exercise	      简答题
