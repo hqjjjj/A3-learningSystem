@@ -33,8 +33,9 @@
           "analysis": "磁盘缓存不是实际存在的存储器，而是利用内存中的部分空间来暂存磁盘数据，以提高磁盘I/O速度。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "存储层次中，CPU寄存器的访问速度最快但容量最小，可移动存储介质速度最慢但容量最大。",
+          "options": ["true", "false"],
           "answer": "true",
           "analysis": "这是存储层次的基本规律：越靠近CPU的存储器速度越快、价格越高、容量越小。"
         }
@@ -115,8 +116,9 @@
           "analysis": "覆盖技术要求程序员了解程序结构，声明覆盖结构，操作系统只负责完成覆盖过程。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "对换技术只能用于分时系统，不能用于批处理系统。",
+          "options": ["true", "false"],
           "answer": "false",
           "analysis": "对换技术最早用于分时系统，后来被广泛应用于各类操作系统中，包括批处理系统。"
         },
@@ -239,8 +241,9 @@
           "analysis": "EAT = a×λ + (1-a)×(t+λ) + t = 0.95×20 + 0.05×120 + 100 = 19 + 6 + 100 = 125ns。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "快表是页表在内存中的一个副本，其大小可以容纳所有页表项。",
+          "options": ["true", "false"],
           "answer": "false",
           "analysis": "快表是高速缓存，由于成本原因容量有限，通常只能存放16-512个页表项，不能容纳所有页表项。"
         }
@@ -353,8 +356,9 @@
           "analysis": "段页式系统中，段表不再记录内存起始地址，而是记录该段的页表起始地址和页表长度。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "段页式存储管理方式可以避免外部碎片。",
+          "options": ["true", "false"],
           "answer": "true",
           "analysis": "段页式系统中，页的大小固定，采用离散分配方式，不会产生外部碎片，但会产生内部碎片（页内碎片）。"
         }
@@ -429,8 +433,9 @@
           "analysis": "反置页表只包含已调入内存的页面，若检索整个反置页表都未找到匹配项，说明该页尚未装入内存。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "反置页表可以完全取代传统页表。",
+          "options": ["true", "false"],
           "answer": "false",
           "analysis": "反置页表只包含已调入内存的页面，还需要为每个进程建立一个外部页表，记录尚未调入内存的页面在外存中的位置。"
         }

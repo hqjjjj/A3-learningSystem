@@ -71,8 +71,9 @@
           "analysis": "控制/状态寄存器用于存放从CPU送来的控制信息或设备的状态信息，数据寄存器用于暂存数据。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "内存映像I/O方式将内存单元地址和设备控制器寄存器地址统一编址。",
+          "options": ["true", "false"],
           "answer": "true",
           "analysis": "内存映像I/O不区分内存地址和设备寄存器地址，统一编址，使用一般的存储指令访问设备寄存器。"
         },
