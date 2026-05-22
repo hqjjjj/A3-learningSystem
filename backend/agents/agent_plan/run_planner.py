@@ -7,16 +7,20 @@ from agentplan import KnowledgeGraph, PlannerAgent
 
 # ==================== 配置 ====================
 
+# 获取项目根目录
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(current_dir, "../../.."))
+
 # 监听目录（别人放用户画像的地方）
-WATCH_DIR = os.path.join(os.path.dirname(__file__),"data","knowledge", "profiles")
+WATCH_DIR = os.path.join(project_root, "data", "profiles")
 
 # 输出目录（你的输出）
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "data","knowledge", "planner")
-
+OUTPUT_DIR = os.path.join(project_root, "data", "paths")
 # 已处理的文件记录（避免重复处理）
 processed_files = set()
 
-
+# memory.json 路径
+MEMORY_PATH = os.path.join(project_root, "data", "knowledge", "memory.json")
 # ==================== 处理函数 ====================
 
 def process_user_profile(filepath: str):
