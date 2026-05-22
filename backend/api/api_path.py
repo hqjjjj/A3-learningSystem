@@ -14,3 +14,4 @@ def get_path(user_id: str):
         "status": "success",
         "result": result
     }
+
