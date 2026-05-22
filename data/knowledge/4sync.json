@@ -71,8 +71,9 @@
           "analysis": "turn变量表示哪个进程可以进入临界区，如果turn==i，则允许进程P_i进入临界区。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "Peterson算法不满足“忙则等待”准则。",
+          "options": ["true", "false"],
           "answer": "false",
           "analysis": "Peterson算法满足忙则等待准则。当一个进程已在临界区时，另一个进程会因while条件为真而处于忙等状态，无法进入临界区。"
         }
@@ -222,8 +223,9 @@
           "analysis": "full=7表示缓冲区中有7个产品，但生产者已生产2个还未放入（说明还在自己的生产区），实际缓冲区产品数仍为7。full值表示已在缓冲区中的产品数。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "生产者-消费者问题中的mutex信号量用于实现生产者和消费者之间的同步。",
+          "options": ["true", "false"],
           "answer": "false",
           "analysis": "mutex信号量用于实现生产者和消费者对缓冲池的互斥访问，empty和full用于实现同步。"
         }

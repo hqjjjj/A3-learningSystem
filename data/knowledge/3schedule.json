@@ -33,8 +33,9 @@
           "analysis": "中级调度（内存调度）将暂时不能运行的进程调至外存，从而提高内存利用率和系统吞吐量。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "低级调度是操作系统中最基本的一种调度，在分时、批处理和实时系统中都必须配置。",
+          "options": ["true", "false"],
           "answer": "true",
           "analysis": "低级调度（进程调度）是最基本的调度，三种类型的操作系统都必须配置。"
         }
@@ -108,8 +109,9 @@
           "analysis": "A周转时间=10；B周转时间=(10-1)+2=11；C周转时间=(12-2)+1=11；平均=(10+11+11)/3=10.67秒。实际上，A完成于10，B从10到12，C从12到13，C周转时间=13-2=11；平均= (10+11+11)/3=10.67。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "FCFS调度算法对长作业和短作业都同样有利。",
+          "options": ["true", "false"],
           "answer": "false",
           "analysis": "FCFS算法对短作业不利，因为短作业需要等待前面所有长作业执行完后才能执行，导致平均周转时间较长。"
         }
@@ -182,8 +184,9 @@
           "analysis": "调度顺序：A(2)→B(2)→C(2)→A(2)→B(1)→A(1)。A执行时间:第1轮2ms，第2轮2ms，第3轮1ms，共5ms。A完成时间：第1轮结束于2ms，第2轮结束于第1轮+2+2+2=8ms，第3轮结束于8+2+1=11ms？重新计算：0-2 A，2-4 B，4-6 C，6-8 A，8-9 B，9-10 A。A完成于10ms。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "轮转调度算法只适用于分时系统，不适用于批处理系统。",
+          "options": ["true", "false"],
           "answer": "false",
           "analysis": "RR算法在分时系统中广泛使用，但也适用于需要公平调度的批处理系统，只是效率可能不如SJF。"
         }
@@ -295,8 +298,9 @@
           "analysis": "友好值的范围为-20到+19，数值越小表示优先级越高，友好值-20对应最高优先级。"
         },
         {
-          "type": "truefalse",
+          "type": "choice",
           "question": "在Linux系统中，实时进程（SCHED_FIFO）的优先级高于普通进程（SCHED_NORMAL）。",
+          "options": ["true", "false"],
           "answer": "true",
           "analysis": "Linux系统中，采用SCHED_FIFO或SCHED_RR实时策略的任务，与普通任务相比具有更高的优先级。"
         }
