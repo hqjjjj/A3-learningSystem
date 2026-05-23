@@ -11,7 +11,7 @@ def get_path(user_id: str):
     result = get_learning_path(user_id)
 
     return {
-        "status": "success",
-        "result": result
+    "status": "success",
+    "data": result
     }
 

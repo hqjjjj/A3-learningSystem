@@ -16,7 +16,7 @@ def chat(req:ChatRequest):
         message=req.message
     )
 
-    return{
-        "state":"success",
-        "result":result
-    }
+    return {
+    "status": "success",
+    "data": result
+    }    
