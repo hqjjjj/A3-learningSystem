@@ -1,0 +1,35 @@
+# 组件 Props 定义
+
+## ProfilePanel
+props:
+  - profile (object, 必填)
+    - learning_style: string        // 学习风格
+    - learning_pace: string         // 学习节奏
+    - weak_points: string[]         // 薄弱知识点列表
+    - knowledge_level: object       // 知识点掌握度 { 知识点名称: 分数(0-1) }
+
+## PathPanel
+props:
+  - learningPath (object, 必填)
+    - topic: string                 // 当前知识点
+    - current: string               // 当前步骤
+    - next: string                  // 下一步
+
+## WeakPointList
+props:
+  - weakPoints: string[]            // 薄弱知识点列表
+
+## KnowledgeChart
+props:
+  - knowledgeLevel: object          // 知识点掌握度 { 知识点名称: 分数(0-1) }
+
+## PathStep
+props:
+  - name: string                    // 步骤名称
+  - status: string                  // 状态: completed / current / pending
+  - isCurrent: boolean              // 是否为当前步骤
+  - onClick: function               // 点击回调
+
+## CurrentTopicBadge
+props:
+  - topic: string                   // 当前知识点名称
