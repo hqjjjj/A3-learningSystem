@@ -8,6 +8,7 @@
   "error_patterns": [],
   "preference": {
     "resource_type": [
+      "mindmap",
       "explanation"
     ],
     "difficulty": "easy"
