@@ -46,8 +46,8 @@ class Orchestrator:
 
         return {
             "reply": reply,
-            "profile_update": {"weak_points": profile.get("weak_points", [])},
-            "learning_path": {"current": path_data.get("current", ""), "next": path_data.get("next", "")},
+            "profile": profile,
+            "learning_path": path_data.get("path_list", []),
             "recommended_resources": recommended,
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
@@ -57,9 +57,11 @@ class Orchestrator:
         profile = self._get_profile_dict(user_id)
         path_data = self._call_plan_agent(user_id, profile)
         return {
-            "learning_path": path_data,
+            "profile": profile,
+            "learning_path": path_data.get("path_list", []),
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
+            
         }
 
     def generate_single_resource(self, user_id: str, topic: str, resource_type: str) -> Dict:
@@ -82,8 +84,8 @@ class Orchestrator:
         recommended = self._extract_recommended(resources)
 
         return {
-            "profile_update": {"weak_points": profile.get("weak_points", [])},
-            "learning_path": {"current": path_data.get("current", ""), "next": path_data.get("next", "")},
+            "profile": profile,
+            "learning_path": path_data.get("path_list", []),
             "recommended_resources": recommended,
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
@@ -100,8 +102,8 @@ class Orchestrator:
         recommended = self._extract_recommended(resources)
 
         return {
-            "profile_update": {"weak_points": profile.get("weak_points", [])},
-            "learning_path": {"current": path_data.get("current", ""), "next": path_data.get("next", "")},
+            "profile": profile,
+            "learning_path": path_data.get("path_list", []),
             "recommended_resources": recommended,
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
@@ -128,12 +130,19 @@ class Orchestrator:
                 result["next"] = lp.get("next_step", "")
                 # current 优先取文件，文件为 None 则取画像的 current_topic
                 result["current"] = lp.get("current_step") or profile.get("progress", {}).get("current_topic", "")
-                result["current_progress"] = result["current"]
+                # 从 teaching_output.json 读取 is_review
+                review_flag = False
+                if os.path.exists("teaching_output.json"):
+                    with open("teaching_output.json", "r", encoding="utf-8") as f:
+                      to = json.load(f)
+                    review_flag = to.get("current_topic", {}).get("is_review", False)
+                result["current_progress"] = "review" if review_flag else "learning"
                 # topic_id 从 path_nodes 中匹配
                 for node in lp.get("path_nodes", []):
                     if node.get("name") == result["current"]:
                         result["topic_id"] = node.get("id", "")
                         break
+                result["path_list"] = lp.get("learning_path", [])[:5]
                 result["module"] = profile.get("course", "")
             return result
         except Exception as e:
@@ -195,8 +204,7 @@ class Orchestrator:
             "learning_style": profile.get("learning_style", "text"),
             "weak_points": profile.get("weak_points", []),
             "understanding": self._get_current_understanding(profile),
-            "current_progress": path_data.get("current_progress", "") if path_data else profile.get("progress", {}).get("current_topic", ""),
-            "resource_type": profile.get("resource_type", ["explanation"])
+            "current_progress": path_data.get("current_progress", "learning") if path_data else "learning",
         }
 
     def _get_current_understanding(self, profile: Dict) -> float:

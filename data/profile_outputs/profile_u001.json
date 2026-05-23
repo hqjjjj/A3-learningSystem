@@ -1,11 +1,11 @@
 {
-  "user_id": "stu_003",
-  "major": "人工智能",
-  "grade": "研一",
+  "user_id": "u001",
+  "major": "计算机",
+  "grade": "大三",
   "course": "操作系统",
   "knowledge_level": {
     "地址空间基本概念": 0.0,
-    "分页基本概念": 0.0,
+    "分页基本概念": 0.4,
     "地址结构（页号+偏移）": 0.0,
     "页表": 0.0,
     "快表（TLB）": 0.0,
@@ -13,27 +13,27 @@
     "页面置换算法": 0.0,
     "内部碎片": 0.0,
     "外部碎片": 0.0,
-    "虚拟内存": 0.75
+    "虚拟内存": 0.0
   },
   "weak_points": [],
   "error_tags": [],
-  "learning_style": "text",
+  "learning_style": "diagram",
   "cognitive_style": {
-    "visual": 0.33,
-    "textual": 0.33,
-    "auditory": 0.33
+    "visual": 0.7,
+    "textual": 0.15,
+    "auditory": 0.15
   },
-  "learning_pace": "fast",
+  "learning_pace": "slow",
   "resource_type": [
     "explanation",
-    "exercise"
+    "mindmap"
   ],
-  "difficulty": "hard",
+  "difficulty": "easy",
   "progress": {
-    "current_topic": "虚拟内存",
+    "current_topic": "分页基本概念",
     "completed_topics": []
   },
   "learning_goal": null,
-  "created_at": "2026-05-18T22:42:37.708087",
-  "updated_at": "2026-05-18T22:42:37.708395"
+  "created_at": "2026-05-23T16:51:17.449785",
+  "updated_at": "2026-05-23T16:51:17.450146"
 }
