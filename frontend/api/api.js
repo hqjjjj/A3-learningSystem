@@ -12,11 +12,17 @@ async function request(url, options) {
       },
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();//解析响应体为 JSON 对象
-    return data;
+    const json = await response.json();
+
+    // 统一处理后端返回格式：{ status: "success", data: ... }
+    if (json.status === 'success') {
+      return json.data;   // 直接返回业务数据
+    }
+    // 如果后端返回其他状态，抛出错误
+    throw new Error(json.message || '请求失败');
   } catch (error) {
     console.error(`API Error [${url}]:`, error);
-    throw error; // 让调用方自行处理
+    throw error;
   }
 }
 

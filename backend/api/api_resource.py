@@ -23,8 +23,8 @@ def generate(rr:ResourceRequest):
         resource_type=rr.resource_type
     )
     return {
-        "status": "success",
-        "result":result
+    "status": "success",
+    "data": result
     }
 
 
@@ -38,10 +38,9 @@ class FinishViewRequest(BaseModel):
 def finish_view(req: FinishViewRequest):
 
     result = finish_view_resource(
-        user_id=req.user_id,
-        resource_type=req.resource_type,
-        duration=req.duration,
-        topic=req.topic
+    user_id=req.user_id,
+    resource_id=req.resource_type,
+    duration=req.duration
     )
 
     return {

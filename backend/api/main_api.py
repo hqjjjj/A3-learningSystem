@@ -6,8 +6,7 @@ from fastapi import FastAPI
 from api_chat import router as chat_router
 from api_path import router as path_router
 from api_resource import router as resource_router
-from api_finish import router as finish_router
-from api_answer import router as answer_router
+
 
 app=FastAPI()
 
@@ -30,17 +29,7 @@ app.include_router(
     tags=["resource"]
 )
 
-app.include_router(
-    finish_router,
-    prefix="/api/resource",
-    tags=["resource"]
-)
 
-app.include_router(
-    answer_router,
-    prefix="/api/answer",
-    tags=["answer"]
-)
 
 if __name__ == "__main__":
     import uvicorn
