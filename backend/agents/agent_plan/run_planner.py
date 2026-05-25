@@ -12,10 +12,10 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(current_dir, "../../.."))
 
 # 监听目录（别人放用户画像的地方）
-WATCH_DIR = os.path.join(project_root, "data", "profiles")
+WATCH_DIR = os.path.join(project_root, "data", "profile_outputs")
 
 # 输出目录（你的输出）
-OUTPUT_DIR = os.path.join(project_root, "data", "paths")
+OUTPUT_DIR = os.path.join(project_root, "data", "planner")
 # 已处理的文件记录（避免重复处理）
 processed_files = set()
 
@@ -29,9 +29,16 @@ def process_user_profile(filepath: str):
         with open(filepath, "r", encoding="utf-8") as f:
             user_profile = json.load(f)
         
+        # 优先从文件内容获取 user_id
         user_id = user_profile.get("user_id")
+        
+        # 如果内容中没有，从文件名提取（去掉 profile_ 前缀，去掉 .json）
         if not user_id:
-            print(f"[跳过] 文件 {filepath} 缺少 user_id")
+            filename = os.path.basename(filepath)
+            user_id = filename.replace("profile_", "").replace(".json", "")
+        
+        if not user_id:
+            print(f"[跳过] 文件 {filepath} 无法获取 user_id")
             return
         
         print(f"\n[处理] 用户 {user_id}")
