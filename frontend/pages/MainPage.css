@@ -1,0 +1,214 @@
+/* MainPage.css */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.main-page {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ========= 左侧栏 ========= */
+.sidebar {
+  background-color: #f8f9fc;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease;
+  width: 320px;          /* 展开宽度 */
+  position: relative;
+  overflow-y: auto;
+}
+
+.sidebar.collapsed {
+  width: 60px;           /* 折叠宽度（只显示图标） */
+  overflow-y: hidden;
+}
+
+/* 折叠/展开按钮 */
+.sidebar-toggle {
+  position: absolute;
+  top: 12px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  transition: 0.1s;
+}
+.sidebar-toggle:hover {
+  background: #eef2ff;
+}
+
+/* 展开时的内容区 */
+.sidebar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 16px 12px;
+  gap: 20px;
+}
+
+.profile-section {
+  flex-shrink: 0;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 16px;
+}
+
+.chat-section {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* 折叠时显示的图标区 */
+.collapsed-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-top: 60px;
+}
+
+/* 原有文字图标样式（保留，如果你不用可以删除） */
+.icon {
+  font-size: 24px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.1s;
+}
+.icon:hover {
+  opacity: 1;
+}
+
+/* 新增：图片图标样式 */
+.icon-img {
+  width: 32px;          /* 根据实际图片调整 */
+  height: 32px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: 0.2s;
+  border-radius: 8px;   /* 可选，圆角 */
+  object-fit: contain;  /* 保持比例 */
+}
+.icon-img:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* ========= 右侧主区域 ========= */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* 主 TabBar */
+.main-tab-bar {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fefefe;
+  padding: 0 24px;
+  flex-shrink: 0;
+}
+.main-tab-bar button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  color: #475569;
+  transition: 0.1s;
+}
+.main-tab-bar button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+.main-tab-bar button:hover:not(.active) {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+/* 主 Tab 内容区 */
+.main-tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+/* 路径区容器（含子 Tab） */
+.path-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sub-tab-bar {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+.sub-tab-bar button {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+}
+.sub-tab-bar button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.sub-tab-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* 资源区容器 */
+.resource-container {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* 响应式小屏：左侧宽度调小一点 */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px;
+  }
+  .sidebar.collapsed {
+    width: 50px;
+  }
+  .main-tab-content {
+    padding: 16px;
+  }
+  .icon-img {
+    width: 28px;
+    height: 28px;
+  }
+}

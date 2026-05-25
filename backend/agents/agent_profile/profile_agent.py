@@ -27,7 +27,7 @@ except Exception as e:
     print(f"⚠️ 加载memory.json失败: {e}")
 
 class ProfileAgent:
-    def __init__(self, app_id="820d31b7", api_key="6e31903de32ff6578f5d5e5e137d5328", api_secret="MDgyODNjMTg1MzdjZGM5YTU4NDlmYWNh"):
+    def __init__(self, app_id="nide", api_key="nide", api_secret="nide"):
         self.app_id = app_id
         self.api_key = api_key
         self.api_secret = api_secret
