@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // 实现单资源生成和资源推送，具体见backend/api/aaapi使用文档.txt
 
 
@@ -21,6 +22,8 @@
 // topic (string, 必填)
 
 // 当前知识点名称
+=======
+>>>>>>> CRPanel
 import React, { useState, useEffect } from 'react';
 import ResourceCard from './ResourceCard';
 import ResourceGeneratorButton from './ResourceGeneratorButton';
