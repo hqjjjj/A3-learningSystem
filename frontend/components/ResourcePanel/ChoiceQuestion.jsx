@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';  // ← 新增 useEffect
 
-const ChoiceQuestion = ({ question, onSubmit }) => {
+const ChoiceQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增 resetTrigger 参数
   const [selectedOption, setSelectedOption] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+
+  // ← 新增：监听重置触发器
+  useEffect(() => {
+    setSelectedOption(null);
+    setSubmitted(false);
+  }, [resetTrigger]);
 
   const handleSubmit = () => {
     if (selectedOption === null) return;

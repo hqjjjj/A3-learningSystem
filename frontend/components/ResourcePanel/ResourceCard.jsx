@@ -27,6 +27,13 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
     setShowResult(true);
   };
 
+  // ← 新增：重试处理函数
+  const handleRetry = () => {
+    setShowResult(false);
+    setResultData(null);
+    setResetTrigger(prev => prev + 1);  // 递增触发器
+  };
+  
   const renderContent = () => {
     switch (resource.type) {
       case 'text':
@@ -36,9 +43,10 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       case 'code':
         return <CodeBlock code={resource.content} language={resource.language} />;
       case 'choice':
-        return <ChoiceQuestion question={resource} onSubmit={handleSubmitAnswer} />;
+        return <ChoiceQuestion question={resource} onSubmit={handleSubmitAnswer} resetTrigger={resetTrigger} />;  // ← 传递 resetTrigger
       case 'short':
-        return <ShortQuestion question={resource} onSubmit={handleSubmitAnswer} />;
+        return <ShortQuestion question={resource} onSubmit={handleSubmitAnswer} resetTrigger={resetTrigger} />;  // ← 传递 resetTrigger
+      // ... 其他类型不变
       default:
         return <TextResource content={resource.content} title={resource.title} />;
     }
@@ -79,7 +87,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       {/* 内容区域 */}
       <div style={{ padding: '16px' }}>
         {showResult && resultData ? (
-          <ExerciseResult result={resultData} onRetry={() => setShowResult(false)} />
+          <ExerciseResult result={resultData} onRetry={handleRetry} />
         ) : (
           renderContent()
         )}

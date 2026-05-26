@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';  // ← 新增导入
 
 const MessageBubble = ({ role, content, isLoading = false }) => {
   const isUser = role === 'user';
@@ -42,8 +43,10 @@ const MessageBubble = ({ role, content, isLoading = false }) => {
             <span style={{ animation: 'pulse 1.4s infinite 0.2s' }}>.</span>
             <span style={{ animation: 'pulse 1.4s infinite 0.4s' }}>.</span>
           </span>
-        ) : (
+        ) : isUser ? (
           content
+        ) : (
+        <ReactMarkdown>{content}</ReactMarkdown>  // ← 助手消息支持 Markdown
         )}
       </div>
 

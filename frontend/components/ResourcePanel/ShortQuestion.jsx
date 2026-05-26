@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';  // ← 新增 useEffect
 
-const ShortQuestion = ({ question, onSubmit }) => {
+const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增 resetTrigger 参数
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+    // ← 新增：监听重置触发器
+  useEffect(() => {
+    setAnswer('');
+    setSubmitted(false);
+  }, [resetTrigger]);
 
   const handleSubmit = () => {
     if (!answer.trim()) return;
