@@ -54,7 +54,7 @@ const MainPage = () => {
         : prev.profile,
       // 推荐资源如果是数组则直接替换
       recommended_resources: updates.recommended_resources ?? prev.recommended_resources,
-      generated_resources: updates.generated_resources ?? prev.generated_resources,
+      generated_resource: updates.generated_resource ?? prev.generated_resource,
       chat_history: updates.chat_history ?? prev.chat_history,
       learning_path: updates.learning_path ?? prev.learning_path,
       topic: updates.topic ?? prev.topic
