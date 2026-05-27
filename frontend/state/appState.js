@@ -5,9 +5,9 @@ const appState = {
     // 用户选择生成单个资源
     recommended_resources: [],
     // 资源推送区的多个资源
-    genrated_resource:{},
+    genrated_resource:[],
     // 当前学习状态：复习/学习
     current_progress:"",
     chat_history: [],
-    learning_path:{}
+    learning_path:[]
 }
