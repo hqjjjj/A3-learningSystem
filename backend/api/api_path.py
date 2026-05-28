@@ -1,17 +1,22 @@
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 from orchestrator.orchestrator import get_learning_path
 
 # 用户请求学习路径
 router = APIRouter()
 
-@router.get("/{user_id}")
-def get_path(user_id: str):
+class PathRequest(BaseModel):
+    user_id: str
+    topic: str 
 
-    result = get_learning_path(user_id)
-
+@router.post("/") 
+def get_path(req: PathRequest):
+    result = get_learning_path(
+        user_id=req.user_id,
+        topic=req.topic
+    )
     return {
-    "status": "success",
-    "data": result
+        "status": "success",
+        "data": result
     }
-
