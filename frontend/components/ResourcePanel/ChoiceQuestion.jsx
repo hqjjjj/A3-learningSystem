@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+
 import React, { useState, useEffect } from 'react';  // ← 新增 useEffect
 
 const ChoiceQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增 resetTrigger 参数
   const [selectedOption, setSelectedOption] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [startTime] = useState(Date.now());
 
   // ← 新增：监听重置触发器
   useEffect(() => {
@@ -13,8 +14,18 @@ const ChoiceQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新�
 
   const handleSubmit = () => {
     if (selectedOption === null) return;
+    
+    const duration = Math.floor((Date.now() - startTime) / 1000);
+    const isCorrect = (selectedOption === question.correctAnswer);
+    const correctRate = isCorrect ? 1.0 : 0.0;
+    
     setSubmitted(true);
-    onSubmit(selectedOption);
+    onSubmit({
+      user_answer: selectedOption,
+      correct_rate: correctRate,
+      duration: duration,
+      resource_type: question.type || 'choice'
+    });
   };
 
   return (

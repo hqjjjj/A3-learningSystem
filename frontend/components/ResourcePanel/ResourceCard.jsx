@@ -10,19 +10,25 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
   const [startTime] = useState(Date.now());
   const [showResult, setShowResult] = useState(false);
   const [resultData, setResultData] = useState(null);
+  const [resetTrigger, setResetTrigger] = useState(0);
 
   useEffect(() => {
     return () => {
       // 组件卸载时上报时长
       const duration = Math.floor((Date.now() - startTime) / 1000);
       if (onFinishResource && resource.id) {
-        onFinishResource(resource.id, duration);
+        onFinishResource(resource.type, resource.topic, duration);
       }
     };
   }, [startTime, onFinishResource, resource.id]);
 
   const handleSubmitAnswer = async (answer) => {
-    const result = await onSubmitAnswer(resource.id, answer);
+    const result = await onSubmitAnswer({
+      resource_id: resource.id,
+      resource_type: resource.type,
+      topic: resource.topic,
+      ...answerData
+    });
     setResultData(result);
     setShowResult(true);
   };
@@ -35,6 +41,49 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
   };
   
   const renderContent = () => {
+        // ✅ 新增：动画类型
+    if (resource.type === 'html' && resource.subtype === 'animation') {
+      return (
+        <div style={{
+          border: '1px solid #e5e7eb',
+          borderRadius: '8px',
+          overflow: 'hidden',
+          marginTop: '8px'
+        }}>
+          <div style={{
+            padding: '8px 12px',
+            background: '#f3f4f6',
+            borderBottom: '1px solid #e5e7eb',
+            fontSize: '13px',
+            fontWeight: 500
+          }}>
+            🎬 {resource.title}
+          </div>
+          <iframe
+            srcDoc={resource.html_content}
+            title={resource.title}
+            style={{
+              width: '100%',
+              height: '500px',
+              border: 'none',
+              backgroundColor: '#fff'
+            }}
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+          />
+          {resource.description && (
+            <div style={{
+              padding: '8px 12px',
+              fontSize: '12px',
+              color: '#6b7280',
+              background: '#f9fafb',
+              borderTop: '1px solid #e5e7eb'
+            }}>
+              {resource.description}
+            </div>
+          )}
+        </div>
+      );
+    }
     switch (resource.type) {
       case 'text':
         return <TextResource content={resource.content} title={resource.title} />;

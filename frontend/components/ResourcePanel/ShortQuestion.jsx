@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+
 import React, { useState, useEffect } from 'react';  // ← 新增 useEffect
 
 const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增 resetTrigger 参数
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [startTime] = useState(Date.now());
 
     // ← 新增：监听重置触发器
   useEffect(() => {
@@ -13,8 +14,17 @@ const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增
 
   const handleSubmit = () => {
     if (!answer.trim()) return;
+    
+    const duration = Math.floor((Date.now() - startTime) / 1000);
+    
     setSubmitted(true);
-    onSubmit(answer);
+    onSubmit({
+      user_answer: answer,
+      correct_rate: -1,  // 简答题不自动评分
+      duration: duration,
+      resource_type: question.type || 'short',
+      standard_answer: question.correctAnswer
+    });
   };
 
   return (
@@ -53,6 +63,22 @@ const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增
         >
           提交答案
         </button>
+      )}
+   
+      {/* 提交后显示参考答案 */}
+      {submitted && question.correctAnswer && (
+        <div style={{
+          marginTop: '16px',
+          padding: '12px',
+          background: '#f0fdf4',
+          borderRadius: '8px',
+          borderLeft: '4px solid #22c55e'
+        }}>
+          <strong style={{ fontSize: '13px', color: '#166534' }}>📖 参考答案：</strong>
+          <p style={{ margin: '8px 0 0 0', fontSize: '13px', color: '#374151', lineHeight: 1.5 }}>
+            {question.correctAnswer}
+          </p >
+        </div>
       )}
     </div>
   );
