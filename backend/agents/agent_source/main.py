@@ -1,5 +1,6 @@
 #输入参数转为字典传入
 #主控函数，调用多agent,输出所需资源
+from backend.agents.agent_source.animation_agent import agentanimation
 from backend.agents.agent_source.code_agent import agentcode
 from backend.agents.agent_source.exercise_agent import agentexercise
 from backend.agents.agent_source.kn_agent import agentkn
@@ -26,7 +27,7 @@ test_input={
     "weak_points": ["页表映射"],
     "understanding": 0.6,
     "current_progress":"learning",
-    "resource_type":["explanation","mindmap","exercise","materials","code_example"]
+    "resource_type":["animation","materials","code_example"]
 
 }
 input_data=test_input
@@ -91,7 +92,10 @@ class agentCore:
         # validate_input(input_data)
 
         topic = kb.get_topic_by_id(input_data["topic_id"])
-        
+        if "animation" in input_data["resource_type"]:
+            ani_agent=agentanimation()
+            self.finaloutput.update(ani_agent.run(input_data,topic))
+
         if "code_example" in input_data["resource_type"]:
             code=agentcode()
             self.finaloutput.update(code.run(input_data,topic))
