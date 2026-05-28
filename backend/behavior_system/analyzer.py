@@ -23,26 +23,23 @@ def analyze_behavior(user_id: str):
 
     # 1. 正确率分析
 
-    topic_scores={}
+    topic_scores = {}
     for e in user_events:
-        topic=e.get("topic")
-        correct_rate=e.get("correct_rate")
+        topic = e.get("topic")
+        correct_rate = e.get("correct_rate")
 
-        if topic and correct_rate is not None:
-            if topic  not in topic_scores:
-                topic_scores[topic]=[]
+        # 修改点：增加条件 correct_rate != -1
+        if topic and correct_rate is not None and correct_rate != -1:
+            if topic not in topic_scores:
+                topic_scores[topic] = []
             topic_scores[topic].append(correct_rate)
 
-    knowledge_level={}
-    
-    for topic,scores in topic_scores.items():
-        knowledge_level[topic]=max(
-                0,
-                 min(
-                round(sum(scores)/len(scores),2),
-                1
-             )
-                )
+    knowledge_level = {}
+    for topic, scores in topic_scores.items():
+        knowledge_level[topic] = max(
+            0,
+            min(round(sum(scores) / len(scores), 2), 1)
+        )
 
 
     # 2. 资源偏好分析

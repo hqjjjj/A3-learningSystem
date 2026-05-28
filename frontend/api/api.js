@@ -43,8 +43,12 @@ export const generateResource = async (user_id,topic,resource_type) => {
     )
 }
 
-export const fetchPath = async (user_id) => {
-  return request(`/api/path/${user_id}`, { method: 'GET' });
+export const fetchPath = async (user_id, topic) => {
+  if (!topic) throw new Error('topic is required for fetchPath');
+  return request('/api/path/', {
+    method: 'POST',
+    body: JSON.stringify({ user_id, topic })
+  });
 };
 
 export const finishResource = async ( user_id, resource_type,topic,duration ) => {
