@@ -13,7 +13,7 @@ import * as api from '../api/api';
 //isloding??zuoyong ??
 
 
-const MainPage = (appState, setAppState, userId) => {
+const MainPage = ({appState, setAppState, userId}) => {
   // 左侧折叠状态
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
@@ -22,7 +22,6 @@ const MainPage = (appState, setAppState, userId) => {
 
   // 路径区子 Tab：'learningPath' 或 'knowledgeGraph'
   const [activePathTab, setActivePathTab] = useState('learningPath');
-
 
 
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +59,7 @@ const MainPage = (appState, setAppState, userId) => {
       const assistantMsg = { role: 'assistant', content: data.reply };
       
       mergeAppState({
-        chat_history: [...appState.chat_history, userMsg, assistantMsg],
+        chat_history: [...appState.chat_history, assistantMsg],
         profile: data.profile,
         recommended_resources: data.recommended_resources,
         learning_path: data.learning_path,   // 后端可能返回更新的学习路径
@@ -158,7 +157,7 @@ const handleTopicChange=async(newTopic)=>{
   useEffect(() => {
     const loadInitial = async () => {
       try {
-        const pathData = await api.fetchPath(userId);
+        const pathData = await api.fetchPath(userId,appState.topic);
         mergeAppState({
           learning_path: pathData.learning_path,
           recommended_resources: pathData.recommended_resources || []
@@ -184,7 +183,8 @@ const handleTopicChange=async(newTopic)=>{
         {!isSidebarCollapsed && (
           <div className="sidebar-content">
             <div className="profile-section">
-              <ProfilePanel />
+              <ProfilePanel 
+              profile={appState.profile}/>
             </div>
             <div className="chat-section">
               <ChatPanel 
@@ -263,7 +263,7 @@ const handleTopicChange=async(newTopic)=>{
             <div className="resource-container">
               <ResourcePanel 
                 recommendedResources={appState.recommended_resources}
-                generatedResources={appState.generated_resources}
+                generatedResources={appState.generated_resource}
                 onGenerateResource={handleGenerateResource}
                 onSubmitAnswer={handleSubmitAnswer}
                 onFinishResource={handleFinishResource}
