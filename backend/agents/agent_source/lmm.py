@@ -16,6 +16,6 @@ class SparkLLM:
             ],
             stream=False,
             temperature=0.7,
-            max_tokens=4096,
+            max_tokens=8192,
         )
         return response.choices[0].message.content
