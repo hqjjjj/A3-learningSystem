@@ -36,9 +36,11 @@ class Orchestrator:
 
     # ==================== 五个核心函数 ====================
 
-    def handle_chat(self, user_id: str, message: str) -> Dict:
+    def handle_chat(self, user_id: str, message: str, topic: str = None) -> Dict:
         self._log_behavior(user_id, "chat", message)
         profile = self._update_profile(user_id, message)
+        if topic:
+            profile["progress"]["current_topic"] = topic
         path_data = self._call_plan_agent(user_id, profile)
         resources = self._call_source_agent(profile, path_data)
         reply = self._generate_reply(profile, path_data)
@@ -53,7 +55,7 @@ class Orchestrator:
             "current_progress": path_data.get("current_progress", "")
         }
 
-    def get_learning_path(self, user_id: str) -> Dict:
+    def get_learning_path(self, user_id: str, topic: str = None) -> Dict:
         profile = self._get_profile_dict(user_id)
         path_data = self._call_plan_agent(user_id, profile)
         return {
@@ -261,11 +263,11 @@ def get_orchestrator() -> Orchestrator:
     return _orchestrator
 
 
-def handle_chat(user_id: str, message: str) -> Dict:
-    return get_orchestrator().handle_chat(user_id, message)
+def handle_chat(user_id: str, message: str, topic: str = None) -> Dict:
+    return get_orchestrator().handle_chat(user_id, message, topic)
 
-def get_learning_path(user_id: str) -> Dict:
-    return get_orchestrator().get_learning_path(user_id)
+def get_learning_path(user_id: str, topic: str = None) -> Dict:
+    return get_orchestrator().get_learning_path(user_id, topic)
 
 def generate_single_resource(user_id: str, topic: str, resource_type: str) -> Dict:
     return get_orchestrator().generate_single_resource(user_id, topic, resource_type)

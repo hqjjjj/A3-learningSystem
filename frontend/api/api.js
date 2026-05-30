@@ -28,12 +28,12 @@ async function request(url, options) {
 
 
 
-export const sendChat = async (user_id,message) => {
-    return request('/api/chat/',{
-        method:'POST',
-        body:JSON.stringify({ user_id, message }),}
-    );
-}; 
+export const sendChat = async (user_id, message, topic) => {
+    return request('/api/chat/', {
+        method: 'POST',
+        body: JSON.stringify({ user_id, message, topic }),
+    });
+};
 
 export const generateResource = async (user_id,topic,resource_type) => {
     return request('/api/resource/generate',
@@ -58,13 +58,11 @@ export const finishResource = async ( user_id, resource_type,topic,duration ) =>
   });
 };
 
-export const submitAnswer = async (user_id, topic,correct_rate,duration) => {
-  return request('/api/answer/submit_answer', {
+export const submitAnswer = async (user_id, topic, correct_rate, duration) => {
+  return request('/api/resource/submit_answer', {
     method: 'POST',
-    body: JSON.stringify({  
-         user_id, topic,correct_rate,duration}),
+    body: JSON.stringify({ user_id, topic, correct_rate, duration }),
   });
-  
 };
 
 

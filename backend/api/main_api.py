@@ -8,7 +8,17 @@ from api_path import router as path_router
 from api_resource import router as resource_router
 
 
-app=FastAPI()
+app = FastAPI()
+
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# 然后才是 include_router
 
 # 挂载子路由并未它们分配虚拟路径（网址区域）
 app.include_router(

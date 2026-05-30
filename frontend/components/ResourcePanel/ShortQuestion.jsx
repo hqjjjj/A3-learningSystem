@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import React, { useState, useEffect } from 'react';  // ← 新增 useEffect
-
+import React, { useState, useEffect } from "react";
 const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增 resetTrigger 参数
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);

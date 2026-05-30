@@ -7,7 +7,7 @@
 
 import React from 'react';
 import WeakPointList from './WeakPointList';
-import RadarChart from './RadarChart';
+import KnowledgeChart from './KnowledgeChart';
 
 const ProfilePanel = ({ profile }) => {
   if (!profile || Object.keys(profile).length === 0) {
@@ -20,7 +20,7 @@ const ProfilePanel = ({ profile }) => {
       <p>学习风格：{profile.learning_style || '未知'}</p>
       <p>学习节奏：{profile.learning_pace || '未知'}</p>
       <WeakPointList weakPoints={profile.weak_points} />
-      <RadarChart knowledgeLevel={profile.knowledge_level} />
+      <KnowledgeChart knowledgeLevel={profile.knowledge_level} />
     </div>
   );
 };

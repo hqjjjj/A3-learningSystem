@@ -1,5 +1,5 @@
 // 前端状态结构
-const appState = {
+export const appState = {
     user_id:"",
     profile: {},
     topic: "",

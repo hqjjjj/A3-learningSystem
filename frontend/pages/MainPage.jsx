@@ -1,13 +1,14 @@
+
 // MainPage.jsx
 import React, { useState, useEffect } from 'react';   
-import ProfilePanel from './components/ProfilePanel';
-import ChatPanel from './components/ChatPanel';
-import PathPanel from './components/PathPanel';
-import KnowledgeGraphPanel from './components/KnowledgeGraphPanel'; // 新组件，队友实现
-import ResourcePanel from './components/ResourcePanel';
+import ProfilePanel from '../components/ProfilePanel';
+import ChatPanel from "../components/ChatPanel/ChatPanel";
+import KnowledgeGraphPanel from "../components/KnowledgeGraphPanel/KnowledgeGraphPanel";
+import ResourcePanel from "../components/ResourcePanel/ResourcePanel";
+import PathPanel from '../components/PathPanel';
 import './MainPage.css';
-import chatIcon from '../img/1779594814480.png';
-import profileIcon from '../img/1779594816401.png';
+import chatIcon from '../imgs/1779594814480.png';
+import profileIcon from '../imgs/1779594816401.png';
 import * as api from '../api/api';
 
 //isloding??zuoyong ??
@@ -155,6 +156,7 @@ const handleTopicChange=async(newTopic)=>{
 
     // 初始化加载学习路径
   useEffect(() => {
+    
     const loadInitial = async () => {
       try {
         const pathData = await api.fetchPath(userId,appState.topic);
@@ -167,6 +169,7 @@ const handleTopicChange=async(newTopic)=>{
       }
     };
     if (userId) loadInitial();
+    
   }, [userId]);
 
   const toggleSidebar = () => {
