@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 // 实现单资源生成和资源推送，具体见backend/api/aaapi使用文档.txt
 
@@ -23,33 +24,17 @@
 
 // 当前知识点名称
 
+=======
+
+>>>>>>> e25ecba6e7a658a2f0aa6abea1506f5c2b4d27e8
 import React, { useState, useEffect } from 'react';
 import ResourceCard from './ResourceCard';
 import ResourceGeneratorButton from './ResourceGeneratorButton';
 
-/**
- * ResourcePanel - 资源面板
- * 
- * 角色: 核心业务容器
- * 任务:
- * 1. 展示推荐资源列表（recommended_resources）和用户主动生成的资源（generated_resource）
- * 2. 根据资源类型调用不同的渲染子组件
- * 3. 提供"生成更多资源"按钮（调用 generateResource API）
- * 4. 退出资源时负责上报资源浏览时长（调用 finishResource API）
- * 5. 用户提交习题答案时调用 submitAnswer API
- * 
- * Props:
- * - recommendedResources: 推荐资源列表
- * - generatedResources: 用户生成的资源列表
- * - onGenerateResource: 生成资源回调
- * - onSubmitAnswer: 提交答案回调
- * - onFinishResource: 资源浏览完成回调
- * - isLoading: 是否正在加载
- * - userId: 用户ID
- */
+
 const ResourcePanel = ({
   recommendedResources = [],
-  generatedResources = [],
+  generatedResources = null,
   onGenerateResource,
   onSubmitAnswer,
   onFinishResource,
@@ -160,7 +145,7 @@ const ResourcePanel = ({
                 userId={userId}
               />
             </div>
-            {generatedResources.length === 0 ? (
+            {!generatedResources ? (
               <div style={{
                 textAlign: 'center',
                 padding: '60px 20px',
@@ -173,15 +158,15 @@ const ResourcePanel = ({
                 </p >
               </div>
             ) : (
-              generatedResources.map((resource, index) => (
-                <ResourceCard
-                  key={index}
-                  resource={resource}
-                  onFinishResource={onFinishResource}
-                  onSubmitAnswer={onSubmitAnswer}
-                  userId={userId}
-                />
-              ))
+              
+              <ResourceCard
+                key={index}
+                resource={resource}
+                onFinishResource={onFinishResource}
+                onSubmitAnswer={onSubmitAnswer}
+                userId={userId}
+              />
+              
             )}
           </>
         )}

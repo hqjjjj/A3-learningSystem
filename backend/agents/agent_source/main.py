@@ -1,5 +1,6 @@
 #输入参数转为字典传入
 #主控函数，调用多agent,输出所需资源
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from backend.agents.agent_source.animation_agent import agentanimation
 from backend.agents.agent_source.code_agent import agentcode
 from backend.agents.agent_source.exercise_agent import agentexercise
@@ -20,14 +21,14 @@ llm=SparkLLM()
 
 #输入参数示例
 test_input={
-    "topic_id": "os_mem_04",
-    "module":"内存管理-分页机制",
+    "topic_id": "os_memory_04",
+    "module":"存储器管理",
     "difficulty": "medium",
     "learning_style": "txt",
     "weak_points": ["页表映射"],
     "understanding": 0.6,
     "current_progress":"learning",
-    "resource_type":["animation","materials","code_example"]
+    "resource_type":["animation"]
 
 }
 input_data=test_input
@@ -74,7 +75,7 @@ def normalize_input(data):
 
     data.setdefault(
         "resource_type",
-        ["explanation"]
+        ["mindmap"]
     )
 
     return data   
@@ -90,35 +91,41 @@ class agentCore:
 
         # # 2. 参数校验
         # validate_input(input_data)
-
+        tasks=[]
         topic = kb.get_topic_by_id(input_data["topic_id"])
-        if "animation" in input_data["resource_type"]:
-            ani_agent=agentanimation()
-            self.finaloutput.update(ani_agent.run(input_data,topic))
+        resource_types=input_data["resource_type"];
+        if "animation" in resource_types:
+            tasks.append(lambda: agentanimation().run(input_data, topic))
 
-        if "code_example" in input_data["resource_type"]:
-            code=agentcode()
-            self.finaloutput.update(code.run(input_data,topic))
-        if"exercise"in input_data["resource_type"]:
-            exercise=agentexercise()
-            self.finaloutput.update(exercise.run(input_data,topic))
-        
+        if "code_example" in resource_types:
+            tasks.append(lambda: agentcode().run(input_data, topic))
+
+        if "exercise" in resource_types:
+            tasks.append(lambda: agentexercise().run(input_data, topic))
+
         kn_types = ["explanation", "mindmap", "materials"]
-
         for rtype in kn_types:
+            if rtype in resource_types:
+                tasks.append(lambda r=rtype: agentkn().run(input_data, topic, [r]))
 
-            # 只处理用户真正请求的资源
-            if rtype in input_data["resource_type"]:
 
-                kn = agentkn()
+        # 并发执行所有任务
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            # 提交所有任务，保存 future 对象
+            future_to_task = {executor.submit(task): task for task in tasks}
 
-                result = kn.run(
-                    input_data,
-                    topic,
-                    [rtype]   # 这里只传一个资源类型
-                )
+            # 按完成顺序收集结果
+            for future in as_completed(future_to_task):
+                try:
+                    result = future.result()
+                    if result and isinstance(result, dict):
+                        self.finaloutput.update(result)
+                except Exception as e:
+                    print(f"Agent 执行失败: {e}")
 
-                self.finaloutput.update(result)
+                    self.finaloutput[f"error_{str(e)}"] = {"error": str(e)}
+
+
         # 格式化输出
         resources = []
         for key, resource_obj in self.finaloutput.items():

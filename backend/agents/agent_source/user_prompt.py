@@ -148,4 +148,32 @@ def user_prompt_build(user_input,topic,kb):
     
 
      
+USER_PROMPT_ANIMATION_SIMPLE = """
+当前知识点：{topic_name}
+核心解释：{explanation}
+难度：{difficulty}
+薄弱点：{weak_points}
+
+生成一个可交互的 HTML/CSS/JS 教学动画，可视化上述知识点。
+要求：
+- 完整 HTML 页面（含样式和脚本），可直接运行
+- 使用 Canvas 或 SVG 实现动画
+- 包含交互（按钮、悬停或自动演示）
+- 界面美观，有必要的文字说明
+"""
+
+def user_prompt_animation_build(user_input, topic, kb, max_explanation_len=350):
+    """动画专用精简 prompt（不含习题、示例、总结等）"""
+    explanation = topic["content"]["explanation"]
+    if len(explanation) > max_explanation_len:
+        explanation = explanation[:max_explanation_len] + "…"
     
+    weak_points = user_input.get("weak_points", [])
+    weak_str = json.dumps(weak_points, ensure_ascii=False)
+    
+    return USER_PROMPT_ANIMATION_SIMPLE.format(
+        topic_name=topic["name"],
+        explanation=explanation,
+        difficulty=user_input["difficulty"],
+        weak_points=weak_str
+    )   
