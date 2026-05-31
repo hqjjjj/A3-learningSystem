@@ -17,18 +17,13 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       // 组件卸载时上报时长
       const duration = Math.floor((Date.now() - startTime) / 1000);
       if (onFinishResource && resource.id) {
-        onFinishResource(resource.type, resource.topic, duration);
+        onFinishResource(resource.type, duration);
       }
     };
   }, [startTime, onFinishResource, resource.id]);
 
   const handleSubmitAnswer = async (answer) => {
-    const result = await onSubmitAnswer({
-      resource_id: resource.id,
-      resource_type: resource.type,
-      topic: resource.topic,
-      ...answerData
-    });
+    const result = await onSubmitAnswer(answerData.correct_rate, answerData.duration);
     setResultData(result);
     setShowResult(true);
   };
