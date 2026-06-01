@@ -31,7 +31,7 @@ test_input={
     "resource_type":["animation"]
 
 }
-input_data=test_input
+# input_data=test_input
 
 
 def parse_output(result):
@@ -86,13 +86,19 @@ class agentCore:
     def run(self,input_data:dict):
         self.finaloutput = {}
 
-        # # 1. 参数标准化
-        # input_data = normalize_input(input_data)
+        # 1. 参数标准化
+        input_data = normalize_input(input_data)
 
-        # # 2. 参数校验
-        # validate_input(input_data)
+        # 2. 参数校验
+        validate_input(input_data)
         tasks=[]
         topic = kb.get_topic_by_id(input_data["topic_id"])
+
+        if topic is None:
+            print(f"错误：未找到知识点 {input_data['topic_id']}")
+            return {"resources": []} 
+        
+                
         resource_types=input_data["resource_type"];
         if "animation" in resource_types:
             tasks.append(lambda: agentanimation().run(input_data, topic))
@@ -137,12 +143,39 @@ class agentCore:
         return {"resources": resources}
 # 返回json,最外层仅一个resources字段
 
+def generate_resources(input_data: dict) -> dict:
+    """
+    统一的资源生成入口，供总控调用。
+    input_data 必须包含：
+        - topic_id: str
+        - module: str
+        - resource_type: List[str]  例如 ["explanation", "code_example"]
+        可选：difficulty, weak_points, understanding, learning_style, current_progress
+    返回：
+        {"resources": [...]}
+    """
+    # 参数标准化（复用 normalize_input）
+    input_data = normalize_input(input_data)
+    validate_input(input_data)   # 会检查 topic_id, module, resource_type
 
-if __name__ == "__main__":
-    agent=agentCore()
-    result=agent.run(input_data)
-    print(result)
+    # 如果 resource_type 为空，直接返回空资源
+    if not input_data.get("resource_type"):
+        return {"resources": []}
 
+    agent = agentCore()
+    return agent.run(input_data)
+
+
+# if __name__ == "__main__":
+#     # 仅用于本地手动测试，不会影响正式导入
+#     test_input = {
+#         "topic_id": "os_memory_04",
+#         "module": "存储器管理",
+#         "difficulty": "medium",
+#         "resource_type": ["animation", "code_example", "exercise", "mindmap"]
+#     }
+#     result = generate_resources(test_input)
+#     print(json.dumps(result, ensure_ascii=False, indent=2))
 # 调用提示
 # data.resources.forEach(res => {
 #   switch(res.type) {
