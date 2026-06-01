@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 import React, { useState, useRef, useEffect } from 'react';
 import ChatMessageList from './ChatMessageList';
@@ -42,7 +41,6 @@ const ChatPanel = ({
       height: '100%',
       width: '100%'
     }}>
-      {/* 聊天记录区域 */}
       <div style={{
         flex: 1,
         overflowY: 'auto',
@@ -54,8 +52,6 @@ const ChatPanel = ({
           messagesEndRef={messagesEndRef}
         />
       </div>
-
-      {/* 输入框区域 */}
       <ChatInput 
         onSendMessage={onSendMessage}
         isLoading={isLoading}
@@ -65,53 +61,4 @@ const ChatPanel = ({
   );
 };
 
-=======
-import React, { useState, useRef, useEffect } from 'react';
-import ChatMessageList from './ChatMessageList';
-import ChatInput from './ChatInput';
-
-
-const ChatPanel = ({ 
-  chatHistory = [], 
-  onSendMessage, 
-  isLoading = false,
-  userId 
-}) => {
-  const messagesEndRef = useRef(null);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatHistory]);
-
-  return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      width: '100%'
-    }}>
-      {/* 聊天记录区域 */}
-      <div style={{
-        flex: 1,
-        overflowY: 'auto',
-        padding: '16px'
-      }}>
-        <ChatMessageList 
-          chatHistory={chatHistory} 
-          isLoading={isLoading}
-          messagesEndRef={messagesEndRef}
-        />
-      </div>
-
-      {/* 输入框区域 */}
-      <ChatInput 
-        onSendMessage={onSendMessage}
-        isLoading={isLoading}
-        userId={userId}
-      />
-    </div>
-  );
-};
-
->>>>>>> e25ecba6e7a658a2f0aa6abea1506f5c2b4d27e8
 export default ChatPanel;
