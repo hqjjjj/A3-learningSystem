@@ -156,7 +156,7 @@ const handleTopicChange=async(newTopic)=>{
 
     // 初始化加载学习路径
   useEffect(() => {
-    
+    if (!appState.topic) return; 
     const loadInitial = async () => {
       try {
         const pathData = await api.fetchPath(userId,appState.topic);
@@ -170,7 +170,7 @@ const handleTopicChange=async(newTopic)=>{
     };
     if (userId) loadInitial();
     
-  }, [userId]);
+  }, [userId, appState.topic]);
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -186,8 +186,7 @@ const handleTopicChange=async(newTopic)=>{
         {!isSidebarCollapsed && (
           <div className="sidebar-content">
             <div className="profile-section">
-              <ProfilePanel 
-              profile={appState.profile}/>
+              <ProfilePanel profile={appState.profile} />
             </div>
             <div className="chat-section">
               <ChatPanel 
@@ -195,16 +194,9 @@ const handleTopicChange=async(newTopic)=>{
                 onSendMessage={handleSendMessage}
                 isLoading={isLoading}
                 userId={userId}
-                />
+              />
             </div>
           </div>
-        )}
-        {/* 折叠时只显示一个窄条（可选：显示图标） */}
-        {isSidebarCollapsed && (
-            <div className="collapsed-icons">
-            <img src={profileIcon} alt="用户画像" className="icon-img" title="用户画像" />
-            <img src={chatIcon} alt="聊天" className="icon-img" title="聊天" />
-            </div>
         )}
       </aside>
 
