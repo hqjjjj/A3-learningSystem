@@ -22,11 +22,11 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
     };
   }, [startTime, onFinishResource, resource.id]);
 
-  const handleSubmitAnswer = async (answer) => {
-    const result = await onSubmitAnswer(answerData.correct_rate, answerData.duration);
+const handleSubmitAnswer = async (correct_rate, duration) => {
+    const result = await onSubmitAnswer(correct_rate, duration);
     setResultData(result);
     setShowResult(true);
-  };
+};
 
   // ← 新增：重试处理函数
   const handleRetry = () => {

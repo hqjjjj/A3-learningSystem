@@ -136,41 +136,48 @@ const handleFinishResource=async(resourceType,duration)=>{
 }
 
 //切换主题回调函数
-const handleTopicChange=async(newTopic)=>{
-  setIsLoading(true);
-  try{
-    const pathData=await api.fetchPath(userId,newTopic);
-    mergeAppState({
-        topic: newTopic,
-        learning_path: pathData.learning_path,
-        recommended_resources: pathData.recommended_resources || []
-    })
-  }catch (error) {
-      console.error('切换知识点失败', error);
-      // 降级：只更新本地 topic
-      mergeAppState({ topic: newTopic });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const handleTopicChange = (newTopic) => {
+  try {
+    // 直接更新 topic
+    setAppState(prev => ({ ...prev, topic: newTopic }));
+  } catch (err) {
+    console.warn('更新主题失败:', err);
+    // 即使出错也尝试设置 topic（降级）
+    setAppState(prev => ({ ...prev, topic: newTopic }));
+  }
+};
 
-    // 初始化加载学习路径
-  useEffect(() => {
-    if (!appState.topic) return; 
-    const loadInitial = async () => {
-      try {
-        const pathData = await api.fetchPath(userId,appState.topic);
+    // 响应topic变化的工具
+useEffect(() => {
+  if (!userId || !appState.topic) {
+    setIsLoading(false);
+    return;
+  }
+
+  let isMounted = true;
+  const loadPath = async () => {
+    setIsLoading(true);
+    try {
+      const pathData = await api.fetchPath(userId, appState.topic);
+      if (isMounted) {
         mergeAppState({
           learning_path: pathData.learning_path,
           recommended_resources: pathData.recommended_resources || []
         });
-      } catch (error) {
-        console.error(error);
       }
-    };
-    if (userId) loadInitial();
-    
-  }, [userId, appState.topic]);
+    } catch (error) {
+      console.error('加载学习路径失败:', error);
+      // 可增加降级逻辑：如保留原路径，或提示用户
+    } finally {
+      if (isMounted) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  loadPath();
+  return () => { isMounted = false; };
+}, [userId, appState.topic]);
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
