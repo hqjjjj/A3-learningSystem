@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from backend.agents.agent_source.kn_agent import agentkn as kn_agent_class
 from backend.agents.agent_source.code_agent import agentcode as code_agent_class
 from backend.agents.agent_source.exercise_agent import agentexercise as exercise_agent_class
+from backend.agents.agent_source.main import generate_resources
 
 
 class Orchestrator:
@@ -38,32 +39,55 @@ class Orchestrator:
 
     def handle_chat(self, user_id: str, message: str, topic: str = None) -> Dict:
         self._log_behavior(user_id, "chat", message)
-        profile = self._update_profile(user_id, message)
+        
+        # 1. 关键修复：强制更新画像
+        profile_dict = self._update_profile(user_id, message)
+        
+        # 2. 如果前端明确指定了 Topic，强制更新画像对象的 current_topic
         if topic:
-            profile["progress"]["current_topic"] = topic
-        path_data = self._call_plan_agent(user_id, profile)
-        resources = self._call_source_agent(profile, path_data)
-        reply = self._generate_reply(profile, path_data)
+            profile_obj = self.profile_agent.get_profile(user_id)
+            if profile_obj:
+                profile_obj.progress.current_topic = topic
+                # 保存到磁盘（保证跨服务重启依旧有效）
+                self.profile_agent._save_profile_to_disk(profile_obj)
+                profile_dict = profile_obj.model_dump()
+        
+        # 3. 规划路径（传字典即可）
+        path_data = self._call_plan_agent(user_id, profile_dict)
+        
+        # 4. 生成资源
+        resources = self._call_source_agent(profile_dict, path_data)
+        
+        # 5. 生成回复
+        reply = self._generate_reply(profile_dict, path_data)
         recommended = self._extract_recommended(resources)
 
         return {
             "reply": reply,
-            "profile": profile,
+            "profile": profile_dict, # 返回最新的完整画像
             "learning_path": path_data.get("path_list", []),
             "recommended_resources": recommended,
-            "topic": profile.get("progress", {}).get("current_topic", ""),
+            "topic": profile_dict.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
         }
 
     def get_learning_path(self, user_id: str, topic: str = None) -> Dict:
-        profile = self._get_profile_dict(user_id)
-        path_data = self._call_plan_agent(user_id, profile)
+        profile_obj = self.profile_agent.get_profile(user_id)
+        
+        # 如果内存里没有，尝试从磁盘加载
+        if not profile_obj:
+            profile_obj = self.profile_agent.load_profile_from_disk(user_id)
+            if profile_obj:
+                self.profile_agent.profiles[user_id] = profile_obj
+
+        profile_dict = profile_obj.model_dump() if profile_obj else {}
+        
+        path_data = self._call_plan_agent(user_id, profile_dict)
         return {
-            "profile": profile,
+            "profile": profile_dict,
             "learning_path": path_data.get("path_list", []),
-            "topic": profile.get("progress", {}).get("current_topic", ""),
+            "topic": profile_dict.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
-            
         }
 
     def generate_single_resource(self, user_id: str, topic: str, resource_type: str) -> Dict:
@@ -115,31 +139,42 @@ class Orchestrator:
 
     def _update_profile(self, user_id: str, message: str, behavior: Dict = None) -> Dict:
         resp = self.profile_agent.build_profile(user_id=user_id, user_input=message, behavior=behavior)
+        # ✅ 保存后立刻转成字典返回给前端
         return resp.profile.model_dump()
 
     def _get_profile_dict(self, user_id: str) -> Dict:
+        # 优先从内存/磁盘直接获取 Pydantic 对象转为字典
         profile = self.profile_agent.get_profile(user_id)
+        if not profile:
+            profile = self.profile_agent.load_profile_from_disk(user_id)
+            if profile:
+                self.profile_agent.profiles[user_id] = profile
         return profile.model_dump() if profile else {}
 
     def _call_plan_agent(self, user_id: str, profile: Dict) -> Dict:
         try:
-            run_planner(memory_path=self.memory_path, user_profile=profile, output_dir=".")
+            # 核心优化：不在当前目录读写文件，全部基于变量传递
+            result = run_planner(memory_path=self.memory_path, user_profile=profile, output_dir=".")
+            
+            # 如果返回的是字典，直接处理
+            if isinstance(result, dict):
+                return self._process_plan_result(result, profile)
+            
+            # 兼容旧版（如果还是写的文件）
             result = {}
             if os.path.exists("learning_path.json"):
                 with open("learning_path.json", "r", encoding="utf-8") as f:
                     lp = json.load(f)
-                # next_step 从文件取
                 result["next"] = lp.get("next_step", "")
-                # current 优先取文件，文件为 None 则取画像的 current_topic
                 result["current"] = lp.get("current_step") or profile.get("progress", {}).get("current_topic", "")
-                # 从 teaching_output.json 读取 is_review
+                
                 review_flag = False
                 if os.path.exists("teaching_output.json"):
                     with open("teaching_output.json", "r", encoding="utf-8") as f:
                       to = json.load(f)
                     review_flag = to.get("current_topic", {}).get("is_review", False)
                 result["current_progress"] = "review" if review_flag else "learning"
-                # topic_id 从 path_nodes 中匹配
+                
                 for node in lp.get("path_nodes", []):
                     if node.get("name") == result["current"]:
                         result["topic_id"] = node.get("id", "")
@@ -151,49 +186,26 @@ class Orchestrator:
             print(f"⚠️ 路径规划失败: {e}")
             return {"current": "", "next": "", "current_progress": ""}
 
+    def _process_plan_result(self, plan_data: Dict, profile: Dict) -> Dict:
+        """处理新的路径规划返回结果"""
+        result = {
+            "next": plan_data.get("next_step", ""),
+            "current": plan_data.get("current_step") or profile.get("progress", {}).get("current_topic", ""),
+            "current_progress": "review" if plan_data.get("is_review", False) else "learning",
+            "topic_id": plan_data.get("topic_id", ""),
+            "path_list": plan_data.get("learning_path", [])[:5],
+            "module": profile.get("course", "")
+        }
+        return result
+
     def _call_source_agent(self, profile: Dict, path_data: Dict) -> List[Dict]:
         resource_input = self._build_resource_input(profile, path_data)
         return self._call_source_agent_raw(resource_input)
 
     def _call_source_agent_raw(self, resource_input: Dict) -> Dict:
         try:
-            result = {}
-            topic_id = resource_input.get("topic_id", "")
-            resource_types = resource_input.get("resource_type", [])
-
-            # 将 topic_id 转为完整的 topic 字典（队友C需要）
-            topic = self._get_topic_by_id(topic_id)
-            if topic is None:
-                print(f"⚠️ 未找到知识点: {topic_id}")
-                return {"resources": []}
-
-            if "code_example" in resource_types:
-                try:
-                    result.update(self.code_agent.run(resource_input, topic))
-                except Exception as e:
-                    print(f"⚠️ code_agent失败: {e}")
-            if "exercise" in resource_types:
-                try:
-                    result.update(self.exercise_agent.run(resource_input, topic))
-                except Exception as e:
-                    print(f"⚠️ exercise_agent失败: {e}")
-            if any(t in resource_types for t in ["explanation", "mindmap", "materials"]):
-                try:
-                    result.update(self.kn_agent.run(resource_input, topic, resource_types))
-                except Exception as e:
-                    print(f"⚠️ kn_agent失败: {e}")
-
-            resources = []
-            for key, value in result.items():
-                if isinstance(value, dict):
-                    value.setdefault("type", key)
-                    resources.append(value)
-                elif isinstance(value, list):
-                    for item in value:
-                        if isinstance(item, dict):
-                            item.setdefault("type", key)
-                            resources.append(item)
-            return {"resources": resources}
+            result = generate_resources(resource_input)
+            return result
         except Exception as e:
             print(f"⚠️ 资源生成失败: {e}")
             return {"resources": []}
@@ -207,36 +219,35 @@ class Orchestrator:
             "weak_points": profile.get("weak_points", []),
             "understanding": self._get_current_understanding(profile),
             "current_progress": path_data.get("current_progress", "learning") if path_data else "learning",
+            "resource_type": ["explanation"],
         }
 
     def _get_current_understanding(self, profile: Dict) -> float:
         current_topic = profile.get("progress", {}).get("current_topic", "")
         return profile.get("knowledge_level", {}).get(current_topic, 0.0)
     
-    def _get_topic_by_id(self, topic_id: str) -> Optional[Dict]:
-        """根据 topic_id 从知识图谱中获取完整的 topic 字典"""
-        import json as _json
-        memory_path = os.path.join(
-            os.path.dirname(__file__), '..', '..', 'data', 'knowledge', 'memory.json'
-        )
-        try:
-            with open(memory_path, 'r', encoding='utf-8') as f:
-                data = _json.load(f)
-            for topic in data.get('topics', []):
-                if topic.get('id') == topic_id:
-                    return topic
-        except Exception as e:
-            print(f"⚠️ 读取知识图谱失败: {e}")
-        return None
-
     def _generate_reply(self, profile: Dict, path_data: Dict) -> str:
         weak = profile.get("weak_points", [])
-        current = path_data.get("current", "")
+        # 优先读取画像里最新的 current_topic
+        current_topic = profile.get("progress", {}).get("current_topic", "")
         next_topic = path_data.get("next", "")
+        
+        # 1. 如果有薄弱点，优先聚焦薄弱点
         if weak:
-            return f"检测到你在{'、'.join(weak)}部分掌握较弱，建议先复习{current}，再学习{next_topic}。"
-        elif next_topic:
-            return f"当前学习{current}，下一步建议学习{next_topic}。"
+            # 强行把当前学习主题置为第一个薄弱点，逻辑更通顺
+            target = weak[0]
+            # 如果路径规划里也有"下一个"，顺带提一句
+            if next_topic and next_topic != target:
+                return f"检测到你在「{target}」部分掌握较弱，建议优先攻克该知识点。攻克后可以继续学习「{next_topic}」。"
+            return f"检测到你在「{target}」部分掌握较弱，建议集中复习该内容。"
+        
+        # 2. 没有薄弱点时，正常走学习路线
+        elif current_topic:
+            if next_topic:
+                return f"当前已掌握「{current_topic}」，下一步建议学习「{next_topic}」。"
+            return f"正在学习「{current_topic}」，请查看右侧推荐资源。"
+            
+        # 3. 兜底
         return "已为你更新学习计划，请查看推荐资源。"
 
     def _extract_recommended(self, resources) -> List[Dict]:

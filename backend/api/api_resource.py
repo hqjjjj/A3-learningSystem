@@ -6,6 +6,7 @@ from orchestrator.orchestrator import (
     finish_view_resource,
     submit_answer_result
 )
+from backend.agents.agent_source.main import generate_resources
 
 router = APIRouter()
 
@@ -65,6 +66,47 @@ def submit_answer(req: SubmitAnswerRequest):
         duration=req.duration
     )
 
+    return {
+        "status": "success",
+        "data": result
+    }
+
+# 使用新封装的资源生成函数
+class GenerateResourcesRequest(BaseModel):
+    user_id: str
+    topic_id: str
+    module: str
+    resource_type: list
+    difficulty: str = None
+    weak_points: list = None
+    understanding: float = None
+    learning_style: str = None
+    current_progress: str = None
+
+@router.post("/generate_resources")
+def generate_resources_api(req: GenerateResourcesRequest):
+    # 构建输入数据
+    input_data = {
+        "topic_id": req.topic_id,
+        "module": req.module,
+        "resource_type": req.resource_type,
+    }
+    
+    # 添加可选参数
+    if req.difficulty:
+        input_data["difficulty"] = req.difficulty
+    if req.weak_points:
+        input_data["weak_points"] = req.weak_points
+    if req.understanding:
+        input_data["understanding"] = req.understanding
+    if req.learning_style:
+        input_data["learning_style"] = req.learning_style
+    if req.current_progress:
+        input_data["current_progress"] = req.current_progress
+    
+    # 调用资源生成函数
+    result = generate_resources(input_data)
+    
     return {
         "status": "success",
         "data": result

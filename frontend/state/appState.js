@@ -8,7 +8,7 @@ export const appState = {
     // 用户选择生成单个资源
     generated_resource:{},
     // 当前学习状态：复习/学习
-    current_progress:"",
+    current_progress:0,
     chat_history: [],
     learning_path:[]
 }

@@ -11,7 +11,7 @@
     "页面置换算法",
     "虚拟内存"
   ],
-  "current_step": "分页基本概念",
+  "current_step": "地址变换机构与快表",
   "next_step": "地址空间基本概念",
   "path_nodes": [
     {

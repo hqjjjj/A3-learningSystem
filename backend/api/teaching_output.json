@@ -3,15 +3,16 @@
   "weak_points": [],
   "cognitive_level": {
     "level": "beginner",
-    "understanding_avg": 0.04
+    "understanding_avg": 0.08
   },
   "error_patterns": [],
   "preference": {
     "resource_type": [
-      "explanation",
-      "mindmap"
+      "code_example",
+      "mindmap",
+      "explanation"
     ],
-    "difficulty": "easy"
+    "difficulty": "medium"
   },
   "learning_pace": "normal",
   "current_topic": {

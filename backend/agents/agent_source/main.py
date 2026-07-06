@@ -52,7 +52,6 @@ def validate_input(data):
     required_fields = [
         "topic_id",
         "module",
-        "difficulty",
         "resource_type"
     ]
 

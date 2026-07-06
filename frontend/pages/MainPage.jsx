@@ -139,16 +139,47 @@ const handleFinishResource=async(resourceType,duration)=>{
 const handleTopicChange=async(newTopic)=>{
   setIsLoading(true);
   try{
+    // 先更新主题，让用户立即看到反馈
+    mergeAppState({ topic: newTopic });
+    
+    // 然后获取新的学习路径数据
     const pathData=await api.fetchPath(userId,newTopic);
+    
+    // 更新学习路径、推荐资源和学习进度
+    // 如果新主题是路径中的下一个节点，进度应该增加
+    const currentIndex = appState.learning_path ? appState.learning_path.indexOf(appState.topic) : -1;
+    const newIndex = pathData.learning_path ? pathData.learning_path.indexOf(newTopic) : -1;
+    const progressIncrement = newIndex > currentIndex ? 1 : 0;
+    
     mergeAppState({
-        topic: newTopic,
         learning_path: pathData.learning_path,
-        recommended_resources: pathData.recommended_resources || []
-    })
+        recommended_resources: pathData.recommended_resources || [],
+        current_progress: (appState.current_progress || 0) + progressIncrement
+    });
   }catch (error) {
       console.error('切换知识点失败', error);
-      // 降级：只更新本地 topic
-      mergeAppState({ topic: newTopic });
+      // 如果获取新路径失败，尝试获取当前主题的路径
+      try {
+        const pathData=await api.fetchPath(userId,newTopic);
+        
+        // 更新学习路径、推荐资源和学习进度
+        const currentIndex = appState.learning_path ? appState.learning_path.indexOf(appState.topic) : -1;
+        const newIndex = pathData.learning_path ? pathData.learning_path.indexOf(newTopic) : -1;
+        const progressIncrement = newIndex > currentIndex ? 1 : 0;
+        
+        mergeAppState({
+            learning_path: pathData.learning_path,
+            recommended_resources: pathData.recommended_resources || [],
+            current_progress: (appState.current_progress || 0) + progressIncrement
+        });
+      } catch (retryError) {
+        console.error('重试获取路径失败', retryError);
+        // 至少更新主题和进度
+        mergeAppState({
+          topic: newTopic,
+          current_progress: (appState.current_progress || 0) + 1
+        });
+      }
     } finally {
       setIsLoading(false);
     }
