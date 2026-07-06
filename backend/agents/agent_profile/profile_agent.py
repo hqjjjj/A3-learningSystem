@@ -1,14 +1,11 @@
+# backend/agents/agent_profile/profile_agent.py
 import requests
 import json
-import hashlib
-import hmac
-import base64
 import datetime
 import os
 import re
-from urllib.parse import urlencode
 from typing import Dict, List, Optional
-from models import StudentProfile, CognitiveStyle, Preference, Progress, ProfileResponse
+from models import StudentProfile, CognitiveStyle, Progress, ProfileResponse
 
 os.environ["no_proxy"] = "*"
 
@@ -17,76 +14,104 @@ KNOWLEDGE_GRAPH = {}
 try:
     agent_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(agent_dir)))
-    memory_path = os.path.join(project_root, "data", "knowledge", "memory.json")
+    
+    # 👇 这里改掉！原来读的是 memory.json，现在改读专门的操作系统章节 memory 文件夹下的 5memory.json
+    memory_path = os.path.join(project_root, "data", "knowledge", "5memory.json")
+    
     with open(memory_path, "r", encoding="utf-8") as f:
         data = json.load(f)
         for topic in data.get("topics", []):
             KNOWLEDGE_GRAPH[topic["name"]] = topic
-    print(f"✅ 成功加载 {len(KNOWLEDGE_GRAPH)} 个课程知识点")
+    print(f"✅ 成功加载 {len(KNOWLEDGE_GRAPH)} 个课程知识点 (从 5memory.json)")
 except Exception as e:
-    print(f"⚠️ 加载memory.json失败: {e}")
+    print(f"⚠️ 加载5memory.json失败: {e}")
+
 
 class ProfileAgent:
-    def __init__(self, app_id="820d31b7", api_key="6e31903de32ff6578f5d5e5e137d5328", api_secret="MDgyODNjMTg1MzdjZGM5YTU4NDlmYWNh"):
-        self.app_id = app_id
-        self.api_key = api_key
-        self.api_secret = api_secret
-        self.host = "spark-api-open.xf-yun.com"
-        self.path = "/v1/chat/completions"
-        self.request_url = f"https://{self.host}{self.path}"
-        self.profiles: Dict[str, StudentProfile] = {}
+    """学习画像构建智能体"""
 
-    def _create_url(self) -> str:
+    def __init__(self, api_key="OALNHAzMNPceyqfkinMN:iahJPnpBnZEBAxAzsBNq"):
+        self.api_key = api_key
+        self.base_url = "https://spark-api-open.xf-yun.com/agent/v1/chat/completions"
+        self.model = "spark-x"
+        self.profiles: Dict[str, StudentProfile] = {}
         
-        now = datetime.datetime.now(datetime.timezone.utc)
-        date = now.strftime('%a, %d %b %Y %H:%M:%S GMT')
-        signature_origin = f"host: {self.host}\ndate: {date}\nPOST {self.path} HTTP/1.1"
-        signature_sha = hmac.new(
-            self.api_secret.encode('utf-8'),
-            signature_origin.encode('utf-8'),
-            digestmod=hashlib.sha256
-        ).digest()
-        signature = base64.b64encode(signature_sha).decode('utf-8')
-        authorization_origin = f'api_key="{self.api_key}", algorithm="hmac-sha256", headers="host date request-line", signature="{signature}"'
-        authorization = base64.b64encode(authorization_origin.encode('utf-8')).decode('utf-8')
-        q = {"authorization": authorization, "date": date, "host": self.host}
-        return f"{self.request_url}?{urlencode(q)}"
+        # 新增：定义画像持久化的根目录
+        agent_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(agent_dir)))
+        self.data_root = os.path.join(project_root, "data", "profile_outputs")
+        # 确保文件夹存在
+        os.makedirs(self.data_root, exist_ok=True)
+
+    # ================= 新增：文件持久化方法 =================
+    def _save_profile_to_disk(self, profile: StudentProfile):
+        """将最新的画像对象同步写入磁盘"""
+        file_path = os.path.join(self.data_root, f"profile_{profile.user_id}.json")
+        try:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(profile.model_dump_json(indent=2))
+        except Exception as e:
+            print(f"⚠️ 保存用户 {profile.user_id} 画像失败: {e}")
+
+    def load_profile_from_disk(self, user_id: str) -> Optional[StudentProfile]:
+        """从磁盘读取旧的画像数据（用于服务重启后数据恢复）"""
+        file_path = os.path.join(self.data_root, f"profile_{user_id}.json")
+        if os.path.exists(file_path):
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    # 利用 Pydantic 的 model_validate 从字典还原对象
+                    return StudentProfile.model_validate(data)
+            except Exception as e:
+                print(f"⚠️ 读取用户 {user_id} 历史画像失败: {e}")
+        return None
+    # ======================================================
 
     def _call_llm(self, system_prompt: str, user_msg: str) -> dict:
-        url = self._create_url()
-        headers = {"Content-Type": "application/json"}
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
         payload = {
-            "model": "generalv3.5",
+            "model": self.model,
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_msg}
             ],
             "temperature": 0.1,
-            "max_tokens": 1024,
-            "top_p": 0.7
+            "max_tokens": 1024
         }
 
         max_retries = 2
         for attempt in range(max_retries):
             try:
                 resp = requests.post(
-                    url,
+                    self.base_url,
                     headers=headers,
                     json=payload,
-                    timeout=30,
-                    proxies={"http": None, "https": None}
+                    timeout=30
                 )
                 result = resp.json()
 
                 if result.get("code") == 0:
-                    content = result["choices"][0]["message"]["content"].strip()
+                    msg = result["choices"][0]["message"]
+                    content = msg.get("content", "").strip()
+                    if not content:
+                        reasoning = msg.get("reasoning_content", "")
+                        start = reasoning.rfind('{')
+                        end = reasoning.rfind('}')
+                        if start != -1 and end != -1 and end > start:
+                            content = reasoning[start:end+1]
+                    if not content:
+                        if attempt < max_retries - 1:
+                            continue
+                        return {}
                     if content.startswith("```"):
                         lines = content.split('\n')
                         content = '\n'.join(lines[1:]) if len(lines) > 1 else content
                         if content.endswith("```"):
                             content = content[:-3]
                     content = content.strip()
-                    # 修复可能的JSON格式问题
                     content = re.sub(r',\s*}', '}', content)
                     content = re.sub(r',\s*]', ']', content)
                     return json.loads(content)
@@ -109,14 +134,18 @@ class ProfileAgent:
                       history: List[dict] = None,
                       behavior: dict = None) -> ProfileResponse:
         old_profile = self.profiles.get(user_id)
+        
+        # 如果没有在内存里，尝试从硬盘读取（防止后端重启后变成新用户）
+        if not old_profile:
+            old_profile = self.load_profile_from_disk(user_id)
+            if old_profile:
+                self.profiles[user_id] = old_profile
 
-        # 构建知识点选择列表
         topics_list = []
         for tname, tdata in KNOWLEDGE_GRAPH.items():
             topics_list.append(f"'{tname}' (难度: {tdata['difficulty']})")
         topics_str = "\n".join(topics_list)
 
-        # 大模型Prompt
         sys_prompt = f"""你是一个学习画像构建助手。分析学生的对话与行为数据，输出标准JSON。
 
         ## 可选知识点（名称必须完全一致）
@@ -150,10 +179,8 @@ class ProfileAgent:
             empty_profile = StudentProfile(user_id=user_id, created_at=datetime.datetime.now())
             return ProfileResponse(profile=empty_profile, update_type="init", confidence=0.1)
 
-        # 初始化或获取旧画像
         if not old_profile:
             profile = StudentProfile(user_id=user_id, created_at=datetime.datetime.now())
-            # 初始化所有知识点掌握度为 0.0
             for topic_name in KNOWLEDGE_GRAPH:
                 profile.knowledge_level[topic_name] = 0.0
             update_type = "init"
@@ -161,7 +188,6 @@ class ProfileAgent:
             profile = old_profile
             update_type = "update"
 
-        # === 基础信息更新 ===
         if extraction.get("major"):
             profile.major = extraction["major"]
         if extraction.get("grade"):
@@ -169,7 +195,6 @@ class ProfileAgent:
         if extraction.get("course"):
             profile.course = extraction["course"]
 
-        # === 认知风格更新 ===
         if "cognitive_style" in extraction:
             cs = extraction["cognitive_style"]
             total = cs.get("visual", 0) + cs.get("textual", 0) + cs.get("auditory", 0)
@@ -179,89 +204,54 @@ class ProfileAgent:
                     textual=round(cs.get("textual", 0) / total, 2),
                     auditory=round(cs.get("auditory", 0) / total, 2)
                 )
-        # === 认知风格转 learning_style (text / diagram) ===
-        if profile.cognitive_style.visual >= 0.5:
-            profile.learning_style = "diagram"
-        else:
-            profile.learning_style = "text"
+        profile.learning_style = "diagram" if profile.cognitive_style.visual >= 0.5 else "text"
 
-        # === 学习节奏更新 ===
         if extraction.get("learning_pace"):
             profile.learning_pace = extraction["learning_pace"]
 
         if "resource_type" in extraction and isinstance(extraction["resource_type"], list):
-            merged = list(set(profile.resource_type + extraction["resource_type"]))
-            profile.resource_type = merged
+            profile.resource_type = list(set(profile.resource_type + extraction["resource_type"]))
         if "difficulty" in extraction:
             profile.difficulty = extraction["difficulty"]
 
-        # === 进度更新 ===
         if "progress" in extraction:
             prog = extraction["progress"]
             if prog.get("current_topic"):
                 profile.progress.current_topic = prog["current_topic"]
 
-        # ============================================
-        # 【纯规则引擎】确定性计算 knowledge_level
-        # ============================================
         current_topic = profile.progress.current_topic
         correct_rate = behavior.get("correct_rate", None) if behavior else None
 
         if current_topic and current_topic in KNOWLEDGE_GRAPH:
             old_score = profile.knowledge_level.get(current_topic, 0.0)
-
-            # 基础分
             base_score = 0.45
-
-            # 行为数据修正
             if correct_rate is not None:
                 if correct_rate < 0.4:
                     base_score = 0.25
                 elif correct_rate > 0.8:
                     base_score = 0.75
-
-            # 学习节奏修正
             if profile.learning_pace == "slow":
                 base_score = min(base_score, 0.4)
             elif profile.learning_pace == "fast":
                 base_score = max(base_score, 0.7)
+            profile.knowledge_level[current_topic] = base_score if old_score == 0.0 else round(old_score * 0.7 + base_score * 0.3, 2)
 
-            # 平滑合并
-            if old_score == 0.0:
-                profile.knowledge_level[current_topic] = base_score
-            else:
-                profile.knowledge_level[current_topic] = round(old_score * 0.7 + base_score * 0.3, 2)
-
-        # 薄弱点与错误标签
         profile.weak_points = [name for name, score in profile.knowledge_level.items() if 0.0 < score <= 0.3]
         profile.error_tags = [name for name, score in profile.knowledge_level.items() if 0.0 < score <= 0.2]
 
         profile.updated_at = datetime.datetime.now()
+        
+        # === 核心修改：写入内存并同步写入硬盘 ===
         self.profiles[user_id] = profile
+        self._save_profile_to_disk(profile)  # 自动持久化
+        
         return ProfileResponse(profile=profile, update_type=update_type, confidence=0.85)
 
     def get_profile(self, user_id: str) -> Optional[StudentProfile]:
-        return self.profiles.get(user_id)
-
-
-# ============ 测试 ============
-if __name__ == "__main__":
-    import os
-
-    agent = ProfileAgent(
-     app_id=os.environ.get("SPARK_APP_ID", "820d31b7"),
-     api_key=os.environ.get("SPARK_API_KEY", ""),
-     api_secret=os.environ.get("SPARK_API_SECRET", "")
-    )
-
-    print("=" * 50)
-    print("测试1：首次对话构建画像")
-    print("=" * 50)
-    res1 = agent.build_profile("s1", "计算机大三，操作系统分页太难了，我喜欢看视频")
-    print(res1.profile.model_dump_json(indent=2))
-
-    print("\n" + "=" * 50)
-    print("测试2：增量更新画像")
-    print("=" * 50)
-    res2 = agent.build_profile("s1", "缺页中断还是不懂，做题正确率好低", behavior={"correct_rate": 0.3})
-    print(res2.profile.model_dump_json(indent=2))
+        # 改进了获取逻辑：如果内存没有，帮总控去硬盘找
+        profile = self.profiles.get(user_id)
+        if not profile:
+            profile = self.load_profile_from_disk(user_id)
+            if profile:
+                self.profiles[user_id] = profile
+        return profile

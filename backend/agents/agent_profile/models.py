@@ -55,3 +55,4 @@ class ProfileResponse(BaseModel):
     profile: StudentProfile
     update_type: str = Field(description="init 或 update")
     confidence: float = Field(default=0.85, ge=0, le=1)
+    profile_path: Optional[str] = Field(default=None, description="画像文件保存路径")
