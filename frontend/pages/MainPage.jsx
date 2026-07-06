@@ -136,72 +136,48 @@ const handleFinishResource=async(resourceType,duration)=>{
 }
 
 //切换主题回调函数
-const handleTopicChange=async(newTopic)=>{
-  setIsLoading(true);
-  try{
-    // 先更新主题，让用户立即看到反馈
-    mergeAppState({ topic: newTopic });
-    
-    // 然后获取新的学习路径数据
-    const pathData=await api.fetchPath(userId,newTopic);
-    
-    // 更新学习路径、推荐资源和学习进度
-    // 如果新主题是路径中的下一个节点，进度应该增加
-    const currentIndex = appState.learning_path ? appState.learning_path.indexOf(appState.topic) : -1;
-    const newIndex = pathData.learning_path ? pathData.learning_path.indexOf(newTopic) : -1;
-    const progressIncrement = newIndex > currentIndex ? 1 : 0;
-    
-    mergeAppState({
-        learning_path: pathData.learning_path,
-        recommended_resources: pathData.recommended_resources || [],
-        current_progress: (appState.current_progress || 0) + progressIncrement
-    });
-  }catch (error) {
-      console.error('切换知识点失败', error);
-      // 如果获取新路径失败，尝试获取当前主题的路径
-      try {
-        const pathData=await api.fetchPath(userId,newTopic);
-        
-        // 更新学习路径、推荐资源和学习进度
-        const currentIndex = appState.learning_path ? appState.learning_path.indexOf(appState.topic) : -1;
-        const newIndex = pathData.learning_path ? pathData.learning_path.indexOf(newTopic) : -1;
-        const progressIncrement = newIndex > currentIndex ? 1 : 0;
-        
-        mergeAppState({
-            learning_path: pathData.learning_path,
-            recommended_resources: pathData.recommended_resources || [],
-            current_progress: (appState.current_progress || 0) + progressIncrement
-        });
-      } catch (retryError) {
-        console.error('重试获取路径失败', retryError);
-        // 至少更新主题和进度
-        mergeAppState({
-          topic: newTopic,
-          current_progress: (appState.current_progress || 0) + 1
-        });
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const handleTopicChange = (newTopic) => {
+  try {
+    // 直接更新 topic
+    setAppState(prev => ({ ...prev, topic: newTopic }));
+  } catch (err) {
+    console.warn('更新主题失败:', err);
+    // 即使出错也尝试设置 topic（降级）
+    setAppState(prev => ({ ...prev, topic: newTopic }));
+  }
+};
 
-    // 初始化加载学习路径
-  useEffect(() => {
-    
-    const loadInitial = async () => {
-      try {
-        const pathData = await api.fetchPath(userId,appState.topic);
+    // 响应topic变化的工具
+useEffect(() => {
+  if (!userId || !appState.topic) {
+    setIsLoading(false);
+    return;
+  }
+
+  let isMounted = true;
+  const loadPath = async () => {
+    setIsLoading(true);
+    try {
+      const pathData = await api.fetchPath(userId, appState.topic);
+      if (isMounted) {
         mergeAppState({
           learning_path: pathData.learning_path,
           recommended_resources: pathData.recommended_resources || []
         });
-      } catch (error) {
-        console.error(error);
       }
-    };
-    if (userId) loadInitial();
-    
-  }, [userId]);
+    } catch (error) {
+      console.error('加载学习路径失败:', error);
+      // 可增加降级逻辑：如保留原路径，或提示用户
+    } finally {
+      if (isMounted) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  loadPath();
+  return () => { isMounted = false; };
+}, [userId, appState.topic]);
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -217,8 +193,7 @@ const handleTopicChange=async(newTopic)=>{
         {!isSidebarCollapsed && (
           <div className="sidebar-content">
             <div className="profile-section">
-              <ProfilePanel 
-              profile={appState.profile}/>
+              <ProfilePanel profile={appState.profile} />
             </div>
             <div className="chat-section">
               <ChatPanel 
@@ -226,16 +201,9 @@ const handleTopicChange=async(newTopic)=>{
                 onSendMessage={handleSendMessage}
                 isLoading={isLoading}
                 userId={userId}
-                />
+              />
             </div>
           </div>
-        )}
-        {/* 折叠时只显示一个窄条（可选：显示图标） */}
-        {isSidebarCollapsed && (
-            <div className="collapsed-icons">
-            <img src={profileIcon} alt="用户画像" className="icon-img" title="用户画像" />
-            <img src={chatIcon} alt="聊天" className="icon-img" title="聊天" />
-            </div>
         )}
       </aside>
 
