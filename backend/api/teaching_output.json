@@ -1,15 +1,15 @@
 {
-  "learning_style": "visual",
-  "weak_points": [],
+  "learning_style": "auditory",
+  "weak_points": [
+    "分段存储管理方式"
+  ],
   "cognitive_level": {
     "level": "beginner",
-    "understanding_avg": 0.08
+    "understanding_avg": 0.0
   },
   "error_patterns": [],
   "preference": {
     "resource_type": [
-      "code_example",
-      "mindmap",
       "explanation"
     ],
     "difficulty": "medium"

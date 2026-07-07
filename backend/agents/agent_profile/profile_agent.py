@@ -9,22 +9,36 @@ from models import StudentProfile, CognitiveStyle, Progress, ProfileResponse
 
 os.environ["no_proxy"] = "*"
 
-# ============ 加载课程知识图谱 ============
+# ============ 加载课程知识图谱（支持多文件合并） ============
 KNOWLEDGE_GRAPH = {}
 try:
     agent_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(agent_dir)))
     
-    # 👇 这里改掉！原来读的是 memory.json，现在改读专门的操作系统章节 memory 文件夹下的 5memory.json
-    memory_path = os.path.join(project_root, "data", "knowledge", "5memory.json")
+    knowledge_dir = os.path.join(project_root, "data", "knowledge")
+    total_topics = 0
     
-    with open(memory_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-        for topic in data.get("topics", []):
-            KNOWLEDGE_GRAPH[topic["name"]] = topic
-    print(f"✅ 成功加载 {len(KNOWLEDGE_GRAPH)} 个课程知识点 (从 5memory.json)")
+    # 遍历 knowledge 目录下所有以 .json 结尾的文件
+    for filename in os.listdir(knowledge_dir):
+        if filename.endswith(".json") and filename != "__init__.py": # 过滤掉可能的非知识文件
+            file_path = os.path.join(knowledge_dir, filename)
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    # 假设每个文件里都有 "topics" 列表
+                    if "topics" in data:
+                        for topic in data["topics"]:
+                            # 为了防重名，可以把文件名加进去作区分（可选）
+                            # topic["full_name"] = f"{filename}_{topic['name']}" 
+                            KNOWLEDGE_GRAPH[topic["name"]] = topic
+                            total_topics += 1
+                print(f"📖 已加载: {filename}")
+            except Exception as e:
+                print(f"⚠️ 读取 {filename} 失败: {e}")
+                
+    print(f"✅ 成功加载 {len(KNOWLEDGE_GRAPH)} 个课程知识点 (涵盖 12 个章节)")
 except Exception as e:
-    print(f"⚠️ 加载5memory.json失败: {e}")
+    print(f"⚠️ 遍历 knowledge 目录失败: {e}")
 
 
 class ProfileAgent:
@@ -160,7 +174,7 @@ class ProfileAgent:
            - 说"看视频/动画"→visual高0.6-0.7，其他各0.15-0.2
            - 说"看文档/看书"→textual高0.6-0.7，其他各0.15-0.2
            - 无明确偏好→三者均匀分配
-        6. learning_pace: "normal"/"slow"/"fast"，从语气和行为推断
+        6. learning_pace: "normal"/"slow"/"fast"，默认值为 "normal"。如果有明确证据表明学生学得很快（如"我学得很快"、"我提前学完了"）才改为 "fast"，有明确证据表明严重阻碍才改为 "slow"。
         7. resource_type: 资源类型列表，从["explanation", "mindmap", "exercise", "code_example"]中选择。根据学生偏好和行为动态推断，如喜欢看视频→["explanation", "mindmap"]，做题正确率低→["explanation", "exercise"]
         8. difficulty: "easy"/"medium"/"hard"
         9. learning_goal: 无法推断填null
@@ -236,14 +250,39 @@ class ProfileAgent:
                 base_score = max(base_score, 0.7)
             profile.knowledge_level[current_topic] = base_score if old_score == 0.0 else round(old_score * 0.7 + base_score * 0.3, 2)
 
-        profile.weak_points = [name for name, score in profile.knowledge_level.items() if 0.0 < score <= 0.3]
-        profile.error_tags = [name for name, score in profile.knowledge_level.items() if 0.0 < score <= 0.2]
+                # 只要掌握度不到 60% (0.6)，就算是薄弱点
+        profile.weak_points = [name for name, score in profile.knowledge_level.items() if 0.0 < score < 0.6]
+        # 掌握度不到 40% (0.4)，算作严重错误/难点标签
+        profile.error_tags = [name for name, score in profile.knowledge_level.items() if 0.0 < score < 0.4]
+        # ============================================
+        # 🔥 新增：强制薄弱点召回机制（弥补大模型漏判）
+        # ============================================
+        # 1. 如果我们发现用户输入里提到了某个知识点，且该知识点分数 < 0.6，强制拉入薄弱点
+        if user_input and user_input.strip() != "":
+            for topic_name, score in profile.knowledge_level.items():
+                # 如果用户说的话里包含这个知识点的名字，且分数低于 0.6
+                if topic_name in user_input and score < 0.6:
+                    if topic_name not in profile.weak_points:
+                        profile.weak_points.append(topic_name)
+                    if score < 0.4 and topic_name not in profile.error_tags:
+                        profile.error_tags.append(topic_name)
 
+        # 2. 如果强制搜索后没找到明确名字，就把知识点掌握度最低的前 3 个加进去
+        if not profile.weak_points and len(profile.knowledge_level) > 0:
+            # 按分数从低到高排序
+            sorted_topics = sorted(profile.knowledge_level.items(), key=lambda x: x[1])
+            for topic_name, score in sorted_topics:
+                if score < 0.6 and score > 0.0:
+                    profile.weak_points.append(topic_name)
+                    if len(profile.weak_points) >= 3:  # 最多强制加3个
+                        break
+        # ============================================
         profile.updated_at = datetime.datetime.now()
         
         # === 核心修改：写入内存并同步写入硬盘 ===
         self.profiles[user_id] = profile
         self._save_profile_to_disk(profile)  # 自动持久化
+        
         
         return ProfileResponse(profile=profile, update_type=update_type, confidence=0.85)
 

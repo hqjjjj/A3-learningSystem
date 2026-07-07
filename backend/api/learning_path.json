@@ -11,7 +11,7 @@
     "页面置换算法",
     "虚拟内存"
   ],
-  "current_step": "地址变换机构与快表",
+  "current_step": "分段存储管理方式",
   "next_step": "地址空间基本概念",
   "path_nodes": [
     {
@@ -28,7 +28,7 @@
       "name": "分页基本概念",
       "difficulty": "easy",
       "status": "pending",
-      "understanding": 0.45,
+      "understanding": 0.0,
       "x": 583.0935426189682,
       "y": 156.65961681546844
     },

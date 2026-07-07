@@ -40,7 +40,7 @@ class Orchestrator:
     def handle_chat(self, user_id: str, message: str, topic: str = None) -> Dict:
         self._log_behavior(user_id, "chat", message)
         
-        # 1. 关键修复：强制更新画像
+        # 1. 更新画像（此时已处理用户消息，写入了新的薄弱点）
         profile_dict = self._update_profile(user_id, message)
         
         # 2. 如果前端明确指定了 Topic，强制更新画像对象的 current_topic
@@ -48,14 +48,15 @@ class Orchestrator:
             profile_obj = self.profile_agent.get_profile(user_id)
             if profile_obj:
                 profile_obj.progress.current_topic = topic
-                # 保存到磁盘（保证跨服务重启依旧有效）
+                # 强制同步到磁盘
                 self.profile_agent._save_profile_to_disk(profile_obj)
                 profile_dict = profile_obj.model_dump()
         
-        # 3. 规划路径（传字典即可）
-        path_data = self._call_plan_agent(user_id, profile_dict)
+        # 3. 【关键修复】规划路径：强制调用 get_learning_path，让总控基于最新画像重新计算路径和ID
+        # 这样能确保路径规划器拿到最新的状态，而非旧状态
+        path_data = self.get_learning_path(user_id, topic) 
         
-        # 4. 生成资源
+        # 4. 生成资源（此时使用的是最新的、正确的 path_data）
         resources = self._call_source_agent(profile_dict, path_data)
         
         # 5. 生成回复
@@ -64,7 +65,7 @@ class Orchestrator:
 
         return {
             "reply": reply,
-            "profile": profile_dict, # 返回最新的完整画像
+            "profile": profile_dict, 
             "learning_path": path_data.get("path_list", []),
             "recommended_resources": recommended,
             "topic": profile_dict.get("progress", {}).get("current_topic", ""),
@@ -80,16 +81,26 @@ class Orchestrator:
             if profile_obj:
                 self.profile_agent.profiles[user_id] = profile_obj
 
+        # 如果 get_learning_path 收到了 topic 参数，强行写入画像对象！
+        if topic and profile_obj:
+            profile_obj.progress.current_topic = topic
+            # 既然手动改了主题，同步写入磁盘
+            self.profile_agent._save_profile_to_disk(profile_obj)
+            # 更新缓存的字典
+            self.profile_agent.profiles[user_id] = profile_obj
+
         profile_dict = profile_obj.model_dump() if profile_obj else {}
         
+        # ========== 重点优化：重新根据最新画像调用路径规划 ==========
         path_data = self._call_plan_agent(user_id, profile_dict)
+        # ==========================================================
+        
         return {
             "profile": profile_dict,
             "learning_path": path_data.get("path_list", []),
             "topic": profile_dict.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
         }
-
     def generate_single_resource(self, user_id: str, topic: str, resource_type: str) -> Dict:
         profile = self._get_profile_dict(user_id)
         resource_input = self._build_resource_input(profile, None)
@@ -139,11 +150,12 @@ class Orchestrator:
 
     def _update_profile(self, user_id: str, message: str, behavior: Dict = None) -> Dict:
         resp = self.profile_agent.build_profile(user_id=user_id, user_input=message, behavior=behavior)
-        # ✅ 保存后立刻转成字典返回给前端
+        # [修复点 1] build_profile 内部其实已经自己存了盘，但为了稳妥，我们再显式写一次
+        if resp and resp.profile:
+            self.profile_agent._save_profile_to_disk(resp.profile)
         return resp.profile.model_dump()
 
     def _get_profile_dict(self, user_id: str) -> Dict:
-        # 优先从内存/磁盘直接获取 Pydantic 对象转为字典
         profile = self.profile_agent.get_profile(user_id)
         if not profile:
             profile = self.profile_agent.load_profile_from_disk(user_id)
@@ -228,26 +240,18 @@ class Orchestrator:
     
     def _generate_reply(self, profile: Dict, path_data: Dict) -> str:
         weak = profile.get("weak_points", [])
-        # 优先读取画像里最新的 current_topic
         current_topic = profile.get("progress", {}).get("current_topic", "")
         next_topic = path_data.get("next", "")
-        
-        # 1. 如果有薄弱点，优先聚焦薄弱点
         if weak:
-            # 强行把当前学习主题置为第一个薄弱点，逻辑更通顺
-            target = weak[0]
-            # 如果路径规划里也有"下一个"，顺带提一句
-            if next_topic and next_topic != target:
-                return f"检测到你在「{target}」部分掌握较弱，建议优先攻克该知识点。攻克后可以继续学习「{next_topic}」。"
-            return f"检测到你在「{target}」部分掌握较弱，建议集中复习该内容。"
-        
-        # 2. 没有薄弱点时，正常走学习路线
+            # 1. 把所有薄弱点用顿号连起来，显得系统很聪明
+            weak_str = "、".join(weak)
+            if next_topic:
+                return f"检测到你在「{weak_str}」部分掌握较弱。建议优先集中攻克这些薄弱点，再继续学习「{next_topic}」。"
+            return f"检测到你在「{weak_str}」部分掌握较弱，建议集中复习，巩固基础。"
         elif current_topic:
             if next_topic:
                 return f"当前已掌握「{current_topic}」，下一步建议学习「{next_topic}」。"
             return f"正在学习「{current_topic}」，请查看右侧推荐资源。"
-            
-        # 3. 兜底
         return "已为你更新学习计划，请查看推荐资源。"
 
     def _extract_recommended(self, resources) -> List[Dict]:
