@@ -1,13 +1,48 @@
-# backend/agents/agent_profile/profile_agent.py
 import requests
 import json
 import datetime
 import os
 import re
 from typing import Dict, List, Optional
-from models import StudentProfile, CognitiveStyle, Progress, ProfileResponse
+from pydantic import BaseModel, Field  # 新增对 pydantic 的导入
 
 os.environ["no_proxy"] = "*"
+
+# ============================================
+# 直接在文件里定义数据模型，彻底摆脱 "models.py" 查找冲突！
+# ============================================
+class CognitiveStyle(BaseModel):
+    visual: float = 0.33
+    textual: float = 0.33
+    auditory: float = 0.34
+
+class Progress(BaseModel):
+    current_topic: Optional[str] = None
+    completed_topics: List[str] = []
+
+class StudentProfile(BaseModel):
+    user_id: str
+    major: Optional[str] = None
+    grade: Optional[str] = None
+    course: Optional[str] = None
+    knowledge_level: Dict[str, float] = Field(default_factory=dict)
+    weak_points: List[str] = Field(default_factory=list)
+    error_tags: List[str] = Field(default_factory=list)
+    learning_style: str = "text"
+    cognitive_style: CognitiveStyle = Field(default_factory=CognitiveStyle)
+    learning_pace: str = "normal"
+    resource_type: List[str] = Field(default_factory=lambda: ["explanation"])
+    difficulty: str = "medium"
+    progress: Progress = Field(default_factory=Progress)
+    learning_goal: Optional[str] = None
+    created_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
+    updated_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
+
+class ProfileResponse(BaseModel):
+    profile: StudentProfile
+    update_type: str
+    confidence: float
+# ============================================
 
 # ============ 加载课程知识图谱（支持多文件合并） ============
 KNOWLEDGE_GRAPH = {}
@@ -20,16 +55,13 @@ try:
     
     # 遍历 knowledge 目录下所有以 .json 结尾的文件
     for filename in os.listdir(knowledge_dir):
-        if filename.endswith(".json") and filename != "__init__.py": # 过滤掉可能的非知识文件
+        if filename.endswith(".json") and filename != "__init__.py":
             file_path = os.path.join(knowledge_dir, filename)
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    # 假设每个文件里都有 "topics" 列表
                     if "topics" in data:
                         for topic in data["topics"]:
-                            # 为了防重名，可以把文件名加进去作区分（可选）
-                            # topic["full_name"] = f"{filename}_{topic['name']}" 
                             KNOWLEDGE_GRAPH[topic["name"]] = topic
                             total_topics += 1
                 print(f"📖 已加载: {filename}")
@@ -50,16 +82,13 @@ class ProfileAgent:
         self.model = "spark-x"
         self.profiles: Dict[str, StudentProfile] = {}
         
-        # 新增：定义画像持久化的根目录
         agent_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(os.path.dirname(os.path.dirname(agent_dir)))
         self.data_root = os.path.join(project_root, "data", "profile_outputs")
-        # 确保文件夹存在
         os.makedirs(self.data_root, exist_ok=True)
 
-    # ================= 新增：文件持久化方法 =================
+    # ================= 文件持久化方法 =================
     def _save_profile_to_disk(self, profile: StudentProfile):
-        """将最新的画像对象同步写入磁盘"""
         file_path = os.path.join(self.data_root, f"profile_{profile.user_id}.json")
         try:
             with open(file_path, 'w', encoding='utf-8') as f:
@@ -68,18 +97,15 @@ class ProfileAgent:
             print(f"⚠️ 保存用户 {profile.user_id} 画像失败: {e}")
 
     def load_profile_from_disk(self, user_id: str) -> Optional[StudentProfile]:
-        """从磁盘读取旧的画像数据（用于服务重启后数据恢复）"""
         file_path = os.path.join(self.data_root, f"profile_{user_id}.json")
         if os.path.exists(file_path):
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    # 利用 Pydantic 的 model_validate 从字典还原对象
                     return StudentProfile.model_validate(data)
             except Exception as e:
                 print(f"⚠️ 读取用户 {user_id} 历史画像失败: {e}")
         return None
-    # ======================================================
 
     def _call_llm(self, system_prompt: str, user_msg: str) -> dict:
         headers = {
@@ -99,12 +125,7 @@ class ProfileAgent:
         max_retries = 2
         for attempt in range(max_retries):
             try:
-                resp = requests.post(
-                    self.base_url,
-                    headers=headers,
-                    json=payload,
-                    timeout=30
-                )
+                resp = requests.post(self.base_url, headers=headers, json=payload, timeout=30)
                 result = resp.json()
 
                 if result.get("code") == 0:
@@ -149,7 +170,6 @@ class ProfileAgent:
                       behavior: dict = None) -> ProfileResponse:
         old_profile = self.profiles.get(user_id)
         
-        # 如果没有在内存里，尝试从硬盘读取（防止后端重启后变成新用户）
         if not old_profile:
             old_profile = self.load_profile_from_disk(user_id)
             if old_profile:
@@ -250,44 +270,38 @@ class ProfileAgent:
                 base_score = max(base_score, 0.7)
             profile.knowledge_level[current_topic] = base_score if old_score == 0.0 else round(old_score * 0.7 + base_score * 0.3, 2)
 
-                # 只要掌握度不到 60% (0.6)，就算是薄弱点
+        # 只要掌握度不到 60% (0.6)，就算是薄弱点
         profile.weak_points = [name for name, score in profile.knowledge_level.items() if 0.0 < score < 0.6]
         # 掌握度不到 40% (0.4)，算作严重错误/难点标签
         profile.error_tags = [name for name, score in profile.knowledge_level.items() if 0.0 < score < 0.4]
+
         # ============================================
         # 🔥 新增：强制薄弱点召回机制（弥补大模型漏判）
         # ============================================
-        # 1. 如果我们发现用户输入里提到了某个知识点，且该知识点分数 < 0.6，强制拉入薄弱点
         if user_input and user_input.strip() != "":
             for topic_name, score in profile.knowledge_level.items():
-                # 如果用户说的话里包含这个知识点的名字，且分数低于 0.6
                 if topic_name in user_input and score < 0.6:
                     if topic_name not in profile.weak_points:
                         profile.weak_points.append(topic_name)
                     if score < 0.4 and topic_name not in profile.error_tags:
                         profile.error_tags.append(topic_name)
 
-        # 2. 如果强制搜索后没找到明确名字，就把知识点掌握度最低的前 3 个加进去
         if not profile.weak_points and len(profile.knowledge_level) > 0:
-            # 按分数从低到高排序
             sorted_topics = sorted(profile.knowledge_level.items(), key=lambda x: x[1])
             for topic_name, score in sorted_topics:
                 if score < 0.6 and score > 0.0:
                     profile.weak_points.append(topic_name)
-                    if len(profile.weak_points) >= 3:  # 最多强制加3个
+                    if len(profile.weak_points) >= 3:
                         break
-        # ============================================
+
         profile.updated_at = datetime.datetime.now()
         
-        # === 核心修改：写入内存并同步写入硬盘 ===
         self.profiles[user_id] = profile
-        self._save_profile_to_disk(profile)  # 自动持久化
-        
+        self._save_profile_to_disk(profile)
         
         return ProfileResponse(profile=profile, update_type=update_type, confidence=0.85)
 
     def get_profile(self, user_id: str) -> Optional[StudentProfile]:
-        # 改进了获取逻辑：如果内存没有，帮总控去硬盘找
         profile = self.profiles.get(user_id)
         if not profile:
             profile = self.load_profile_from_disk(user_id)

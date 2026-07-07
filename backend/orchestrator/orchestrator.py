@@ -1,6 +1,13 @@
 # backend/orchestrator/orchestrator.py
+# 导入行为系统
 import sys
 import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'behavior_system'))
+from logger import log_behavior
+from cleanup import cleanup_events
+from analyzer import analyze_behavior
+
+
 import json
 from typing import Dict, Optional, List
 from datetime import datetime
@@ -39,6 +46,12 @@ class Orchestrator:
 
     def handle_chat(self, user_id: str, message: str, topic: str = None) -> Dict:
         self._log_behavior(user_id, "chat", message)
+        
+        # 普通聊天，只记录到事件文件，不触发 analyzer
+        log_behavior(user_id, action="message", message=message)
+        cleanup_events(user_id)
+        
+        # ... (后续的 画像更新、路径规划、资源生成 代码保持不变) ...
         
         # 1. 更新画像（此时已处理用户消息，写入了新的薄弱点）
         profile_dict = self._update_profile(user_id, message)
@@ -115,7 +128,26 @@ class Orchestrator:
 
     def finish_view_resource(self, user_id: str, resource_id: str, duration: int) -> Dict:
         self._log_behavior(user_id, "view_resource", f"resource:{resource_id}", duration)
-        profile = self._update_profile(user_id, f"学习了资源{resource_id}，用时{duration}秒")
+        
+        # 触发行为系统：日志记录
+        log_behavior(user_id, action="view_resource", resource_id=resource_id, duration=duration)
+        cleanup_events(user_id) # 维护窗口
+        
+        # 如果浏览时间超过某个阈值（比如 30秒），认为是深入学习，触发 analyzer
+        if duration >= 30:
+            # 调用 analyzer，它会返回统计后的画像参数
+            analyzed_data = analyze_behavior(user_id)
+            
+            # 将 analyze 的结果作为 behavior 传进去，与消息一起更新画像
+            profile = self._update_profile(
+                user_id, 
+                f"仔细阅读了资源{resource_id}，用时{duration}秒", 
+                behavior=analyzed_data # 将行为统计结果传给 LLM/画像更新
+            )
+        else:
+            # 只是简单浏览，只更新对话记录
+            profile = self._update_profile(user_id, f"浏览了资源{resource_id}，用时{duration}秒")
+            
         path_data = self._call_plan_agent(user_id, profile)
         resources = self._call_source_agent(profile, path_data)
         recommended = self._extract_recommended(resources)
@@ -127,13 +159,24 @@ class Orchestrator:
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
         }
-
     def submit_answer_result(self, user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
         self._log_behavior(user_id, "submit_answer", topic, duration, correct_rate)
+        
+        # 触发行为系统：记录做题事件
+        log_behavior(user_id, action="exercise", correct_rate=correct_rate, duration=duration)
+        cleanup_events(user_id) # 维护窗口
+        
+        # 练习动作必须触发 analyzer，计算最新的掌握度
+        analyzed_data = analyze_behavior(user_id)
+        
+        # 将 analyzer 分析出的掌握度数据传给 ProfileAgent
+        # 注意：这里 behavior 不仅仅是 correct_rate 了，而是 analyzer 返回的完整字典
         profile = self._update_profile(
-            user_id, f"做了{topic}的题目，正确率{correct_rate}",
-            behavior={"correct_rate": correct_rate, "duration": duration}
+            user_id, 
+            f"做了{topic}的题目，正确率{correct_rate}，用时{duration}秒",
+            behavior=analyzed_data # 把统计结果传进去
         )
+        
         path_data = self._call_plan_agent(user_id, profile)
         resources = self._call_source_agent(profile, path_data)
         recommended = self._extract_recommended(resources)
@@ -277,6 +320,48 @@ def get_orchestrator() -> Orchestrator:
         _orchestrator = Orchestrator()
     return _orchestrator
 
+
+def load_user_state(self, user_id: str) -> Dict:
+        """
+        用户登录/页面刷新时调用，加载完整状态。
+        返回的字典结构必须完全匹配前端截图中的 data 对象。
+        """
+        # 1. 获取用户的画像（从内存读，不存在则从磁盘加载，并写入内存）
+        profile_obj = self.profile_agent.get_profile(user_id)
+        if not profile_obj:
+            profile_obj = self.profile_agent.load_profile_from_disk(user_id)
+            if profile_obj:
+                self.profile_agent.profiles[user_id] = profile_obj
+        
+        # 如果完全没有该用户的数据，创建一个空的兜底对象
+        if not profile_obj:
+            empty_profile = StudentProfile(user_id=user_id, created_at=datetime.now())
+            self.profile_agent.profiles[user_id] = empty_profile
+            profile_obj = empty_profile
+
+        profile_dict = profile_obj.model_dump()
+        
+        # 2. 获取学习路径
+        # 注意：这里调用 get_learning_path 会自动加载并返回最新的路径数据
+        path_data = self.get_learning_path(user_id)
+        
+        # 3. 根据目前的画像和路径，推荐首批资源（如果有学习路径的话）
+        # 注意：这里我们复用 `_call_source_agent` 来获取推荐资源
+        resources = {}
+        if path_data.get("topic_id"):
+            resources = self._call_source_agent(profile_dict, path_data)
+        
+        recommended = self._extract_recommended(resources)
+
+        # 4. 组装返回给前端的数据
+        return {
+            "user_id": user_id,
+            "profile": profile_dict,
+            "learning_path": path_data.get("path_list", []),
+            "recommended_resources": recommended,
+            "topic": profile_dict.get("progress", {}).get("current_topic", ""),
+            "current_progress": path_data.get("current_progress", "learning")
+        }
 
 def handle_chat(user_id: str, message: str, topic: str = None) -> Dict:
     return get_orchestrator().handle_chat(user_id, message, topic)
