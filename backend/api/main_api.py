@@ -1,4 +1,5 @@
 import sys
+import os  # ✅ 添加 os 导入
 sys.path.insert(0, '..')
 
 from fastapi import FastAPI
@@ -12,7 +13,11 @@ from api_resource import router as resource_router
 # ===== 导入知识库路由 =====
 from api_knowledge import router as knowledge_router
 
-# ===== 导入 KnowledgeBaseManager（用于全局初始化） =====
+# ===== 导入 KnowledgeBaseManager =====
+knowledge_path = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'knowledge')
+if knowledge_path not in sys.path:
+    sys.path.insert(0, knowledge_path)
+
 from KnowledgeBaseManager import KnowledgeBaseManager
 
 app = FastAPI()
@@ -26,44 +31,21 @@ app.add_middleware(
 )
 
 # ===== 全局初始化知识库管理器 =====
-# 为了让其他路由能访问，存入 app.state
 kb_manager = KnowledgeBaseManager()
 print(f"📚 知识库路径: {kb_manager.base_path}")
 print(f"📚 已加载知识点数量: {len(kb_manager.topics_index)}")
 
-# 将 kb_manager 存入 app.state，供其他路由使用
 app.state.kb_manager = kb_manager
 
 # ===== 挂载子路由 =====
-app.include_router(
-    chat_router,
-    prefix="/api/chat",
-    tags=["chat"]
-)
-
-app.include_router(
-    path_router,
-    prefix="/api/path",
-    tags=["path"]
-)
-
-app.include_router(
-    resource_router,
-    prefix="/api/resource",
-    tags=["resource"]
-)
-
-# ===== 新增：知识库路由 =====
-app.include_router(
-    knowledge_router,
-    prefix="/api/knowledge",
-    tags=["knowledge"]
-)
+app.include_router(chat_router, prefix="/api/chat", tags=["chat"])
+app.include_router(path_router, prefix="/api/path", tags=["path"])
+app.include_router(resource_router, prefix="/api/resource", tags=["resource"])
+app.include_router(knowledge_router, prefix="/api/knowledge", tags=["knowledge"])
 
 # ===== 健康检查 =====
 @app.get("/api/health")
 async def health_check():
-    """健康检查"""
     return {
         "status": "healthy",
         "knowledge_topics": len(app.state.kb_manager.topics_index),
@@ -91,7 +73,5 @@ if __name__ == "__main__":
     print("=" * 50)
     print("🚀 A3 多智能体学习系统启动中...")
     print("📌 API 文档: http://localhost:8080/docs")
-    print("📌 知识库匹配: POST /api/knowledge/match")
-    print("📌 智能对话: POST /api/knowledge/chat")
     print("=" * 50)
     uvicorn.run(app, host="0.0.0.0", port=8080)

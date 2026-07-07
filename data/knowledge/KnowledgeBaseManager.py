@@ -5,26 +5,38 @@ import numpy as np
 from typing import Optional, Dict, List, Any
 
 class KnowledgeBaseManager:
+    _instance = None
+    _initialized = False
+    
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
     def __init__(self, base_path=None):
-        """
-        初始化知识库管理器
-        :param base_path: 知识库JSON文件所在目录，如果不传则使用默认路径
-        """
+        # 防止重复初始化
+        if KnowledgeBaseManager._initialized:
+            return
+            
         if base_path is None:
-            # 默认路径：backend/api/../../data/knowledge
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            self.base_path = os.path.join(current_dir, '..', '..', 'data', 'knowledge')
+            self.base_path = current_dir
         else:
             self.base_path = base_path
             
-        self.topics_index = {}  # topic_id -> topic_data
+        self.topics_index = {}
         self._load_all_topics()
         
         # ===== 向量检索相关 =====
         self._embedding_model = None
-        self.topic_ids = []           # 有序的 topic_id 列表
-        self.topic_vectors = None     # numpy 数组，存储所有向量
+        self.topic_ids = []
+        self.topic_vectors = None
         self._vector_index_ready = False
+        
+        # 标记为已初始化
+        KnowledgeBaseManager._initialized = True
+    
+    # ... 其余方法保持不变 ...
     
     def _load_all_topics(self):
         """加载 base_path 下所有 JSON 文件中的 topics"""
