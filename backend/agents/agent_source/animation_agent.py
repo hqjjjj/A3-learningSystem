@@ -32,53 +32,6 @@ from pathlib import Path
 CACHE_DIR = Path(__file__).parent.parent.parent.parent / "data" / "cache"
 CACHE_FILE = CACHE_DIR / "animation_cache.json"
 
-class AnimationCache:
-    """动画缓存管理器"""
-    def __init__(self):
-        CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        self.cache = self._load()
-    
-    def _load(self):
-        """从文件加载缓存"""
-        if CACHE_FILE.exists():
-            try:
-                with open(CACHE_FILE, "r", encoding="utf-8") as f:
-                    return json.load(f)
-            except (json.JSONDecodeError, IOError):
-                return {}
-        return {}
-    
-    def _save(self):
-        """保存缓存到文件"""
-        with open(CACHE_FILE, "w", encoding="utf-8") as f:
-            json.dump(self.cache, f, ensure_ascii=False, indent=2)
-    
-    def _make_key(self, topic_id, resource_type):
-        """生成缓存键"""
-        raw = f"{topic_id}:{resource_type}"
-        return hashlib.md5(raw.encode()).hexdigest()
-    
-    def get(self, topic_id, resource_type):
-        """获取缓存，返回 (html_content, title, description) 或 None"""
-        key = self._make_key(topic_id, resource_type)
-        entry = self.cache.get(key)
-        if entry:
-            return entry.get("html_content"), entry.get("title"), entry.get("description")
-        return None
-    
-    def set(self, topic_id, resource_type, html_content, title, description):
-        """存入缓存"""
-        key = self._make_key(topic_id, resource_type)
-        self.cache[key] = {
-            "html_content": html_content,
-            "title": title,
-            "description": description,
-            "created_at": __import__("time").time()
-        }
-        self._save()
-
-# 全局单例
-_cache = AnimationCache()
 
 
 
@@ -90,17 +43,6 @@ class agentanimation:
         if topic is None:
             return {"error": f"知识点不存在: {topic_id}"}
         
-        # 检查缓存
-        cached = _cache.get(topic_id, resource_type)
-        if cached:
-            html_content, title, description = cached
-            print(f"动画缓存命中: {topic_id}")
-            return {"animation": {
-                "type": "html",
-                "title": title,
-                "html_content": html_content,
-                "description": description
-            }}
         
         system = system_prompt_animation
         user = user_prompt_animation_build(input_data, topic, kb)
@@ -139,8 +81,6 @@ class agentanimation:
                 if not anim["html_content"].strip():
                     anim["html_content"] = "<div style='padding:20px;text-align:center;color:red;'>动画生成失败，请重试</div>"
                 
-                _cache.set(topic_id, resource_type, 
-                          anim["html_content"], anim["title"], anim.get("description", ""))
                 
                 return {"animation": anim}
             else:
