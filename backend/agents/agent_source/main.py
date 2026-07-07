@@ -8,15 +8,17 @@ from backend.agents.agent_source.kn_agent import agentkn
 from data.knowledge.KnowledgeBaseManager import KnowledgeBaseManager
 from backend.agents.agent_source.lmm import SparkLLM
 import json
-import os
+import os, json, hashlib
+from pathlib import Path
 from json_repair import repair_json
 
-BASE_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../../..")
-)
-kb = KnowledgeBaseManager(
-    os.path.join(BASE_DIR, "data/knowledge")
-)
+
+# 知识库管理器
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent  
+KB_PATH = PROJECT_ROOT / "data" / "knowledge"
+RESOURCE_CACHE_PATH = PROJECT_ROOT / "data" / "user_resources"
+kb = KnowledgeBaseManager(str(KB_PATH))
+
 llm=SparkLLM()
 
 #输入参数示例
@@ -32,6 +34,33 @@ test_input={
 
 }
 # input_data=test_input
+
+
+
+def get_profile_hash(input_data):
+    # 提取关键画像字段，保证稳定
+    profile = {
+        "weak": sorted(input_data.get("weak_points", [])),
+        "diff": input_data.get("difficulty", "medium"),
+        "under": round(input_data.get("understanding", 0.5), 1)
+    }
+    return hashlib.md5(json.dumps(profile, sort_keys=True).encode()).hexdigest()
+
+def get_cached_resource(user_id, topic_id, res_type, profile_hash):
+    file_path = RESOURCE_CACHE_PATH / user_id / f"{topic_id}_{res_type}_{profile_hash}.json"
+    if file_path.exists():
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return None
+
+def save_resource(user_id, topic_id, res_type, profile_hash, resource_obj):
+    dir_path = RESOURCE_CACHE_PATH / user_id
+    dir_path.mkdir(parents=True, exist_ok=True)
+    file_path = dir_path / f"{topic_id}_{res_type}_{profile_hash}.json"
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(resource_obj, f, ensure_ascii=False, indent=2)
+
+
 
 
 def parse_output(result):
@@ -50,6 +79,7 @@ def parse_output(result):
 def validate_input(data):
 
     required_fields = [
+        "user_id",
         "topic_id",
         "module",
         "resource_type"
@@ -144,30 +174,54 @@ class agentCore:
 
 def generate_resources(input_data: dict) -> dict:
     """
-    统一的资源生成入口，供总控调用。
-    input_data 必须包含：
-        - topic_id: str
-        - module: str
-        - resource_type: List[str]  例如 ["explanation", "code_example"]
-        可选：difficulty, weak_points, understanding, learning_style, current_progress
+    统一的资源生成入口。
+    输入必须包含：user_id, topic_id, module, resource_type
     返回：
         {"resources": [...]}
     """
-    # 参数标准化（复用 normalize_input）
     input_data = normalize_input(input_data)
-    validate_input(input_data)   # 会检查 topic_id, module, resource_type
+    validate_input(input_data)
 
-    # 如果 resource_type 为空，直接返回空资源
-    if not input_data.get("resource_type"):
-        return {"resources": []}
+    user_id = input_data["user_id"]
+    topic_id = input_data["topic_id"]
+    profile_hash = get_profile_hash(input_data)
+    requested_types = input_data["resource_type"]
 
+    final_resources = []
+    missing_types = []
+
+    # 1. 检查缓存（对每种资源类型分别查询）
+    for res_type in requested_types:
+        cached = get_cached_resource(user_id, topic_id, res_type, profile_hash)
+        if cached is not None:
+            final_resources.append(cached)
+        else:
+            missing_types.append(res_type)
+
+    # 2. 如果全部命中，直接返回
+    if not missing_types:
+        return {"resources": final_resources}
+
+    # 3. 有缺失类型 → 仅生成缺失的部分
+    new_input = input_data.copy()
+    new_input["resource_type"] = missing_types
     agent = agentCore()
-    return agent.run(input_data)
+    result = agent.run(new_input)  
+
+    # 4. 存储新生成的资源并合并
+    for res in result.get("resources", []):
+        res_type = res.get("subtype")
+        if res_type:
+            save_resource(user_id, topic_id, res_type, profile_hash, res)
+        final_resources.append(res)
+
+    return {"resources": final_resources}
 
 
 # if __name__ == "__main__":
 #     # 仅用于本地手动测试，不会影响正式导入
 #     test_input = {
+#         "user_id": "u001", 
 #         "topic_id": "os_memory_04",
 #         "module": "存储器管理",
 #         "difficulty": "medium",
