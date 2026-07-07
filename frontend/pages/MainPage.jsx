@@ -149,10 +149,9 @@ const handleTopicChange = (newTopic) => {
 
     // 响应topic变化的工具
 useEffect(() => {
-  if (!userId || !appState.topic) {
-    setIsLoading(false);
-    return;
-  }
+  if (!userId || !appState.topic) return;
+  // 如果已经存在学习路径，则不再重复请求
+  if (appState.learning_path && appState.learning_path.length > 0) return;
 
   let isMounted = true;
   const loadPath = async () => {
@@ -167,21 +166,15 @@ useEffect(() => {
       }
     } catch (error) {
       console.error('加载学习路径失败:', error);
-      // 可增加降级逻辑：如保留原路径，或提示用户
     } finally {
-      if (isMounted) {
-        setIsLoading(false);
-      }
+      if (isMounted) setIsLoading(false);
     }
   };
-
   loadPath();
   return () => { isMounted = false; };
-}, [userId, appState.topic]);
+}, [userId, appState.topic, appState.learning_path]); 
 
-  const toggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
-  };
+
 
   return (
     <div className="main-page">

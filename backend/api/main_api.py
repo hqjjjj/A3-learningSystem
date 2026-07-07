@@ -19,6 +19,7 @@ if knowledge_path not in sys.path:
     sys.path.insert(0, knowledge_path)
 
 from KnowledgeBaseManager import KnowledgeBaseManager
+from api_user import router as user_router
 
 app = FastAPI()
 
@@ -36,6 +37,14 @@ print(f"📚 知识库路径: {kb_manager.base_path}")
 print(f"📚 已加载知识点数量: {len(kb_manager.topics_index)}")
 
 app.state.kb_manager = kb_manager
+
+
+# 挂载子路由并未它们分配虚拟路径
+app.include_router(
+    chat_router,
+    prefix="/api/chat",
+    tags=["chat"]
+)
 
 # ===== 挂载子路由 =====
 app.include_router(chat_router, prefix="/api/chat", tags=["chat"])
@@ -67,6 +76,11 @@ async def root():
         }
     }
 
+app.include_router(
+    user_router, 
+    prefix="/api/user", 
+    tags=["user"]
+    )
 
 if __name__ == "__main__":
     import uvicorn
