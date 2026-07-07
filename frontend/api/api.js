@@ -65,4 +65,9 @@ export const submitAnswer = async (user_id, topic, correct_rate, duration) => {
   });
 };
 
-
+export const loadUserState = async (user_id) => {
+    return request('/api/user/load_state', {
+        method: 'POST',
+        body: JSON.stringify({ user_id }),
+    });
+};

@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from api_chat import router as chat_router
 from api_path import router as path_router
 from api_resource import router as resource_router
-
+from api_user import router as user_router
 
 app = FastAPI()
 
@@ -18,9 +18,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 然后才是 include_router
 
-# 挂载子路由并未它们分配虚拟路径（网址区域）
+
+# 挂载子路由并未它们分配虚拟路径
 app.include_router(
     chat_router,
     prefix="/api/chat",
@@ -39,7 +39,11 @@ app.include_router(
     tags=["resource"]
 )
 
-
+app.include_router(
+    user_router, 
+    prefix="/api/user", 
+    tags=["user"]
+    )
 
 if __name__ == "__main__":
     import uvicorn
