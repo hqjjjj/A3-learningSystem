@@ -61,7 +61,7 @@ class Orchestrator:
                 profile_dict = profile_obj.model_dump()
         
         path_data = self.get_learning_path(user_id, topic) 
-        resources = self._call_source_agent(profile_dict, path_data)
+        resources = self._call_source_agent(profile_dict, path_data, user_id=user_id)
         reply = self._generate_reply(profile_dict, path_data)
         recommended = self._extract_recommended(resources)
 
@@ -131,7 +131,7 @@ class Orchestrator:
             profile = self._update_profile(user_id, f"浏览了资源{resource_id}，用时{duration}秒")
             
         path_data = self._call_plan_agent(user_id, profile)
-        resources = self._call_source_agent(profile, path_data)
+        resources = self._call_source_agent(profile, path_data, user_id=user_id)
         recommended = self._extract_recommended(resources)
 
         return {
@@ -250,8 +250,11 @@ class Orchestrator:
         }
         return result
 
-    def _call_source_agent(self, profile: Dict, path_data: Dict) -> List[Dict]:
+    def _call_source_agent(self, profile: Dict, path_data: Dict, user_id: str = None) -> List[Dict]:
         resource_input = self._build_resource_input(profile, path_data)
+        # 👇 强行给字典注入 user_id！
+        if user_id:
+            resource_input["user_id"] = user_id
         return self._call_source_agent_raw(resource_input)
 
     def _call_source_agent_raw(self, resource_input: Dict) -> Dict:

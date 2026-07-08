@@ -37,12 +37,19 @@ class FinishViewRequest(BaseModel):
         duration: int
 @router.post("/finish_view")
 def finish_view(req: FinishViewRequest):
-
+    # 1. 先调用总控层完成行为记录和画像更新
     result = finish_view_resource(
-    user_id=req.user_id,
-    resource_id=req.resource_type,
-    duration=req.duration
+        user_id=req.user_id,
+        resource_id=req.resource_type,
+        duration=req.duration
     )
+    
+    # 👇 2. 关键修复：将 user_id 手动补进返回数据中 (针对总控里调用 generate_resources 时的缺失)
+    # 因为总控层在返回资源时，有时候不会把 user_id 保留在 output 中。
+    # 我们在 API 层做个补丁。
+    if "data" in result and result["data"] is not None:
+        if isinstance(result["data"], dict) and "user_id" not in result["data"]:
+            result["data"]["user_id"] = req.user_id
 
     return {
         "status": "success",

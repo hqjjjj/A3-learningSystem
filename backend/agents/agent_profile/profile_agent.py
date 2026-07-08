@@ -147,8 +147,12 @@ class ProfileAgent:
                         if content.endswith("```"):
                             content = content[:-3]
                     content = content.strip()
+                    # 1. 正则修复 JSON 尾巴逗号
                     content = re.sub(r',\s*}', '}', content)
                     content = re.sub(r',\s*]', ']', content)
+                    # 👇 2. 关键修复：将内容中不合法的换行符转义为 \n
+                    content = re.sub(r'(?<!\\)\n', '\\n', content)
+                    # 3. 直接返回解析结果
                     return json.loads(content)
                 else:
                     if attempt < max_retries - 1:
