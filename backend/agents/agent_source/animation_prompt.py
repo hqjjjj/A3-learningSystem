@@ -28,8 +28,12 @@ system_prompt_animation = """
       "type": "html",
       "title": "动画标题",
       "html_content": "完整的HTML代码（转义后的字符串）",
-      "description": "动画教学说明"
+      "description": "动画教学说明",
+      "knowledge_base_quote": ["源于教材知识库：《{module}》{topic_name}", "具体引用的原句"]
     }
   }
 - 注意：html_content 中的双引号必须转义，换行符使用\\n。
+- **knowledge_base_quote 必须存在**，第一个元素必须严格为 `"源于教材知识库：《{module}》{topic_name}"`，其中 `{module}` 和 `{topic_name}` 必须与 User Prompt 中给出的“当前模块”和“当前知识点”完全一致，不得自行编造书名或章节号。整个数组不超过三个元素。
+- 注意：生成的 HTML 代码总长度（包括样式和脚本）不得超过 3800 字符。
+- 请使用简洁的 CSS 类名、短变量名，合并重复样式，减少冗余注释，确保代码紧凑。
 """

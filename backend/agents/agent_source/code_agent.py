@@ -40,7 +40,23 @@ class agentcode:
             result = llm.generate(system, user)
             result= parse_output(result)
             if "error" not in result:
+
+                if "code_example" in result:
+                    code_obj = result["code_example"]
+                    module = input_data.get("module", "未知章节")
+                    topic_name = topic.get("name", "未知知识点")
+                    base_citation = f"源于教材知识库：《{module}》{topic_name}"
+                    if "knowledge_base_quote" not in code_obj or not code_obj["knowledge_base_quote"]:
+                        code_obj["knowledge_base_quote"] = [base_citation]
+                    else:
+                        if not code_obj["knowledge_base_quote"][0].startswith("源于教材知识库"):
+                            code_obj["knowledge_base_quote"].insert(0, base_citation)
+                    result["code_example"] = code_obj
+
+
                 return result
+            
+            
             else:
                 user+=f"""
             你刚才输出的JSON不合法。

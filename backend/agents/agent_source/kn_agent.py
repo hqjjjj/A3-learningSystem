@@ -34,7 +34,7 @@ class agentkn:
     #需要从知识库传递一整个topic内容
     def run(self,input_data,topic,allows):
         
-        system, user =build_kn_prompt(allows) ,user_prompt_build(input_data, topic,kb)  
+        system, user = build_kn_prompt(allows, input_data.get("module", "未知章节"), topic.get("name", "未知知识点")) ,user_prompt_build(input_data, topic,kb)  
         for i in range(3):
             result = llm.generate(system, user)
             result= parse_output(result)
@@ -95,6 +95,20 @@ class agentkn:
                 obj["type"] = correct_type
 
                 result[res_type] = obj
+
+                module = input_data.get("module", "未知章节")
+                topic_name = topic.get("name", "未知知识点")
+                base_citation = f"源于教材知识库：《{module}》{topic_name}"
+
+                obj = result[res_type]   # 已确保存在
+                if "knowledge_base_quote" not in obj or not obj["knowledge_base_quote"]:
+                    obj["knowledge_base_quote"] = [base_citation]
+                else:
+                    if not obj["knowledge_base_quote"][0].startswith("源于教材知识库"):
+                        obj["knowledge_base_quote"].insert(0, base_citation)
+
+                result[res_type] = obj
+                
                 return result
             else:
                 user+=f"""

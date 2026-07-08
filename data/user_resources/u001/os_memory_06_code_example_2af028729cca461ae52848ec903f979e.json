@@ -1,0 +1,37 @@
+{
+  "type": "code",
+  "title": "地址变换机构与快表模拟",
+  "language": "python",
+  "code_lines": [
+    "class AddressTranslator:",
+    "    def __init__(self, page_table):",
+    "        self.page_table = page_table  # 内存中的页表",
+    "        self.tlb = {}                # 快表(TLB)缓存",
+    "",
+    "    def translate(self, virtual_address):",
+    "        page_number = self.get_page_number(virtual_address)",
+    "        offset = self.get_offset(virtual_address)",
+    "",
+    "        # 尝试在快表中查找",
+    "        if page_number in self.tlb:",
+    "            physical_block = self.tlb[page_number]",
+    "            return (physical_block << 10) | offset  # 假设页大小为1KB",
+    "",
+    "        # 快表未命中，访问内存页表",
+    "        physical_block = self.page_table[page_number]",
+    "        self.tlb[page_number] = physical_block  # 更新快表",
+    "        return (physical_block << 10) | offset",
+    "",
+    "    def get_page_number(self, address):",
+    "        return address >> 10",
+    "",
+    "    def get_offset(self, address):",
+    "        return address & 0x3FF"
+  ],
+  "description": "模拟分页系统的地址变换过程：当访问虚拟地址时，先检查快表(TLB)，命中则直接获取物理块号；未命中则访问内存页表并更新快表。代码展示了快表加速地址变换的核心机制。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《存储器管理》地址变换机构与快表",
+    "快表是页表的高速缓存，存放最近访问的页表项，可加快地址变换速度。"
+  ],
+  "subtype": "code_example"
+}

@@ -89,6 +89,19 @@ USER_PROMPT_TABEL="""
 - 必须适配：
 {learning_style} 题目类型
 
+
+【知识库来源引用硬性规则 - 防幻觉/可溯源】
+1. 本次生成的所有内容（包括解释、解析、代码注释），核心事实依据必须来源于下方的“知识点解释/示例/总结”。
+2. 你输出的 JSON 中**必须**包含 "knowledge_base_quote" 字段（字符串数组）。
+3. **引用格式强制要求**：该数组的**第一个元素**必须严格为：
+   "源于教材知识库：《{module}》{topic_name}"
+   后续元素可以是你具体引用的知识库原句（至少包含1句）。
+   示例：["源于教材知识库：《存储器管理》分页存储管理方式", "页表用于实现从页号到物理块号的地址映射"]
+   总共不超过三个元素
+
+当前资源应引用的章节和知识点是：
+《{module}》- {topic_name}
+
 """
 
 def user_prompt_build(user_input,topic,kb):
@@ -100,6 +113,7 @@ def user_prompt_build(user_input,topic,kb):
         else:
             prereq_names.append(pid)
     prereq_names_str = json.dumps(prereq_names, ensure_ascii=False, indent=2)
+    
     return USER_PROMPT_TABEL.format(
         module=user_input["module"],
 
@@ -175,5 +189,6 @@ def user_prompt_animation_build(user_input, topic, kb, max_explanation_len=350):
         topic_name=topic["name"],
         explanation=explanation,
         difficulty=user_input["difficulty"],
-        weak_points=weak_str
+        weak_points=weak_str,
+        module=user_input.get("module", "未知章节")
     )   

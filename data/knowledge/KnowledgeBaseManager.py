@@ -41,7 +41,7 @@ class KnowledgeBaseManager:
     def _load_all_topics(self):
         """加载 base_path 下所有 JSON 文件中的 topics"""
         json_files = glob.glob(os.path.join(self.base_path, "*.json"))
-        print(f"📂 发现 {len(json_files)} 个 JSON 文件")
+        print(f"已检索 {len(json_files)} 个 JSON 文件")
         
         for file_path in json_files:
             try:
@@ -61,7 +61,7 @@ class KnowledgeBaseManager:
             except Exception as e:
                 print(f"⚠️ 加载文件失败 {file_path}: {e}")
         
-        print(f"📚 共加载 {len(self.topics_index)} 个知识点")
+        print(f"共加载 {len(self.topics_index)} 个知识点")
 
     def get_topic_by_id(self, topic_id):
         """根据ID获取知识点"""

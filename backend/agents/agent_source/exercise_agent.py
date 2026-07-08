@@ -124,6 +124,17 @@ class agentexercise:
                             ex_obj["answer"] = ex_obj["options"][idx]
 
                 # ========== 6. 最终包装 ==========
+
+                module = input_data.get("module", "未知章节")
+                topic_name = topic.get("name", "未知知识点")
+                base_citation = f"源于教材知识库：《{module}》{topic_name}"
+
+                if "knowledge_base_quote" not in ex_obj or not ex_obj["knowledge_base_quote"]:
+                    ex_obj["knowledge_base_quote"] = [base_citation]
+                else:
+                    if not ex_obj["knowledge_base_quote"][0].startswith("源于教材知识库"):
+                        ex_obj["knowledge_base_quote"].insert(0, base_citation)
+                        
                 return {"exercise": ex_obj}
             else:
                 user+=f"""
