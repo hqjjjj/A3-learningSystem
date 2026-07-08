@@ -192,6 +192,10 @@ useEffect(() => {
 }, [userId, appState.topic]); // 👈 改为只依赖 userId 和 topic，去掉 learning_path
 
 
+const toggleSidebar = () => {
+  setIsSidebarCollapsed(prev => !prev);
+};
+
 
   return (
     <div className="main-page">

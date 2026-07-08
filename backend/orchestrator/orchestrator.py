@@ -311,16 +311,15 @@ class Orchestrator:
     def load_user_state(self, user_id: str) -> Dict:
         """
         用户登录/页面刷新时调用，加载完整状态。
-        返回的字典结构必须完全匹配前端截图中的 data 对象。
+        返回的字典结构必须匹配前端期望的 data 对象。
         """
-        # 1. 获取用户的画像（从内存读，不存在则从磁盘加载，并写入内存）
+        # 1. 获取用户画像
         profile_obj = self.profile_agent.get_profile(user_id)
         if not profile_obj:
             profile_obj = self.profile_agent.load_profile_from_disk(user_id)
             if profile_obj:
                 self.profile_agent.profiles[user_id] = profile_obj
-        
-        # 如果完全没有该用户的数据，创建一个空的兜底对象
+
         if not profile_obj:
             # 从 ProfileAgent 里借用 StudentProfile，避免 ImportError
             from profile_agent import StudentProfile
@@ -337,12 +336,9 @@ class Orchestrator:
         resources = {}
         if path_data.get("topic_id"):
             resources = self._call_source_agent(profile_dict, path_data)
-        
         recommended = self._extract_recommended(resources)
 
-        # 4. 组装返回给前端的数据
         return {
-            "user_id": user_id,
             "profile": profile_dict,
             "learning_path": path_data.get("path_list", []),
             "recommended_resources": recommended,
@@ -375,6 +371,9 @@ def finish_view_resource(user_id: str, resource_id: str, duration: int) -> Dict:
 
 def submit_answer_result(user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
     return get_orchestrator().submit_answer_result(user_id, topic, correct_rate, duration)
+
+def load_user_state(user_id: str) -> Dict:
+    return get_orchestrator().load_user_state(user_id)
 
 def load_user_state(user_id: str) -> Dict:
     return get_orchestrator().load_user_state(user_id)

@@ -153,7 +153,10 @@
   },
   "learning_pace": "normal",
   "resource_type": [
-    "explanation"
+    "exercise",
+    "code",
+    "explanation",
+    "code_example"
   ],
   "difficulty": "medium",
   "progress": {

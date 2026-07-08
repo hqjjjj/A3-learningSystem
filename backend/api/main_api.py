@@ -33,8 +33,8 @@ app.add_middleware(
 
 # ===== 全局初始化知识库管理器 =====
 kb_manager = KnowledgeBaseManager()
-print(f"📚 知识库路径: {kb_manager.base_path}")
-print(f"📚 已加载知识点数量: {len(kb_manager.topics_index)}")
+print(f"知识库路径: {kb_manager.base_path}")
+print(f"已加载知识点数量: {len(kb_manager.topics_index)}")
 
 app.state.kb_manager = kb_manager
 
@@ -85,7 +85,7 @@ app.include_router(
 if __name__ == "__main__":
     import uvicorn
     print("=" * 50)
-    print("🚀 A3 多智能体学习系统启动中...")
-    print("📌 API 文档: http://localhost:8080/docs")
+    print(" A3 多智能体学习系统启动中...")
+    print(" API 文档: http://localhost:8080/docs")
     print("=" * 50)
     uvicorn.run(app, host="0.0.0.0", port=8080)
