@@ -2,8 +2,7 @@
 # backend/api/api_user.py
 from fastapi import APIRouter
 from pydantic import BaseModel
-from orchestrator.orchestrator import load_user_state 
-
+from orchestrator.orchestrator import get_orchestrator
 router = APIRouter()
 
 class UserStateRequest(BaseModel):
@@ -11,7 +10,8 @@ class UserStateRequest(BaseModel):
 
 @router.post("/load_state")
 def load_state(req: UserStateRequest):
-    result = load_user_state(req.user_id)
+    orchestrator = get_orchestrator()
+    result = orchestrator.load_user_state(req.user_id)
     return {
         "status": "success",
         "data": result

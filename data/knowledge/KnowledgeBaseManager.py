@@ -225,11 +225,13 @@ class KnowledgeBaseManager:
         
         print(f"\n🔎 正在匹配: \"{user_input}\"")
         
-        if use_semantic:
-            result = self._semantic_match(user_input, threshold)
-            if result:
-                return result
+        # 👇 核心修改：直接注释掉这一整段，不再执行向量语义匹配！
+        # if use_semantic:
+        #     result = self._semantic_match(user_input, threshold)
+        #     if result:
+        #         return result
         
+        # 直接使用关键词匹配（不需要联网，不需要下载模型，快如闪电！）
         result = self._keyword_match(user_input)
         if result:
             return result
