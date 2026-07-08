@@ -17,6 +17,12 @@ import * as api from '../api/api';
 const MainPage = ({appState, setAppState, userId}) => {
   // 左侧折叠状态
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  
+  // 👇 加上这个缺失的函数！（放在 useState 和 useEffect 之间即可）
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+  // 👆 加上这个函数
 
   // 右侧主 Tab：'path' 或 'resource'
   const [activeMainTab, setActiveMainTab] = useState('path');
@@ -147,14 +153,19 @@ const handleTopicChange = (newTopic) => {
   }
 };
 
-    // 响应topic变化的工具
+    // 响应topic变化的工具 (加入请求锁，防止并发死循环)
 useEffect(() => {
   if (!userId || !appState.topic) return;
   // 如果已经存在学习路径，则不再重复请求
   if (appState.learning_path && appState.learning_path.length > 0) return;
 
+  // 👇 新增一个“正在请求中”的锁，防止重复触发
+  let isLoadingLock = false;
+  if (isLoadingLock) return;
+
   let isMounted = true;
   const loadPath = async () => {
+    isLoadingLock = true; // 上锁
     setIsLoading(true);
     try {
       const pathData = await api.fetchPath(userId, appState.topic);
@@ -167,12 +178,18 @@ useEffect(() => {
     } catch (error) {
       console.error('加载学习路径失败:', error);
     } finally {
-      if (isMounted) setIsLoading(false);
+      if (isMounted) {
+        setIsLoading(false);
+        isLoadingLock = false; // 解锁
+      }
     }
   };
   loadPath();
-  return () => { isMounted = false; };
-}, [userId, appState.topic, appState.learning_path]); 
+  return () => { 
+    isMounted = false;
+    isLoadingLock = false; // 组件卸载时强制解锁
+  };
+}, [userId, appState.topic]); // 👈 改为只依赖 userId 和 topic，去掉 learning_path
 
 
 

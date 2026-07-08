@@ -1,0 +1,82 @@
+[
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T14:21:13.403834",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T14:21:13.405018",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T14:21:13.406960",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T14:21:13.408775",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T14:21:13.413349",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T14:21:13.416654",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-08T14:58:35.609213",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "你好，我想测试一下行为记录。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-08T14:59:28.868563",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "你好，我想测试一下行为记录。"
+  }
+]
