@@ -153,7 +153,10 @@
   },
   "learning_pace": "normal",
   "resource_type": [
-    "explanation"
+    "exercise",
+    "code",
+    "explanation",
+    "code_example"
   ],
   "difficulty": "medium",
   "progress": {
@@ -162,5 +165,5 @@
   },
   "learning_goal": null,
   "created_at": "2026-07-06T23:38:56.836754",
-  "updated_at": "2026-07-06T23:40:00.458572"
+  "updated_at": "2026-07-08T12:03:39.961410"
 }

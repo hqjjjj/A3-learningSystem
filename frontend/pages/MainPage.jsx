@@ -175,6 +175,10 @@ useEffect(() => {
 }, [userId, appState.topic, appState.learning_path]); 
 
 
+const toggleSidebar = () => {
+  setIsSidebarCollapsed(prev => !prev);
+};
+
 
   return (
     <div className="main-page">

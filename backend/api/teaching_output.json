@@ -10,14 +10,17 @@
   "error_patterns": [],
   "preference": {
     "resource_type": [
-      "explanation"
+      "exercise",
+      "code",
+      "explanation",
+      "code_example"
     ],
     "difficulty": "medium"
   },
   "learning_pace": "normal",
   "current_topic": {
-    "id": "os_mem_01",
-    "name": "地址空间基本概念",
-    "is_review": true
+    "id": "",
+    "name": "已完成",
+    "is_review": false
   }
 }

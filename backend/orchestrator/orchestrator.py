@@ -310,7 +310,43 @@ class Orchestrator:
             "duration": duration, "correct_rate": correct_rate,
             "timestamp": datetime.now().isoformat()
         })
+    def load_user_state(self, user_id: str) -> Dict:
+        """
+        用户登录/页面刷新时调用，加载完整状态。
+        返回的字典结构必须匹配前端期望的 data 对象。
+        """
+        # 1. 获取用户画像
+        profile_obj = self.profile_agent.get_profile(user_id)
+        if not profile_obj:
+            profile_obj = self.profile_agent.load_profile_from_disk(user_id)
+            if profile_obj:
+                self.profile_agent.profiles[user_id] = profile_obj
 
+        if not profile_obj:
+            # 如果完全没有该用户，创建一个空画像（需要导入 StudentProfile）
+            from backend.agents.agent_profile.profile_agent import StudentProfile
+            empty_profile = StudentProfile(user_id=user_id, created_at=datetime.now())
+            self.profile_agent.profiles[user_id] = empty_profile
+            profile_obj = empty_profile
+
+        profile_dict = profile_obj.model_dump()
+
+        # 2. 获取学习路径（调用已有的 get_learning_path）
+        path_data = self.get_learning_path(user_id)   # 注意：get_learning_path 内部会处理 topic
+
+        # 3. 推荐资源
+        resources = {}
+        if path_data.get("topic_id"):
+            resources = self._call_source_agent(profile_dict, path_data)
+        recommended = self._extract_recommended(resources)
+
+        return {
+            "profile": profile_dict,
+            "learning_path": path_data.get("path_list", []),
+            "recommended_resources": recommended,
+            "topic": profile_dict.get("progress", {}).get("current_topic", ""),
+            "current_progress": path_data.get("current_progress", "learning")
+        }
 
 _orchestrator = None
 
@@ -321,47 +357,47 @@ def get_orchestrator() -> Orchestrator:
     return _orchestrator
 
 
-def load_user_state(self, user_id: str) -> Dict:
-        """
-        用户登录/页面刷新时调用，加载完整状态。
-        返回的字典结构必须完全匹配前端截图中的 data 对象。
-        """
-        # 1. 获取用户的画像（从内存读，不存在则从磁盘加载，并写入内存）
-        profile_obj = self.profile_agent.get_profile(user_id)
-        if not profile_obj:
-            profile_obj = self.profile_agent.load_profile_from_disk(user_id)
-            if profile_obj:
-                self.profile_agent.profiles[user_id] = profile_obj
+# def load_user_state(self, user_id: str) -> Dict:
+#         """
+#         用户登录/页面刷新时调用，加载完整状态。
+#         返回的字典结构必须完全匹配前端截图中的 data 对象。
+#         """
+#         # 1. 获取用户的画像（从内存读，不存在则从磁盘加载，并写入内存）
+#         profile_obj = self.profile_agent.get_profile(user_id)
+#         if not profile_obj:
+#             profile_obj = self.profile_agent.load_profile_from_disk(user_id)
+#             if profile_obj:
+#                 self.profile_agent.profiles[user_id] = profile_obj
         
-        # 如果完全没有该用户的数据，创建一个空的兜底对象
-        if not profile_obj:
-            empty_profile = StudentProfile(user_id=user_id, created_at=datetime.now())
-            self.profile_agent.profiles[user_id] = empty_profile
-            profile_obj = empty_profile
+#         # 如果完全没有该用户的数据，创建一个空的兜底对象
+#         if not profile_obj:
+#             empty_profile = StudentProfile(user_id=user_id, created_at=datetime.now())
+#             self.profile_agent.profiles[user_id] = empty_profile
+#             profile_obj = empty_profile
 
-        profile_dict = profile_obj.model_dump()
+#         profile_dict = profile_obj.model_dump()
         
-        # 2. 获取学习路径
-        # 注意：这里调用 get_learning_path 会自动加载并返回最新的路径数据
-        path_data = self.get_learning_path(user_id)
+#         # 2. 获取学习路径
+#         # 注意：这里调用 get_learning_path 会自动加载并返回最新的路径数据
+#         path_data = self.get_learning_path(user_id)
         
-        # 3. 根据目前的画像和路径，推荐首批资源（如果有学习路径的话）
-        # 注意：这里我们复用 `_call_source_agent` 来获取推荐资源
-        resources = {}
-        if path_data.get("topic_id"):
-            resources = self._call_source_agent(profile_dict, path_data)
+#         # 3. 根据目前的画像和路径，推荐首批资源（如果有学习路径的话）
+#         # 注意：这里我们复用 `_call_source_agent` 来获取推荐资源
+#         resources = {}
+#         if path_data.get("topic_id"):
+#             resources = self._call_source_agent(profile_dict, path_data)
         
-        recommended = self._extract_recommended(resources)
+#         recommended = self._extract_recommended(resources)
 
-        # 4. 组装返回给前端的数据
-        return {
-            "user_id": user_id,
-            "profile": profile_dict,
-            "learning_path": path_data.get("path_list", []),
-            "recommended_resources": recommended,
-            "topic": profile_dict.get("progress", {}).get("current_topic", ""),
-            "current_progress": path_data.get("current_progress", "learning")
-        }
+#         # 4. 组装返回给前端的数据
+#         return {
+#             "user_id": user_id,
+#             "profile": profile_dict,
+#             "learning_path": path_data.get("path_list", []),
+#             "recommended_resources": recommended,
+#             "topic": profile_dict.get("progress", {}).get("current_topic", ""),
+#             "current_progress": path_data.get("current_progress", "learning")
+#         }
 
 def handle_chat(user_id: str, message: str, topic: str = None) -> Dict:
     return get_orchestrator().handle_chat(user_id, message, topic)
@@ -377,3 +413,6 @@ def finish_view_resource(user_id: str, resource_id: str, duration: int) -> Dict:
 
 def submit_answer_result(user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
     return get_orchestrator().submit_answer_result(user_id, topic, correct_rate, duration)
+
+def load_user_state(user_id: str) -> Dict:
+    return get_orchestrator().load_user_state(user_id)
