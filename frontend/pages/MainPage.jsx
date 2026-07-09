@@ -18,11 +18,11 @@ const MainPage = ({appState, setAppState, userId}) => {
   // 左侧折叠状态
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   
-  // 👇 加上这个缺失的函数！（放在 useState 和 useEffect 之间即可）
+  
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
-  // 👆 加上这个函数
+
 
   // 右侧主 Tab：'path' 或 'resource'
   const [activeMainTab, setActiveMainTab] = useState('path');
@@ -34,24 +34,22 @@ const MainPage = ({appState, setAppState, userId}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   // 辅助函数：用于合并后端返回更新
-   const mergeAppState = (updates) => {
-    setAppState(prev => {
-      const updates = typeof updates === 'function' ? updates(prev) : updates;
-      return {
-      
-        ...prev,
-        ...updates,
-        profile: updates.profile ?? prev.profile,
-        // 推荐资源如果是数组则直接替换
-        recommended_resources: updates.recommended_resources ?? prev.recommended_resources,
-        generated_resource: updates.generated_resource ?? prev.generated_resource,
-        chat_history: updates.chat_history !== undefined ? updates.chat_history : prev.chat_history,
-        learning_path: updates.learning_path ?? prev.learning_path,
-        topic: updates.topic ?? prev.topic,
-        current_progress:updates.current_progress ?? prev.current_progress
-      };
-    });
-  };
+const mergeAppState = (updates) => {
+  setAppState(prev => {
+    const processedUpdates = typeof updates === 'function' ? updates(prev) : updates;
+    return {
+      ...prev,
+      ...processedUpdates,
+      profile: processedUpdates.profile ?? prev.profile,
+      recommended_resources: processedUpdates.recommended_resources ?? prev.recommended_resources,
+      generated_resource: processedUpdates.generated_resource ?? prev.generated_resource,
+      chat_history: processedUpdates.chat_history !== undefined ? processedUpdates.chat_history : prev.chat_history,
+      learning_path: processedUpdates.learning_path ?? prev.learning_path,
+      topic: processedUpdates.topic ?? prev.topic,
+      current_progress: processedUpdates.current_progress ?? prev.current_progress
+    };
+  });
+};
 
 
   // 聊天模块回调函数
@@ -163,7 +161,7 @@ useEffect(() => {
   // 如果已经存在学习路径，则不再重复请求
   if (appState.learning_path && appState.learning_path.length > 0) return;
 
-  // 👇 新增一个“正在请求中”的锁，防止重复触发
+  // 新增一个“正在请求中”的锁，防止重复触发
   let isLoadingLock = false;
   if (isLoadingLock) return;
 
@@ -193,7 +191,7 @@ useEffect(() => {
     isMounted = false;
     isLoadingLock = false; // 组件卸载时强制解锁
   };
-}, [userId, appState.topic]); // 👈 改为只依赖 userId 和 topic，去掉 learning_path
+}, [userId, appState.topic]); //  只依赖 userId 和 topic
 
 
 
