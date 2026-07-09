@@ -35,18 +35,22 @@ const MainPage = ({appState, setAppState, userId}) => {
 
   // 辅助函数：用于合并后端返回更新
    const mergeAppState = (updates) => {
-    setAppState(prev => ({
-      ...prev,
-      ...updates,
-       profile: updates.profile ?? prev.profile,
-      // 推荐资源如果是数组则直接替换
-      recommended_resources: updates.recommended_resources ?? prev.recommended_resources,
-      generated_resource: updates.generated_resource ?? prev.generated_resource,
-      chat_history: updates.chat_history ?? prev.chat_history,
-      learning_path: updates.learning_path ?? prev.learning_path,
-      topic: updates.topic ?? prev.topic,
-      current_progress:updates.current_progress ?? prev.current_progress
-    }));
+    setAppState(prev => {
+      const updates = typeof updates === 'function' ? updates(prev) : updates;
+      return {
+      
+        ...prev,
+        ...updates,
+        profile: updates.profile ?? prev.profile,
+        // 推荐资源如果是数组则直接替换
+        recommended_resources: updates.recommended_resources ?? prev.recommended_resources,
+        generated_resource: updates.generated_resource ?? prev.generated_resource,
+        chat_history: updates.chat_history !== undefined ? updates.chat_history : prev.chat_history,
+        learning_path: updates.learning_path ?? prev.learning_path,
+        topic: updates.topic ?? prev.topic,
+        current_progress:updates.current_progress ?? prev.current_progress
+      };
+    });
   };
 
 
@@ -65,14 +69,14 @@ const MainPage = ({appState, setAppState, userId}) => {
 
       const assistantMsg = { role: 'assistant', content: data.reply };
       
-      mergeAppState({
-        chat_history: [...appState.chat_history, assistantMsg],
+      mergeAppState((prev) => ({
+        chat_history: [...prev.chat_history, assistantMsg],
         profile: data.profile,
         recommended_resources: data.recommended_resources,
         learning_path: data.learning_path,   // 后端可能返回更新的学习路径
         topic: data.topic,
         current_progress: data.current_progress
-      })
+      }));
     }catch(error){
       console.error('发送消息失败', error);
       const errorMsg={ role: 'assistant', content: '抱歉，服务出错了，请稍后再试。' };
@@ -192,9 +196,7 @@ useEffect(() => {
 }, [userId, appState.topic]); // 👈 改为只依赖 userId 和 topic，去掉 learning_path
 
 
-const toggleSidebar = () => {
-  setIsSidebarCollapsed(prev => !prev);
-};
+
 
 
   return (
@@ -266,11 +268,12 @@ const toggleSidebar = () => {
                      topic={appState.topic}
                      onTopicChange={handleTopicChange}
                     />}
-                {activePathTab ==='knowledgeGraph' && (
-                         <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
-                    知识图谱功能开发中，敬请期待...
-                      </div>
-                    )}
+                {activePathTab === 'knowledgeGraph' && (
+                  <KnowledgeGraphPanel 
+                    knowledgeGraph={appState.knowledge_graph}
+                    userId={userId}
+                  />
+                )}
 
               </div>
             </div>
