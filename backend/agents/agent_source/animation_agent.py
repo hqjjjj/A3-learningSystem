@@ -36,11 +36,11 @@ class agentanimation:
         for attempt in range(max_attempts):
             t0 = time.time()
             result = llm.generate(system, user)
-            print(f"LLM 调用耗时（第{attempt+1}次）: {time.time()-t0:.2f}秒")
+            print(f"【资源生成agent】LLM 调用耗时（第{attempt+1}次）: {time.time()-t0:.2f}秒")
             
             # 打印结果摘要 
-            print(f" 返回结果长度: {len(result)} 字符")
-            print(f" 预览 (前200字符): {result[:200]}...")
+            print(f" 【资源生成agent】返回结果长度: {len(result)} 字符")
+            print(f" 【资源生成agent】预览 (前200字符): {result[:200]}...")
             
             parsed = parse_output(result)
             if not isinstance(parsed, dict):
@@ -51,7 +51,7 @@ class agentanimation:
             
             # 检测 JSON 修复过程中产生的异常字段（表明原始 JSON 不完整）
             if any(k in parsed for k in ("fixed", "dynamic", "已分配")):
-                print(f" 检测到修复残留字段: {[k for k in parsed if k in ('fixed', 'dynamic', '已分配')]}")
+                print(f" 【资源生成agent】检测到修复残留字段: {[k for k in parsed if k in ('fixed', 'dynamic', '已分配')]}")
                 user += "\n 你输出的 JSON 不完整，包含修复残留字段。请确保 JSON 完全正确，且 HTML 代码以 </html> 结尾。"
                 continue
             
@@ -81,7 +81,7 @@ class agentanimation:
                 if (not html.strip().startswith("<!DOCTYPE html>") or 
                     not html.strip().endswith("</html>") or
                     len(html) < 200):
-                    print(f" HTML 校验失败: 长度={len(html)}, 开头={html[:50]}, 结尾={html[-50:]}")
+                    print(f" 【资源生成agent】HTML 校验失败: 长度={len(html)}, 开头={html[:50]}, 结尾={html[-50:]}")
                     #  追加更明确的压缩指令 
                     user += "\n 生成的 HTML 不完整，必须包含完整的 <!DOCTYPE html> 和 </html>，且长度应大于 200 字符。请生成更紧凑的 HTML 代码，尽量精简 CSS 和 JS，总字符数控制在 3000 以内。"
                     continue
@@ -103,11 +103,11 @@ class agentanimation:
                 return {"animation": anim}
             else:
                 error_msg = parsed.get('error', '未知错误')
-                print(f" JSON 解析错误: {error_msg}")
+                print(f" 【资源生成agent】JSON 解析错误: {error_msg}")
                 user += f"\n你上次输出的JSON不合法，错误：{error_msg}，请重新输出合法JSON。"
         
         # 全部重试失败，返回默认静态提示页面
-        print(" 所有重试均失败，返回默认提示页面")
+        print(" 【资源生成agent】所有重试均失败，返回默认提示页面")
         module = input_data.get("module", "未知章节")
         topic_name = topic.get("name", "未知知识点")
         base_citation = f"源于教材知识库：《{module}》{topic_name}"

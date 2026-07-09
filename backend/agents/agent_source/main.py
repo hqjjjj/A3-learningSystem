@@ -92,7 +92,7 @@ def validate_input(data):
         if field not in data:
 
             raise ValueError(
-                f"缺少必要字段: {field}"
+                f"【资源生成agent】缺少必要字段: {field}"
             )
 def normalize_input(data):
 
@@ -126,7 +126,7 @@ class agentCore:
         topic = kb.get_topic_by_id(input_data["topic_id"])
 
         if topic is None:
-            print(f"错误：未找到知识点 {input_data['topic_id']}")
+            print(f"【资源生成agent】错误：未找到知识点 {input_data['topic_id']}")
             return {"resources": []} 
         
                 
@@ -158,9 +158,9 @@ class agentCore:
                     if result and isinstance(result, dict):
                         self.finaloutput.update(result)
                 except Exception as e:
-                    print(f"Agent 执行失败: {e}")
+                    print(f"【资源生成agent】Agent 执行失败: {e}")
 
-                    self.finaloutput[f"error_{str(e)}"] = {"error": str(e)}
+                    self.finaloutput[f"【资源生成agent】error_{str(e)}"] = {"error": str(e)}
 
 
         # 格式化输出
