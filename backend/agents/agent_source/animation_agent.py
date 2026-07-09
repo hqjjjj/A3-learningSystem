@@ -106,6 +106,7 @@ class agentanimation:
                 print(f" 【资源生成agent】JSON 解析错误: {error_msg}")
                 user += f"\n你上次输出的JSON不合法，错误：{error_msg}，请重新输出合法JSON。"
         
+        
         # 全部重试失败，返回默认静态提示页面
         print(" 【资源生成agent】所有重试均失败，返回默认提示页面")
         module = input_data.get("module", "未知章节")

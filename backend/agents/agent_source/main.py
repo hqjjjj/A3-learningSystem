@@ -220,6 +220,7 @@ def generate_resources(input_data: dict) -> dict:
     return {"resources": final_resources}
 
 
+
 # if __name__ == "__main__":
 #     # 仅用于本地手动测试，不会影响正式导入
 #     test_input = {
