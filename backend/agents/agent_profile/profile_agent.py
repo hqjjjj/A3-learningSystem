@@ -66,11 +66,11 @@ try:
                             total_topics += 1
                 print(f"📖 已加载: {filename}")
             except Exception as e:
-                print(f"⚠️ 读取 {filename} 失败: {e}")
+                print(f"【画像Agent】⚠️ 读取 {filename} 失败: {e}")
                 
-    print(f"✅ 成功加载 {len(KNOWLEDGE_GRAPH)} 个课程知识点 (涵盖 12 个章节)")
+    print(f"【画像Agent】✅ 成功加载 {len(KNOWLEDGE_GRAPH)} 个课程知识点 (涵盖 12 个章节)")
 except Exception as e:
-    print(f"⚠️ 遍历 knowledge 目录失败: {e}")
+    print(f"【画像Agent】⚠️ 遍历 knowledge 目录失败: {e}")
 
 
 class ProfileAgent:
@@ -94,7 +94,7 @@ class ProfileAgent:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(profile.model_dump_json(indent=2))
         except Exception as e:
-            print(f"⚠️ 保存用户 {profile.user_id} 画像失败: {e}")
+            print(f"【画像Agent】⚠️ 保存用户 {profile.user_id} 画像失败: {e}")
 
     def load_profile_from_disk(self, user_id: str) -> Optional[StudentProfile]:
         file_path = os.path.join(self.data_root, f"profile_{user_id}.json")
@@ -104,7 +104,7 @@ class ProfileAgent:
                     data = json.load(f)
                     return StudentProfile.model_validate(data)
             except Exception as e:
-                print(f"⚠️ 读取用户 {user_id} 历史画像失败: {e}")
+                print(f"【画像Agent】⚠️ 读取用户 {user_id} 历史画像失败: {e}")
         return None
 
     def _call_llm(self, system_prompt: str, user_msg: str) -> dict:
@@ -211,7 +211,7 @@ class ProfileAgent:
         try:
             extraction = self._call_llm(sys_prompt, user_message)
         except Exception as e:
-            print(f"API调用失败: {e}")
+            print(f"【画像Agent】API调用失败: {e}")
             if old_profile:
                 return ProfileResponse(profile=old_profile, update_type="update", confidence=0.3)
             empty_profile = StudentProfile(user_id=user_id, created_at=datetime.datetime.now())

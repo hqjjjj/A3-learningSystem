@@ -119,7 +119,7 @@ class Orchestrator:
             try:
                 analyzed_data = analyze_behavior(user_id)
             except Exception as e:
-                print(f"⚠️ analyzer分析失败: {e}, 使用兜底数据")
+                print(f"【总控】⚠️ analyzer分析失败: {e}, 使用兜底数据")
                 analyzed_data = {}
                 
             profile = self._update_profile(
@@ -151,7 +151,7 @@ class Orchestrator:
         try:
             analyzed_data = analyze_behavior(user_id)
         except Exception as e:
-            print(f"⚠️ analyzer分析失败: {e}, 使用兜底数据")
+            print(f"【总控】⚠️ analyzer分析失败: {e}, 使用兜底数据")
             analyzed_data = {"correct_rate": correct_rate}
         
         profile = self._update_profile(
@@ -236,7 +236,7 @@ class Orchestrator:
             return result
             
         except Exception as e:
-            print(f"⚠️ 知识库匹配与规划失败: {e}")
+            print(f"【总控】⚠️ 知识库匹配与规划失败: {e}")
             return {"current": "", "next": "", "current_progress": ""}
 
     def _process_plan_result(self, plan_data: Dict, profile: Dict) -> Dict:
@@ -262,7 +262,7 @@ class Orchestrator:
             result = generate_resources(resource_input)
             return result
         except Exception as e:
-            print(f"⚠️ 资源生成失败: {e}")
+            print(f"【总控】⚠️ 资源生成失败: {e}")
             return {"resources": []}
 
     def _build_resource_input(self, profile: Dict, path_data: Optional[Dict]) -> Dict:
