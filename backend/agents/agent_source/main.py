@@ -23,6 +23,8 @@ llm=SparkLLM()
 
 #输入参数示例
 test_input={
+
+    "user_id":"u001",
     "topic_id": "os_memory_04",
     "module":"存储器管理",
     "difficulty": "medium",
@@ -218,17 +220,17 @@ def generate_resources(input_data: dict) -> dict:
     return {"resources": final_resources}
 
 
-if __name__ == "__main__":
-    # 仅用于本地手动测试，不会影响正式导入
-    test_input = {
-        "user_id": "u001", 
-        "topic_id": "os_memory_06",
-        "module": "存储器管理",
-        "difficulty": "medium",
-        "resource_type": ["animation", "code_example", "exercise", "mindmap","explanation","materials"]
-    }
-    result = generate_resources(test_input)
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+# if __name__ == "__main__":
+#     # 仅用于本地手动测试，不会影响正式导入
+#     test_input = {
+#         "user_id": "u001", 
+#         "topic_id": "os_memory_06",
+#         "module": "存储器管理",
+#         "difficulty": "medium",
+#         "resource_type": ["animation", "code_example", "exercise", "mindmap","explanation","materials"]
+#     }
+#     result = generate_resources(test_input)
+#     print(json.dumps(result, ensure_ascii=False, indent=2))
 # 调用提示
 # data.resources.forEach(res => {
 #   switch(res.type) {

@@ -26,34 +26,62 @@ class KnowledgeNode:
     prerequisites: List[str] = field(default_factory=list)
     x: float = 0
     y: float = 0
-
-
 class KnowledgeGraph:
-    def __init__(self, memory_path: str):
+    def __init__(self, knowledge_dir: str):
         self.graph = nx.DiGraph()
         self.nodes: Dict[str, KnowledgeNode] = {}
         self.name_to_id: Dict[str, str] = {}
         self.id_to_name: Dict[str, str] = {}
-        self._load_from_memory(memory_path)
+        self._load_from_directory(knowledge_dir)
         self._build_graph()
         self._calculate_positions()
     
-    def _load_from_memory(self, memory_path: str):
-        with open(memory_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
+    def _load_from_directory(self, knowledge_dir: str):
+        """从目录加载所有 JSON 文件"""
+        if not os.path.exists(knowledge_dir):
+            print(f"[错误] 知识库目录不存在: {knowledge_dir}")
+            return
         
-        for topic in data.get("topics", []):
-            node = KnowledgeNode(
-                id=topic["id"],
-                name=topic["name"],
-                difficulty=topic.get("difficulty", "medium"),
-                prerequisites=topic.get("prerequisites", [])
-            )
-            self.nodes[node.id] = node
-            self.name_to_id[node.name] = node.id
-            self.id_to_name[node.id] = node.name
+        json_files = [f for f in os.listdir(knowledge_dir) if f.endswith('.json')]
+        print(f"[知识库] 发现 {len(json_files)} 个文件")
+        
+        for json_file in json_files:
+            file_path = os.path.join(knowledge_dir, json_file)
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                
+                topics = data.get("topics", data) if isinstance(data, dict) else data
+                
+                if isinstance(topics, list):
+                    for topic in topics:
+                        self._add_topic(topic)
+                else:
+                    print(f"[警告] {json_file} 格式不正确，跳过")
+                    
+            except Exception as e:
+                print(f"[错误] 读取 {json_file} 失败: {e}")
+        
+        print(f"[知识库] 从 {len(json_files)} 个文件加载了 {len(self.nodes)} 个知识点")
+    
+    def _add_topic(self, topic: dict):
+        """添加单个知识点节点"""
+        topic_id = topic.get("id")
+        if not topic_id:
+            return
+        
+        node = KnowledgeNode(
+            id=topic_id,
+            name=topic.get("name", topic_id),
+            difficulty=topic.get("difficulty", "medium"),
+            prerequisites=topic.get("prerequisites", [])
+        )
+        self.nodes[node.id] = node
+        self.name_to_id[node.name] = node.id
+        self.id_to_name[node.id] = node.name
     
     def _build_graph(self):
+        """构建有向图（依赖关系）"""
         for node in self.nodes.values():
             self.graph.add_node(node.id, name=node.name, difficulty=node.difficulty)
             for prereq in node.prerequisites:
@@ -61,6 +89,7 @@ class KnowledgeGraph:
                     self.graph.add_edge(prereq, node.id)
     
     def _calculate_positions(self):
+        """计算节点坐标"""
         try:
             pos = nx.spring_layout(self.graph, k=2, seed=42)
             for node_id, (x, y) in pos.items():
@@ -107,7 +136,6 @@ class KnowledgeGraph:
         
         return {"nodes": nodes, "edges": edges}
 
-
 # ==================== 路径规划器 ====================
 
 class PlannerAgent:
@@ -132,6 +160,7 @@ class PlannerAgent:
             self.llm = None
     
     def get_next_topic(self, user_profile: Dict) -> Dict:
+        """获取下一个要学习的知识点（所有知识点）"""
         knowledge = user_profile.get("knowledge_level", {})
         weak_points = user_profile.get("weak_points", [])
         completed_topics = user_profile.get("progress", {}).get("completed_topics", [])
@@ -152,17 +181,52 @@ class PlannerAgent:
         
         if not need_study:
             return {"topic_id": "", "name": "已完成", "understanding": 1.0, "is_review": False}
-        
+    
         need_study.sort(key=lambda x: (not x["is_weak"], x["understanding"]))
         next_topic = need_study[0]
-        
+    
         return {
             "topic_id": next_topic["id"],
             "name": next_topic["name"],
             "understanding": round(next_topic["understanding"], 2),
             "is_review": next_topic["understanding"] < 0.5 or next_topic["is_weak"]
         }
+
+    def _build_path_response(self, user_profile: Dict, llm_path_names: List[str]) -> Dict:
+  
+        path_nodes = []
+        for name in llm_path_names:
+            topic_id = self.kg.name_to_id.get(name)
+            if topic_id:
+                node = self.kg.nodes.get(topic_id)
+                if node:
+                    completed_topics = user_profile.get("progress", {}).get("completed_topics", [])
+                    status = "completed" if topic_id in completed_topics else "pending"
+                    score = user_profile.get("knowledge_level", {}).get(node.name, 0)
+                
+                    path_nodes.append({
+                       "id": topic_id,
+                        "name": node.name,
+                        "difficulty": node.difficulty,
+                        "status": status,
+                        "understanding": round(score, 2),
+                        "x": node.x,
+                        "y": node.y
+                    })
     
+        if not path_nodes:
+            return self._get_learning_path_rule(user_profile)
+    
+        next_topic = self.get_next_topic(user_profile)
+    
+        return {
+            "learning_path": [n["name"] for n in path_nodes],
+            "current_step": user_profile.get("progress", {}).get("current_topic", ""),
+            "next_step": next_topic["name"] if next_topic else "",
+            "path_nodes": path_nodes,
+            "edges": self.kg.to_json()["edges"]
+        }
+
     def get_learning_path(self, user_profile: Dict) -> Dict:
         knowledge = user_profile.get("knowledge_level", {})
         completed_topics = user_profile.get("progress", {}).get("completed_topics", [])
@@ -343,9 +407,9 @@ def save_json(data: Dict, filepath: str):
     print(f"✅ 已输出: {filepath}")
 
 
-def run_planner(memory_path: str, user_profile: Dict, output_dir: str = "."):
+def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
     """运行规划器主流程"""
-    kg = KnowledgeGraph(memory_path)
+    kg = KnowledgeGraph(KNOWLEDGE_DIR)
     planner = PlannerAgent(kg)
     
     # 1. 输出知识图谱
