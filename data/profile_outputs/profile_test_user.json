@@ -1,0 +1,27 @@
+{
+  "user_id": "test_user",
+  "major": null,
+  "grade": null,
+  "course": null,
+  "knowledge_level": {},
+  "weak_points": [],
+  "error_tags": [],
+  "learning_style": "text",
+  "cognitive_style": {
+    "visual": 0.33,
+    "textual": 0.33,
+    "auditory": 0.34
+  },
+  "learning_pace": "normal",
+  "resource_type": [
+    "explanation"
+  ],
+  "difficulty": "medium",
+  "progress": {
+    "current_topic": "os_mp_01",
+    "completed_topics": []
+  },
+  "learning_goal": null,
+  "created_at": "2026-07-11T11:34:24.521551",
+  "updated_at": "2026-07-11T11:34:24.521842"
+}

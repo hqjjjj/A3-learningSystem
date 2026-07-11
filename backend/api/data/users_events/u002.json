@@ -1,0 +1,72 @@
+[
+  {
+    "user_id": "u002",
+    "event_type": "message",
+    "time": "2026-07-10T19:13:12.361459",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u002",
+    "event_type": "message",
+    "time": "2026-07-10T19:13:53.461824",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u002",
+    "event_type": "message",
+    "time": "2026-07-10T19:24:35.862505",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u002",
+    "event_type": "message",
+    "time": "2026-07-11T11:41:06.854575",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u002",
+    "event_type": "message",
+    "time": "2026-07-11T11:41:37.417641",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u002",
+    "event_type": "message",
+    "time": "2026-07-11T16:59:05.796792",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u002",
+    "event_type": "message",
+    "time": "2026-07-11T16:59:18.349591",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  }
+]

@@ -1418,5 +1418,95 @@
     "correct_rate": null,
     "duration": 0,
     "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-10T19:11:49.683948",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-11T12:37:00.648930",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-11T13:59:49.773060",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-11T14:48:45.625925",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-11T14:49:48.722587",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-11T14:49:48.722748",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-11T14:49:48.724462",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-11T14:49:48.725375",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-11T14:49:48.725577",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
   }
 ]

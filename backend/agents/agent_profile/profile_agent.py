@@ -4,12 +4,12 @@ import datetime
 import os
 import re
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field  # 新增对 pydantic 的导入
+from pydantic import BaseModel, Field
 
 os.environ["no_proxy"] = "*"
 
 # ============================================
-# 直接在文件里定义数据模型，彻底摆脱 "models.py" 查找冲突！
+# 数据模型定义
 # ============================================
 class CognitiveStyle(BaseModel):
     visual: float = 0.33
@@ -54,20 +54,21 @@ try:
     total_topics = 0
     
     # 遍历 knowledge 目录下所有以 .json 结尾的文件
-    for filename in os.listdir(knowledge_dir):
-        if filename.endswith(".json") and filename != "__init__.py":
-            file_path = os.path.join(knowledge_dir, filename)
-            try:
-                with open(file_path, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    if "topics" in data:
-                        for topic in data["topics"]:
-                            KNOWLEDGE_GRAPH[topic["name"]] = topic
-                            total_topics += 1
-                print(f"📖 已加载: {filename}")
-            except Exception as e:
-                print(f"【画像Agent】⚠️ 读取 {filename} 失败: {e}")
-                
+    if os.path.exists(knowledge_dir):
+        for filename in os.listdir(knowledge_dir):
+            if filename.endswith(".json") and filename != "__init__.py":
+                file_path = os.path.join(knowledge_dir, filename)
+                try:
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                        if "topics" in data:
+                            for topic in data["topics"]:
+                                KNOWLEDGE_GRAPH[topic["name"]] = topic
+                                total_topics += 1
+                    print(f"📖 已加载: {filename}")
+                except Exception as e:
+                    print(f"【画像Agent】⚠️ 读取 {filename} 失败: {e}")
+                    
     print(f"【画像Agent】✅ 成功加载 {len(KNOWLEDGE_GRAPH)} 个课程知识点 (涵盖 12 个章节)")
 except Exception as e:
     print(f"【画像Agent】⚠️ 遍历 knowledge 目录失败: {e}")
@@ -76,8 +77,8 @@ except Exception as e:
 class ProfileAgent:
     """学习画像构建智能体"""
 
-    def __init__(self, api_key="OALNHAzMNPceyqfkinMN:iahJPnpBnZEBAxAzsBNq"):
-        self.api_key = api_key
+    def __init__(self, api_key: str = None):
+        self.api_key = api_key or "OALNHAzMNPceyqfkinMN:iahJPnpBnZEBAxAzsBNq"
         self.base_url = "https://spark-api-open.xf-yun.com/agent/v1/chat/completions"
         self.model = "spark-x"
         self.profiles: Dict[str, StudentProfile] = {}
@@ -86,17 +87,60 @@ class ProfileAgent:
         project_root = os.path.dirname(os.path.dirname(os.path.dirname(agent_dir)))
         self.data_root = os.path.join(project_root, "data", "profile_outputs")
         os.makedirs(self.data_root, exist_ok=True)
+        
+        # 启动时加载所有用户画像
+        self._load_all_profiles()
+
+    # ================= 辅助方法：本地匹配知识点 =================
+    def _match_topic_locally(self, user_input: str) -> Optional[str]:
+        """
+        本地匹配知识点：检查用户输入是否包含知识库中的某个知识点名称
+        """
+        if not user_input:
+            return None
+        
+        user_input = user_input.strip()
+        # 优先匹配完全包含的情况
+        for topic_name in KNOWLEDGE_GRAPH.keys():
+            if topic_name in user_input:
+                return topic_name
+        
+        return None
 
     # ================= 文件持久化方法 =================
+    def _load_all_profiles(self):
+        """启动时加载所有用户画像"""
+        try:
+            if os.path.exists(self.data_root):
+                profile_files = [f for f in os.listdir(self.data_root) if f.endswith('.json')]
+                for filename in profile_files:
+                    try:
+                        user_id = filename.replace('profile_', '').replace('.json', '')
+                        profile = self.load_profile_from_disk(user_id)
+                        if profile:
+                            self.profiles[user_id] = profile
+                    except Exception as e:
+                        print(f"【画像Agent】⚠️ 加载画像失败 {filename}: {e}")
+                print(f"【画像Agent】✅ 已加载 {len(self.profiles)} 个用户画像")
+        except Exception as e:
+            print(f"【画像Agent】⚠️ 加载用户画像目录失败: {e}")
+
     def _save_profile_to_disk(self, profile: StudentProfile):
+        """保存用户画像到本地文件"""
+        # 保存到内存
+        self.profiles[profile.user_id] = profile
+        
+        # 保存到磁盘
         file_path = os.path.join(self.data_root, f"profile_{profile.user_id}.json")
         try:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(profile.model_dump_json(indent=2))
+            # print(f"【画像Agent】✅ 用户 {profile.user_id} 画像已保存到本地") # 减少日志输出
         except Exception as e:
-            print(f"【画像Agent】⚠️ 保存用户 {profile.user_id} 画像失败: {e}")
+            print(f"【画像Agent】⚠️ 保存用户 {profile.user_id} 本地画像失败: {e}")
 
     def load_profile_from_disk(self, user_id: str) -> Optional[StudentProfile]:
+        """从磁盘加载用户画像"""
         file_path = os.path.join(self.data_root, f"profile_{user_id}.json")
         if os.path.exists(file_path):
             try:
@@ -141,19 +185,39 @@ class ProfileAgent:
                         if attempt < max_retries - 1:
                             continue
                         return {}
+
+                    # ======================= 核心清理区 =======================
+                    # 1. 去除 Markdown 代码块包裹
                     if content.startswith("```"):
                         lines = content.split('\n')
                         content = '\n'.join(lines[1:]) if len(lines) > 1 else content
                         if content.endswith("```"):
                             content = content[:-3]
+
                     content = content.strip()
-                    # 1. 正则修复 JSON 尾巴逗号
+                    
+                    # 2. 修复常见的 JSON 格式错误
                     content = re.sub(r',\s*}', '}', content)
                     content = re.sub(r',\s*]', ']', content)
-                    # 👇 2. 关键修复：将内容中不合法的换行符转义为 \n
                     content = re.sub(r'(?<!\\)\n', '\\n', content)
-                    # 3. 直接返回解析结果
-                    return json.loads(content)
+
+                    # 3. 终极防御：暴力截取大括号
+                    import ast
+                    try:
+                        content = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', content)
+                        return ast.literal_eval(content)
+                    except (SyntaxError, ValueError, json.JSONDecodeError):
+                        start_brace = content.find('{')
+                        end_brace = content.rfind('}')
+                        if start_brace != -1 and end_brace != -1 and end_brace > start_brace:
+                            json_str = content[start_brace : end_brace + 1]
+                            try:
+                                return json.loads(json_str)
+                            except:
+                                raise
+                        else:
+                            raise
+                    # ===========================================================
                 else:
                     if attempt < max_retries - 1:
                         continue
@@ -166,6 +230,11 @@ class ProfileAgent:
                 if attempt < max_retries - 1:
                     continue
                 raise
+            except Exception as e:
+                print(f"【画像Agent】LLM请求异常: {e}")
+                if attempt < max_retries - 1:
+                    continue
+                raise
 
         raise Exception("API调用失败，已达最大重试次数")
 
@@ -173,45 +242,47 @@ class ProfileAgent:
                       history: List[dict] = None,
                       behavior: dict = None) -> ProfileResponse:
         old_profile = self.profiles.get(user_id)
-        
+    
         if not old_profile:
             old_profile = self.load_profile_from_disk(user_id)
             if old_profile:
                 self.profiles[user_id] = old_profile
 
+        # 创建知识点列表，包含名称和难度
         topics_list = []
         for tname, tdata in KNOWLEDGE_GRAPH.items():
-            topics_list.append(f"'{tname}' (难度: {tdata['difficulty']})")
+           topics_list.append(f"'{tname}' (难度: {tdata['difficulty']})")
         topics_str = "\n".join(topics_list)
 
         sys_prompt = f"""你是一个学习画像构建助手。分析学生的对话与行为数据，输出标准JSON。
 
-        ## 可选知识点（名称必须完全一致）
-        {topics_str}
+    ## 可选知识点（名称必须完全一致）
+    {topics_str}
 
-        ## 提取规则
-        1. major: 专业名称（如"计算机"），无法推断填null
-        2. grade: 年级（如"大三"），无法推断填null
-        3. course: 课程名称（如"操作系统"），无法推断填null
-        4. progress.current_topic: 学生当前正在学习或询问的知识点名称，必须从上面选
-        5. cognitive_style: {{"visual": 0.0, "textual": 0.0, "auditory": 0.0}}，三者和为1
-           - 说"看视频/动画"→visual高0.6-0.7，其他各0.15-0.2
-           - 说"看文档/看书"→textual高0.6-0.7，其他各0.15-0.2
-           - 无明确偏好→三者均匀分配
-        6. learning_pace: "normal"/"slow"/"fast"，默认值为 "normal"。如果有明确证据表明学生学得很快（如"我学得很快"、"我提前学完了"）才改为 "fast"，有明确证据表明严重阻碍才改为 "slow"。
-        7. resource_type: 资源类型列表，从["explanation", "mindmap", "exercise", "code_example"]中选择。根据学生偏好和行为动态推断，如喜欢看视频→["explanation", "mindmap"]，做题正确率低→["explanation", "exercise"]
-        8. difficulty: "easy"/"medium"/"hard"
-        9. learning_goal: 无法推断填null
+    ## 提取规则
+    1. major: 专业名称（如"计算机"），无法推断填null
+    2. grade: 年级（如"大三"），无法推断填null
+    3. course: 课程名称（如"操作系统"），无法推断填null
+    4. progress.current_topic: 学生当前正在学习或询问的知识点名称，必须从上面选
+    5. cognitive_style: {{"visual": 0.0, "textual": 0.0, "auditory": 0.0}}，三者和为1
+       - 说"看视频/动画"→visual高0.6-0.7，其他各0.15-0.2
+       - 说"看文档/看书"→textual高0.6-0.7，其他各0.15-0.2
+       - 无明确偏好→三者均匀分配
+    6. learning_pace: "normal"/"slow"/"fast"，默认值为 "normal"。如果有明确证据表明学生学得很快（如"我学得很快"、"我提前学完了"）才改为 "fast"，有明确证据表明严重阻碍才改为 "slow"。
+    7. resource_type: 资源类型列表，从["explanation", "mindmap", "exercise", "code_example"]中选择。根据学生偏好和行为动态推断，如喜欢看视频→["explanation", "mindmap"]，做题正确率低→["explanation", "exercise"]
+    8. difficulty: "easy"/"medium"/"hard"
+    9. learning_goal: 无法推断填null
 
-        ## 输出要求
-        必须是合法JSON，无说明文字，无markdown代码块包裹，直接输出纯JSON。"""
-
+    ## 输出要求
+    必须是合法JSON，无说明文字，无markdown代码块包裹，直接输出纯JSON。"""
+        
+        
         user_message = f"学生输入：{user_input}\n行为数据：{json.dumps(behavior or {}, ensure_ascii=False)}\n旧画像：{old_profile.model_dump() if old_profile else '无'}"
 
         try:
             extraction = self._call_llm(sys_prompt, user_message)
         except Exception as e:
-            print(f"【画像Agent】API调用失败: {e}")
+            # 如果LLM调用失败，尝试使用旧画像
             if old_profile:
                 return ProfileResponse(profile=old_profile, update_type="update", confidence=0.3)
             empty_profile = StudentProfile(user_id=user_id, created_at=datetime.datetime.now())
@@ -252,10 +323,33 @@ class ProfileAgent:
         if "difficulty" in extraction:
             profile.difficulty = extraction["difficulty"]
 
-        if "progress" in extraction:
-            prog = extraction["progress"]
-            if prog.get("current_topic"):
-                profile.progress.current_topic = prog["current_topic"]
+    # 🔥 修改：使用本地匹配逻辑替换原来的模型匹配
+        matched_topic = None
+        
+        # 1. 优先尝试从 LLM 提取的结果中匹配
+        if "progress" in extraction and extraction["progress"].get("current_topic"):
+            topic_name = extraction["progress"]["current_topic"]
+            # 直接查找完全匹配
+            if topic_name in KNOWLEDGE_GRAPH:
+                matched_topic = KNOWLEDGE_GRAPH[topic_name]
+            else:
+                # 如果LLM提取的不完全一致，尝试用本地逻辑再查一次（模糊匹配）
+                matched_topic_name = self._match_topic_locally(topic_name)
+                if matched_topic_name:
+                    matched_topic = KNOWLEDGE_GRAPH[matched_topic_name]
+
+        # 2. 如果 LLM 没提取到，或者提取失败，直接从用户输入匹配
+        if not matched_topic:
+            matched_topic_name = self._match_topic_locally(user_input)
+            if matched_topic_name:
+                matched_topic = KNOWLEDGE_GRAPH[matched_topic_name]
+
+        # 3. 更新当前知识点
+        if matched_topic:
+            profile.progress.current_topic = matched_topic["name"]
+        else:
+            # 如果实在匹配不到，保持原状或设为None
+            pass
 
         current_topic = profile.progress.current_topic
         correct_rate = behavior.get("correct_rate", None) if behavior else None
@@ -274,14 +368,14 @@ class ProfileAgent:
                 base_score = max(base_score, 0.7)
             profile.knowledge_level[current_topic] = base_score if old_score == 0.0 else round(old_score * 0.7 + base_score * 0.3, 2)
 
-        # 只要掌握度不到 60% (0.6)，就算是薄弱点
+    # 只要掌握度不到 60% (0.6)，就算是薄弱点
         profile.weak_points = [name for name, score in profile.knowledge_level.items() if 0.0 < score < 0.6]
-        # 掌握度不到 40% (0.4)，算作严重错误/难点标签
+    # 掌握度不到 40% (0.4)，算作严重错误/难点标签
         profile.error_tags = [name for name, score in profile.knowledge_level.items() if 0.0 < score < 0.4]
 
-        # ============================================
-        # 🔥 新增：强制薄弱点召回机制（弥补大模型漏判）
-        # ============================================
+    # ============================================
+    # 🔥 新增：强制薄弱点召回机制（弥补大模型漏判）
+    # ============================================
         if user_input and user_input.strip() != "":
             for topic_name, score in profile.knowledge_level.items():
                 if topic_name in user_input and score < 0.6:
@@ -299,16 +393,19 @@ class ProfileAgent:
                         break
 
         profile.updated_at = datetime.datetime.now()
-        
+    
         self.profiles[user_id] = profile
         self._save_profile_to_disk(profile)
-        
+    
         return ProfileResponse(profile=profile, update_type=update_type, confidence=0.85)
 
+
     def get_profile(self, user_id: str) -> Optional[StudentProfile]:
+        """获取用户画像"""
+        # 首先从内存缓存获取
         profile = self.profiles.get(user_id)
-        if not profile:
-            profile = self.load_profile_from_disk(user_id)
-            if profile:
-                self.profiles[user_id] = profile
-        return profile
+        if profile:
+            return profile
+            
+        # 从磁盘加载
+        return self.load_profile_from_disk(user_id)

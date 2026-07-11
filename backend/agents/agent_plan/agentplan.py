@@ -39,7 +39,7 @@ class KnowledgeGraph:
     def _load_from_directory(self, knowledge_dir: str):
         """从目录加载所有 JSON 文件"""
         if not os.path.exists(knowledge_dir):
-            print(f"[错误] 知识库目录不存在: {knowledge_dir}")
+            print(f"[路径规划agent][错误] 知识库目录不存在: {knowledge_dir}")
             return
         
         json_files = [f for f in os.listdir(knowledge_dir) if f.endswith('.json')]
@@ -57,12 +57,12 @@ class KnowledgeGraph:
                     for topic in topics:
                         self._add_topic(topic)
                 else:
-                    print(f"[警告] {json_file} 格式不正确，跳过")
+                    print(f"[路径规划agent][警告] {json_file} 格式不正确，跳过")
                     
             except Exception as e:
                 print(f"[错误] 读取 {json_file} 失败: {e}")
         
-        print(f"[知识库] 从 {len(json_files)} 个文件加载了 {len(self.nodes)} 个知识点")
+        print(f"[路径规划agent][知识库] 从 {len(json_files)} 个文件加载了 {len(self.nodes)} 个知识点")
     
     def _add_topic(self, topic: dict):
         """添加单个知识点节点"""

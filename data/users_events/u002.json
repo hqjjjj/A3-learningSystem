@@ -1,0 +1,12 @@
+[
+  {
+    "user_id": "u002",
+    "event_type": "message",
+    "time": "2026-07-11T11:43:37.108449",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  }
+]

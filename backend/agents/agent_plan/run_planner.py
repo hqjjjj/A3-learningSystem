@@ -35,7 +35,7 @@ def process_user_profile(filepath: str):
             user_id = filename.replace("profile_", "").replace(".json", "")
         
         if not user_id:
-            print(f"[跳过] 文件 {filepath} 无法获取 user_id")
+            print(f"[路径规划agent][跳过] 文件 {filepath} 无法获取 user_id")
             return
         
         print(f"\n[处理] 用户 {user_id}")
@@ -62,15 +62,15 @@ def process_user_profile(filepath: str):
             llm_result = planner.plan_with_llm(planner_input)
             if llm_result and "learning_path" in llm_result:
                 llm_path = llm_result["learning_path"]
-                print(f"[LLM] 规划成功: {llm_path}")
+                print(f"[路径规划agent][LLM] 规划成功: {llm_path}")
                 
                 # 保存 llm 文件
                 llm_file = os.path.join(OUTPUT_DIR, f"{user_id}_llm.json")
                 with open(llm_file, "w", encoding="utf-8") as f:
                     json.dump(llm_result, f, indent=2, ensure_ascii=False)
-                print(f"[LLM] 已保存: {llm_file}")
+                print(f"[路径规划agent][LLM] 已保存: {llm_file}")
             else:
-                print("[LLM] 规划失败，使用规则规划")
+                print(f"[路径规划agent][LLM] 规划失败，使用规则规划")
         
         # ✅ 构建学习路径（优先使用 LLM 结果）
         if llm_path:
@@ -120,14 +120,14 @@ def process_user_profile(filepath: str):
                 "updated_at": __import__('datetime').datetime.now().isoformat()
             }, f, indent=2, ensure_ascii=False)
         
-        print(f"[输出] 已保存: {output_file}")
-        print(f"[信息] 当前知识点: {current_topic_output['name']}")
-        print(f"[信息] 推荐下一个: {next_topic['name']}")
+        print(f"[路径规划agent][输出] 已保存: {output_file}")
+        print(f"[路径规划agent][信息] 当前知识点: {current_topic_output['name']}")
+        print(f"[路径规划agent][信息] 推荐下一个: {next_topic['name']}")
         if llm_path:
-            print(f"[信息] LLM 路径: {llm_path}")
+            print(f"[路径规划agent][信息] LLM 路径: {llm_path}")
         
     except Exception as e:
-        print(f"[错误] 处理 {filepath} 失败: {e}")
+        print(f"[路径规划agent][错误] 处理 {filepath} 失败: {e}")
 
 # ==================== 文件监听器 ====================
 
@@ -156,7 +156,7 @@ def scan_existing_profiles():
     """启动时扫描已有的用户画像文件"""
     if not os.path.exists(WATCH_DIR):
         os.makedirs(WATCH_DIR, exist_ok=True)
-        print(f"[创建] 监听目录: {WATCH_DIR}")
+        print(f"[路径规划agent][创建] 监听目录: {WATCH_DIR}")
         return
     
     for filename in os.listdir(WATCH_DIR):
@@ -171,7 +171,7 @@ def scan_existing_profiles():
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("Planner Agent 多用户服务")
+    print("[路径规划agent]Planner Agent 多用户服务")
     print("=" * 60)
     
     # 初始化 Planner Agent
@@ -182,7 +182,7 @@ if __name__ == "__main__":
     KNOWLEDGE_DIR = os.path.join(project_root, "data", "knowledge", )
     
     if not os.path.exists(KNOWLEDGE_DIR):
-        print(f"[错误] 找不到 KNOWLEDGE: {KNOWLEDGE_DIR}")
+        print(f"[路径规划agent][错误] 找不到 KNOWLEDGE: {KNOWLEDGE_DIR}")
         exit(1)
     
     kg = KnowledgeGraph(KNOWLEDGE_DIR)
@@ -191,12 +191,12 @@ if __name__ == "__main__":
     
     # 确保输出目录存在
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    print(f"[输出目录] {OUTPUT_DIR}")
+    print(f"[路径规划agent][输出目录] {OUTPUT_DIR}")
     
     # 确保监听目录存在
     os.makedirs(WATCH_DIR, exist_ok=True)
-    print(f"[监听目录] {WATCH_DIR}")
-    print("[等待] 等待用户画像文件...")
+    print(f"[路径规划agent][监听目录] {WATCH_DIR}")
+    print(f"[路径规划agent][等待] 等待用户画像文件...")
     
     # 扫描已有文件
     scan_existing_profiles()
@@ -212,6 +212,6 @@ if __name__ == "__main__":
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
-        print("\n[停止] 服务已关闭")
+        print("\n[路径规划agent][停止] 服务已关闭")
     
     observer.join()

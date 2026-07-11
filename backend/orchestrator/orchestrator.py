@@ -76,12 +76,19 @@ class Orchestrator:
 
     def get_learning_path(self, user_id: str, topic: str = None) -> Dict:
         profile_obj = self.profile_agent.get_profile(user_id)
-        
+    
         if not profile_obj:
             profile_obj = self.profile_agent.load_profile_from_disk(user_id)
             if profile_obj:
                 self.profile_agent.profiles[user_id] = profile_obj
-
+    
+        # 如果profile_obj仍然为空，创建一个新的
+        if not profile_obj:
+            from profile_agent import StudentProfile
+            profile_obj = StudentProfile(user_id=user_id, created_at=datetime.now())
+            self.profile_agent._save_profile_to_disk(profile_obj)
+            self.profile_agent.profiles[user_id] = profile_obj
+    
         if topic and profile_obj:
             profile_obj.progress.current_topic = topic
             self.profile_agent._save_profile_to_disk(profile_obj)
@@ -89,7 +96,7 @@ class Orchestrator:
 
         profile_dict = profile_obj.model_dump() if profile_obj else {}
         path_data = self._call_plan_agent(user_id, profile_dict)
-        
+    
         return {
             "profile": profile_dict,
             "learning_path": path_data.get("path_list", []),
@@ -190,54 +197,99 @@ class Orchestrator:
 
     def _call_plan_agent(self, user_id: str, profile: Dict) -> Dict:
         try:
-            # 导入 KnowledgeBaseManager
-            sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'knowledge'))
-            from KnowledgeBaseManager import KnowledgeBaseManager
-            
-            kb_manager = KnowledgeBaseManager()
-            
-            # 1. 获取用户当前的主题
+            # 1. 构造正确的知识库路径
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            project_root = os.path.dirname(os.path.dirname(current_dir))
+            knowledge_dir = os.path.join(project_root, "data", "knowledge")
+
+            # 定义大写的 KNOWLEDGE_DIR，用于传递给 run_planner
+            KNOWLEDGE_DIR = knowledge_dir  # 在这里定义 KNOWLEDGE_DIR
+
+        
+            print(f"【总控】正在调用路径规划器，知识库路径: {knowledge_dir}")
+        
+            # 2. 获取用户当前的主题
             current_topic_name = profile.get("progress", {}).get("current_topic", "")
-            
-            # ====================================================
-            # 🔥 逻辑修正点：如果用户当前没有 Topic，或者 Topic 是空的，直接返回空路径！
-            # 这样就不会出现“无限匹配空字符串”或者“无限匹配旧数据”的情况。
-            # ====================================================
+        
+            # 3. 如果用户没有当前主题，设置一个默认主题
             if not current_topic_name:
+                # 使用 KnowledgeBaseManager 获取第一个知识点
+                sys.path.insert(0, os.path.join(current_dir, '..', '..', 'data', 'knowledge'))
+                from KnowledgeBaseManager import KnowledgeBaseManager
+                kb_manager = KnowledgeBaseManager()
+            
+                if len(kb_manager.topics_index) > 0:
+                    first_id = list(kb_manager.topics_index.keys())[0]
+                    first_topic = kb_manager.get_topic_by_id(first_id)
+                    if first_topic:
+                        current_topic_name = first_topic.get("name", "")
+                        profile["progress"]["current_topic"] = current_topic_name
+        
+            # 4. 调用路径规划器
+            # 修复：传入正确的参数
+            planner, updated_profile, next_topic = run_planner(
+                KNOWLEDGE_DIR=KNOWLEDGE_DIR,  
+                user_profile=profile,
+                output_dir="."  # 可以指定一个输出目录，或者使用 "."
+            )
+        
+            # 5. 处理规划结果
+            if next_topic and next_topic.get("name"):
+                # 获取从当前主题到下一个主题的路径
+                current_topic_id = planner.kg.name_to_id.get(current_topic_name)
+                next_topic_id = next_topic.get("topic_id")
+            
+                # 构建路径列表
+                path_list = []
+                if current_topic_id and next_topic_id:
+                    # 尝试获取最短路径
+                    try:
+                        import networkx as nx
+                        path = nx.shortest_path(planner.kg.graph, current_topic_id, next_topic_id)
+                        path_list = [
+                            {
+                                "name": planner.kg.id_to_name[node_id],
+                                "id": node_id
+                            }
+                            for node_id in path
+                        ]
+                    except nx.NetworkXNoPath:
+                        # 如果没有路径，直接添加下一个主题
+                        path_list = [{"name": next_topic["name"], "id": next_topic_id}]
+            
+                return {
+                    "next": next_topic["name"],
+                    "current": current_topic_name,
+                    "current_progress": "review" if next_topic.get("is_review", False) else "learning",
+                    "topic_id": next_topic_id,
+                    "path_list": path_list,
+                    "module": profile.get("course", "")
+                }
+            else:
+                # 如果没有规划出下一个主题，返回空路径
                 return {
                     "next": "",
-                    "current": "",
+                    "current": current_topic_name,
                     "current_progress": "learning",
                     "topic_id": "",
                     "path_list": [],
                     "module": profile.get("course", "")
                 }
-
-            # 2. 真正的智能匹配：调用 KnowledgeBaseManager 的语义匹配
-            # 如果你用了我的上一版代码，在这里会打印 "🔎 正在匹配: ..."
-            matched_topic = kb_manager.match_and_get(current_topic_name)
-            
-            # 3. 兜底：如果匹配不到，给你一个默认的（防止界面空转）
-            if not matched_topic and len(kb_manager.topics_index) > 0:
-                # 取第一个知识点作为默认起点
-                first_id = list(kb_manager.topics_index.keys())[0]
-                matched_topic = kb_manager.get_topic_by_id(first_id)
-            
-            # 4. 构造返回结果
-            result = {
+                
+        except Exception as e:
+            print(f"【总控】⚠️ 路径规划失败: {e}")
+            import traceback
+            traceback.print_exc()
+            # 返回默认路径
+            return {
                 "next": "",
-                "current": matched_topic.get("name", "") if matched_topic else "",
+                "current": profile.get("progress", {}).get("current_topic", ""),
                 "current_progress": "learning",
-                "topic_id": matched_topic.get("id", "") if matched_topic else "",
-                "path_list": [],  # 这里目前为空，因为路径规划在下一步做
+                "topic_id": "",
+                "path_list": [],
                 "module": profile.get("course", "")
             }
-            
-            return result
-            
-        except Exception as e:
-            print(f"【总控】⚠️ 知识库匹配与规划失败: {e}")
-            return {"current": "", "next": "", "current_progress": ""}
+
 
     def _process_plan_result(self, plan_data: Dict, profile: Dict) -> Dict:
         result = {
@@ -316,38 +368,87 @@ class Orchestrator:
         用户登录/页面刷新时调用，加载完整状态。
         返回的字典结构必须匹配前端期望的 data 对象。
         """
-        # 1. 获取用户画像
-        profile_obj = self.profile_agent.get_profile(user_id)
-        if not profile_obj:
-            profile_obj = self.profile_agent.load_profile_from_disk(user_id)
-            if profile_obj:
-                self.profile_agent.profiles[user_id] = profile_obj
+        try:
+            # 1. 获取用户画像
+            profile_obj = self.profile_agent.get_profile(user_id)
+            if not profile_obj:
+                profile_obj = self.profile_agent.load_profile_from_disk(user_id)
+                if profile_obj:
+                    self.profile_agent.profiles[user_id] = profile_obj
 
-        if not profile_obj:
-            # 从 ProfileAgent 里借用 StudentProfile，避免 ImportError
-            from profile_agent import StudentProfile
-            empty_profile = StudentProfile(user_id=user_id, created_at=datetime.now())
-            self.profile_agent.profiles[user_id] = empty_profile
-            profile_obj = empty_profile
+            if not profile_obj:
+                # 从 ProfileAgent 里借用 StudentProfile，避免 ImportError
+                from profile_agent import StudentProfile
+                empty_profile = StudentProfile(user_id=user_id, created_at=datetime.now())
+                self.profile_agent.profiles[user_id] = empty_profile
+                profile_obj = empty_profile
 
-        profile_dict = profile_obj.model_dump()
-        
-        # 2. 获取学习路径
-        path_data = self.get_learning_path(user_id)
-        
-        # 3. 根据目前的画像和路径，推荐首批资源（如果有学习路径的话）
-        resources = {}
-        if path_data.get("topic_id"):
-            resources = self._call_source_agent(profile_dict, path_data)
-        recommended = self._extract_recommended(resources)
+            profile_dict = profile_obj.model_dump()
+            
+            # 2. 获取学习路径
+            try:
+                path_data = self.get_learning_path(user_id)
+            except Exception as e:
+                print(f"【总控】⚠️ 获取学习路径失败: {e}")
+                import traceback
+                traceback.print_exc()
+                # 提供默认路径数据
+                path_data = {
+                    "path_list": [],
+                    "topic_id": "",
+                    "current_progress": "learning",
+                    "module": profile_dict.get("course", "")
+                }
+            
+            # 3. 根据目前的画像和路径，推荐首批资源（如果有学习路径的话）
+            resources = {}
+            try:
+                if path_data.get("topic_id"):
+                    resources = self._call_source_agent(profile_dict, path_data)
+            except Exception as e:
+                print(f"【总控】⚠️ 生成资源失败: {e}")
+                import traceback
+                traceback.print_exc()
+                resources = {"resources": []}
+            
+            recommended = self._extract_recommended(resources)
 
-        return {
-            "profile": profile_dict,
-            "learning_path": path_data.get("path_list", []),
-            "recommended_resources": recommended,
-            "topic": profile_dict.get("progress", {}).get("current_topic", ""),
-            "current_progress": path_data.get("current_progress", "learning")
-        }
+            return {
+                "profile": profile_dict,
+                "learning_path": path_data.get("path_list", []),
+                "recommended_resources": recommended,
+                "topic": profile_dict.get("progress", {}).get("current_topic", ""),
+                "current_progress": path_data.get("current_progress", "learning")
+            }
+        except Exception as e:
+            print(f"【总控】⚠️ 加载用户状态失败: {e}")
+            import traceback
+            traceback.print_exc()
+            # 返回一个基本的状态，确保前端不会崩溃
+            return {
+                "profile": {
+                    "user_id": user_id,
+                    "major": None,
+                    "grade": None,
+                    "course": None,
+                    "knowledge_level": {},
+                    "weak_points": [],
+                    "error_tags": [],
+                    "learning_style": "text",
+                    "cognitive_style": {"visual": 0.33, "textual": 0.34, "auditory": 0.33},
+                    "learning_pace": "normal",
+                    "resource_type": ["explanation"],
+                    "difficulty": "medium",
+                    "progress": {"current_topic": "", "completed_topics": []},
+                    "learning_goal": None,
+                    "created_at": datetime.now().isoformat(),
+                    "updated_at": datetime.now().isoformat()
+                },
+                "learning_path": [],
+                "recommended_resources": [],
+                "topic": "",
+                "current_progress": "learning"
+            }
 
 
 # ============= 全局函数导出入口 =============
@@ -374,9 +475,6 @@ def finish_view_resource(user_id: str, resource_id: str, duration: int) -> Dict:
 
 def submit_answer_result(user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
     return get_orchestrator().submit_answer_result(user_id, topic, correct_rate, duration)
-
-def load_user_state(user_id: str) -> Dict:
-    return get_orchestrator().load_user_state(user_id)
 
 def load_user_state(user_id: str) -> Dict:
     return get_orchestrator().load_user_state(user_id)

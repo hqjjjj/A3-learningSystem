@@ -1,26 +1,21 @@
 {
   "learning_style": "auditory",
-  "weak_points": [
-    "分段存储管理方式"
-  ],
+  "weak_points": [],
   "cognitive_level": {
-    "level": "beginner",
-    "understanding_avg": 0.0
+    "level": "intermediate",
+    "understanding_avg": 0.5
   },
   "error_patterns": [],
   "preference": {
     "resource_type": [
-      "exercise",
-      "code",
-      "explanation",
-      "code_example"
+      "explanation"
     ],
     "difficulty": "medium"
   },
   "learning_pace": "normal",
   "current_topic": {
-    "id": "",
-    "name": "已完成",
-    "is_review": false
+    "id": "os_mp_01",
+    "name": "多处理机系统的引入与类型",
+    "is_review": true
   }
 }
