@@ -188,7 +188,7 @@ const ResourcePanel = ({
                 userId={userId}
               />
             </div>
-            {!isEmptyGenerated ? (
+            {isEmptyGenerated ? (
               <div style={{
                 textAlign: 'center',
                 padding: '60px 20px',
