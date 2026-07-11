@@ -1,6 +1,8 @@
 {
   "learning_style": "textual",
   "weak_points": [
+    "多处理机死锁",
+    "云计算",
     "进程控制原语",
     "分段存储管理方式"
   ],
@@ -11,11 +13,11 @@
   "error_patterns": [],
   "preference": {
     "resource_type": [
-      "mindmap",
-      "exercise",
       "code",
+      "exercise",
       "explanation",
-      "code_example"
+      "code_example",
+      "mindmap"
     ],
     "difficulty": "medium"
   },

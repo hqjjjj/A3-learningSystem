@@ -1568,5 +1568,535 @@
     "correct_rate": null,
     "duration": null,
     "message": "我是人工智能大一 ，正在学进程控制原语，我喜欢看视频。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:01.264511",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 183,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:01.858620",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 184,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:02.303996",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 184,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:03.220078",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 206,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:06.554115",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 206,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:07.846006",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 207,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:16.589256",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 208,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:18.907113",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 211,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:28.310222",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 212,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:28.587050",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 221,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:28.723473",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 223,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:31.579891",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 233,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:33.796532",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 233,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:41.320876",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 233,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:42.144734",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 236,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:42.981816",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 238,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:55.028185",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 246,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:27:57.886994",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 247,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:11.721669",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 248,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:20.620551",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 260,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:22.357480",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 262,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:23.672752",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 276,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:26.012836",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 285,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:26.785838",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 287,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:32.720143",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 288,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:35.498429",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 291,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:35.616440",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 291,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:36.703001",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 297,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:42.155747",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 300,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:45.184214",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 300,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:50.051229",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 301,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:50.700851",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 307,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:53.693581",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 310,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:28:56.658461",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 315,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:03.443002",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 315,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:04.488153",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 318,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:12.289290",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 321,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:17.566862",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 328,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:17.973840",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 329,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:18.938979",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 337,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:21.897665",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 342,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:22.509644",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 343,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:28.077173",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 343,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:39.119933",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 346,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:45.894654",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 347,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:46.678152",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 353,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:47.215402",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 364,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:50.383673",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 370,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:29:55.893708",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 371,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:30:00.793489",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 372,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:30:02.416741",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 375,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:30:06.078966",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 380,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T06:30:09.991985",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 385,
+    "message": null
   }
 ]

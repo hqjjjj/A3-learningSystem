@@ -129,7 +129,7 @@
     "假脱机系统（SPOOLing）",
     "设备分配与回收"
   ],
-  "current_step": "进程控制原语",
+  "current_step": "云计算",
   "next_step": "多处理机系统的引入与类型",
   "path_nodes": [
     {
@@ -380,7 +380,7 @@
       "name": "多处理机死锁",
       "difficulty": "medium",
       "status": "pending",
-      "understanding": 0.0,
+      "understanding": 0.45,
       "x": 420.8246497502378,
       "y": -78.71322256604714
     },
@@ -425,7 +425,7 @@
       "name": "云计算",
       "difficulty": "medium",
       "status": "pending",
-      "understanding": 0.0,
+      "understanding": 0.46,
       "x": -180.37197079084928,
       "y": 208.77320881097233
     },
@@ -1830,5 +1830,6 @@
       "source": "os_io_11",
       "target": "os_disk_13"
     }
-  ]
+  ],
+  "timestamp": "2026-07-12T06:30:09.982405"
 }
