@@ -1508,5 +1508,65 @@
     "correct_rate": null,
     "duration": 2,
     "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-11T17:09:01.880039",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大二，正在学存储器的层次结构，我喜欢看图文和文档。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-11T17:47:12.989326",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是人工智能大一，正在学云计算，我喜欢看视频。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-11T19:11:54.284817",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是人工智能大一 ，正在学进程控制原语，我喜欢看视频。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-11T19:14:32.214597",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是人工智能大一 ，正在学进程控制原语，我喜欢看视频。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-11T19:18:30.246997",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是人工智能大一 ，正在学进程控制原语，我喜欢看视频。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-11T19:22:22.403482",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是人工智能大一 ，正在学进程控制原语，我喜欢看视频。"
   }
 ]

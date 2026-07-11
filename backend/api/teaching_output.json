@@ -1,14 +1,21 @@
 {
-  "learning_style": "auditory",
-  "weak_points": [],
+  "learning_style": "textual",
+  "weak_points": [
+    "进程控制原语",
+    "分段存储管理方式"
+  ],
   "cognitive_level": {
-    "level": "intermediate",
-    "understanding_avg": 0.5
+    "level": "beginner",
+    "understanding_avg": 0.01
   },
   "error_patterns": [],
   "preference": {
     "resource_type": [
-      "explanation"
+      "mindmap",
+      "exercise",
+      "code",
+      "explanation",
+      "code_example"
     ],
     "difficulty": "medium"
   },

@@ -46,6 +46,7 @@ class Orchestrator:
     # ==================== 五个核心函数 ====================
 
     def handle_chat(self, user_id: str, message: str, topic: str = None) -> Dict:
+        print(f"【总控】处理用户 {user_id} 的聊天消息: {message}")
         self._log_behavior(user_id, "chat", message)
         
         log_behavior(user_id, action="message", message=message)
@@ -54,6 +55,7 @@ class Orchestrator:
         profile_dict = self._update_profile(user_id, message)
         
         if topic:
+            print(f"【总控】设置用户 {user_id} 的当前主题为: {topic}")
             profile_obj = self.profile_agent.get_profile(user_id)
             if profile_obj:
                 profile_obj.progress.current_topic = topic
@@ -75,21 +77,31 @@ class Orchestrator:
         }
 
     def get_learning_path(self, user_id: str, topic: str = None) -> Dict:
+        print(f"【总控】获取用户 {user_id} 的学习路径")
         profile_obj = self.profile_agent.get_profile(user_id)
     
         if not profile_obj:
+            print(f"【总控】从磁盘加载用户 {user_id} 的画像")
             profile_obj = self.profile_agent.load_profile_from_disk(user_id)
             if profile_obj:
                 self.profile_agent.profiles[user_id] = profile_obj
     
         # 如果profile_obj仍然为空，创建一个新的
         if not profile_obj:
+            print(f"【总控】为用户 {user_id} 创建新画像")
             from profile_agent import StudentProfile
-            profile_obj = StudentProfile(user_id=user_id, created_at=datetime.now())
+            profile_obj = StudentProfile(
+                user_id=user_id,
+                major="软件工程",
+                grade="大二",
+                course="操作系统",
+                created_at=datetime.now()
+            )
             self.profile_agent._save_profile_to_disk(profile_obj)
             self.profile_agent.profiles[user_id] = profile_obj
     
         if topic and profile_obj:
+            print(f"【总控】设置用户 {user_id} 的当前主题为: {topic}")
             profile_obj.progress.current_topic = topic
             self.profile_agent._save_profile_to_disk(profile_obj)
             self.profile_agent.profiles[user_id] = profile_obj
@@ -105,6 +117,7 @@ class Orchestrator:
         }
 
     def generate_single_resource(self, user_id: str, topic: str, resource_type: str) -> Dict:
+        print(f"【总控】为用户 {user_id} 生成 {topic} 的 {resource_type} 资源")
         profile = self._get_profile_dict(user_id)
         resource_input = self._build_resource_input(profile, None)
         resource_input["topic_id"] = topic
@@ -117,6 +130,7 @@ class Orchestrator:
         }
 
     def finish_view_resource(self, user_id: str, resource_id: str, duration: int) -> Dict:
+        print(f"【总控】用户 {user_id} 完成查看资源 {resource_id}，用时 {duration} 秒")
         self._log_behavior(user_id, "view_resource", f"resource:{resource_id}", duration)
         
         log_behavior(user_id, action="view_resource", resource_id=resource_id, duration=duration)
@@ -125,6 +139,7 @@ class Orchestrator:
         if duration >= 30:
             try:
                 analyzed_data = analyze_behavior(user_id)
+                print(f"【总控】分析用户 {user_id} 的行为数据")
             except Exception as e:
                 print(f"【总控】⚠️ analyzer分析失败: {e}, 使用兜底数据")
                 analyzed_data = {}
@@ -150,6 +165,7 @@ class Orchestrator:
         }
 
     def submit_answer_result(self, user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
+        print(f"【总控】用户 {user_id} 提交 {topic} 的答题结果，正确率: {correct_rate}，用时: {duration} 秒")
         self._log_behavior(user_id, "submit_answer", topic, duration, correct_rate)
         
         log_behavior(user_id, action="exercise", correct_rate=correct_rate, duration=duration)
@@ -157,6 +173,7 @@ class Orchestrator:
         
         try:
             analyzed_data = analyze_behavior(user_id)
+            print(f"【总控】分析用户 {user_id} 的答题行为数据")
         except Exception as e:
             print(f"【总控】⚠️ analyzer分析失败: {e}, 使用兜底数据")
             analyzed_data = {"correct_rate": correct_rate}
@@ -182,38 +199,70 @@ class Orchestrator:
     # ==================== 内部方法 ====================
 
     def _update_profile(self, user_id: str, message: str, behavior: Dict = None) -> Dict:
-        resp = self.profile_agent.build_profile(user_id=user_id, user_input=message, behavior=behavior)
-        if resp and resp.profile:
-            self.profile_agent._save_profile_to_disk(resp.profile)
-        return resp.profile.model_dump()
+        print(f"【总控】开始更新用户 {user_id} 的画像")
+        try:
+            resp = self.profile_agent.build_profile(user_id=user_id, user_input=message, behavior=behavior)
+            if resp and resp.profile:
+                print(f"【总控】成功生成用户 {user_id} 的新画像")
+            
+                # 确保用户基本信息存在
+                if resp.profile.major is None:
+                    resp.profile.major = "软件工程"
+                if resp.profile.grade is None:
+                    resp.profile.grade = "大二"
+                if resp.profile.course is None:
+                    resp.profile.course = "操作系统"
+            
+                # 更新时间戳
+                resp.profile.updated_at = datetime.now()
+            
+                # 保存到磁盘
+                try:
+                    self.profile_agent._save_profile_to_disk(resp.profile)
+                    print(f"【总控】成功保存用户 {user_id} 的画像到磁盘")
+                    return resp.profile.model_dump()
+                except Exception as e:
+                    print(f"【总控】⚠️ 保存用户 {user_id} 画像到磁盘失败: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    return {}
+            else:
+                print(f"【总控】⚠️ 生成用户 {user_id} 画像失败")
+                return {}
+        except Exception as e:
+            print(f"【总控】⚠️ 更新用户 {user_id} 画像时出错: {e}")
+            import traceback
+            traceback.print_exc()
+            return {}
 
     def _get_profile_dict(self, user_id: str) -> Dict:
+        print(f"【总控】获取用户 {user_id} 的画像字典")
         profile = self.profile_agent.get_profile(user_id)
         if not profile:
+            print(f"【总控】从磁盘加载用户 {user_id} 的画像")
             profile = self.profile_agent.load_profile_from_disk(user_id)
             if profile:
                 self.profile_agent.profiles[user_id] = profile
         return profile.model_dump() if profile else {}
 
     def _call_plan_agent(self, user_id: str, profile: Dict) -> Dict:
+        print(f"【总控】调用路径规划器，用户 {user_id}")
         try:
             # 1. 构造正确的知识库路径
             current_dir = os.path.dirname(os.path.abspath(__file__))
             project_root = os.path.dirname(os.path.dirname(current_dir))
             knowledge_dir = os.path.join(project_root, "data", "knowledge")
-
-            # 定义大写的 KNOWLEDGE_DIR，用于传递给 run_planner
-            KNOWLEDGE_DIR = knowledge_dir  # 在这里定义 KNOWLEDGE_DIR
-
+            KNOWLEDGE_DIR = knowledge_dir
         
-            print(f"【总控】正在调用路径规划器，知识库路径: {knowledge_dir}")
+            print(f"【总控】知识库路径: {knowledge_dir}")
         
             # 2. 获取用户当前的主题
             current_topic_name = profile.get("progress", {}).get("current_topic", "")
+            print(f"【总控】用户当前主题: {current_topic_name}")
         
             # 3. 如果用户没有当前主题，设置一个默认主题
             if not current_topic_name:
-                # 使用 KnowledgeBaseManager 获取第一个知识点
+                print(f"【总控】用户没有当前主题，设置默认主题")
                 sys.path.insert(0, os.path.join(current_dir, '..', '..', 'data', 'knowledge'))
                 from KnowledgeBaseManager import KnowledgeBaseManager
                 kb_manager = KnowledgeBaseManager()
@@ -224,25 +273,22 @@ class Orchestrator:
                     if first_topic:
                         current_topic_name = first_topic.get("name", "")
                         profile["progress"]["current_topic"] = current_topic_name
+                        print(f"【总控】设置默认主题为: {current_topic_name}")
         
             # 4. 调用路径规划器
-            # 修复：传入正确的参数
             planner, updated_profile, next_topic = run_planner(
                 KNOWLEDGE_DIR=KNOWLEDGE_DIR,  
                 user_profile=profile,
-                output_dir="."  # 可以指定一个输出目录，或者使用 "."
+                output_dir="."
             )
         
             # 5. 处理规划结果
             if next_topic and next_topic.get("name"):
-                # 获取从当前主题到下一个主题的路径
                 current_topic_id = planner.kg.name_to_id.get(current_topic_name)
                 next_topic_id = next_topic.get("topic_id")
             
-                # 构建路径列表
                 path_list = []
                 if current_topic_id and next_topic_id:
-                    # 尝试获取最短路径
                     try:
                         import networkx as nx
                         path = nx.shortest_path(planner.kg.graph, current_topic_id, next_topic_id)
@@ -254,10 +300,9 @@ class Orchestrator:
                             for node_id in path
                         ]
                     except nx.NetworkXNoPath:
-                        # 如果没有路径，直接添加下一个主题
                         path_list = [{"name": next_topic["name"], "id": next_topic_id}]
             
-                return {
+                result = {
                     "next": next_topic["name"],
                     "current": current_topic_name,
                     "current_progress": "review" if next_topic.get("is_review", False) else "learning",
@@ -265,9 +310,10 @@ class Orchestrator:
                     "path_list": path_list,
                     "module": profile.get("course", "")
                 }
+                print(f"【总控】路径规划结果: {result}")
+                return result
             else:
-                # 如果没有规划出下一个主题，返回空路径
-                return {
+                result = {
                     "next": "",
                     "current": current_topic_name,
                     "current_progress": "learning",
@@ -275,12 +321,13 @@ class Orchestrator:
                     "path_list": [],
                     "module": profile.get("course", "")
                 }
+                print(f"【总控】默认路径规划结果: {result}")
+                return result
                 
         except Exception as e:
             print(f"【总控】⚠️ 路径规划失败: {e}")
             import traceback
             traceback.print_exc()
-            # 返回默认路径
             return {
                 "next": "",
                 "current": profile.get("progress", {}).get("current_topic", ""),
@@ -304,7 +351,6 @@ class Orchestrator:
 
     def _call_source_agent(self, profile: Dict, path_data: Dict, user_id: str = None) -> List[Dict]:
         resource_input = self._build_resource_input(profile, path_data)
-        # 👇 强行给字典注入 user_id！
         if user_id:
             resource_input["user_id"] = user_id
         return self._call_source_agent_raw(resource_input)
@@ -368,23 +414,44 @@ class Orchestrator:
         用户登录/页面刷新时调用，加载完整状态。
         返回的字典结构必须匹配前端期望的 data 对象。
         """
+        print(f"【总控】加载用户 {user_id} 的状态")
         try:
             # 1. 获取用户画像
             profile_obj = self.profile_agent.get_profile(user_id)
             if not profile_obj:
+                print(f"【总控】从磁盘加载用户 {user_id} 的画像")
                 profile_obj = self.profile_agent.load_profile_from_disk(user_id)
                 if profile_obj:
                     self.profile_agent.profiles[user_id] = profile_obj
 
             if not profile_obj:
-                # 从 ProfileAgent 里借用 StudentProfile，避免 ImportError
+                print(f"【总控】为用户 {user_id} 创建新画像")
                 from profile_agent import StudentProfile
-                empty_profile = StudentProfile(user_id=user_id, created_at=datetime.now())
-                self.profile_agent.profiles[user_id] = empty_profile
-                profile_obj = empty_profile
+                profile_obj = StudentProfile(
+                    user_id=user_id,
+                    major="软件工程",
+                    grade="大二",
+                    course="操作系统",
+                    created_at=datetime.now()
+                )
+                # 确保保存到磁盘
+                self.profile_agent._save_profile_to_disk(profile_obj)
+                self.profile_agent.profiles[user_id] = profile_obj
+            else:
+                # 如果用户已存在但基本信息为空，更新它们
+                if profile_obj.major is None:
+                    profile_obj.major = "软件工程"
+                if profile_obj.grade is None:
+                    profile_obj.grade = "大二"
+                if profile_obj.course is None:
+                    profile_obj.course = "操作系统"
+                # 保存更新后的信息
+                self.profile_agent._save_profile_to_disk(profile_obj)
+                self.profile_agent.profiles[user_id] = profile_obj
 
             profile_dict = profile_obj.model_dump()
-            
+            print(f"【总控】用户 {user_id} 的画像: {profile_dict}")
+
             # 2. 获取学习路径
             try:
                 path_data = self.get_learning_path(user_id)
@@ -392,15 +459,14 @@ class Orchestrator:
                 print(f"【总控】⚠️ 获取学习路径失败: {e}")
                 import traceback
                 traceback.print_exc()
-                # 提供默认路径数据
                 path_data = {
                     "path_list": [],
                     "topic_id": "",
                     "current_progress": "learning",
                     "module": profile_dict.get("course", "")
                 }
-            
-            # 3. 根据目前的画像和路径，推荐首批资源（如果有学习路径的话）
+
+            # 3. 根据目前的画像和路径，推荐首批资源
             resources = {}
             try:
                 if path_data.get("topic_id"):
@@ -410,7 +476,7 @@ class Orchestrator:
                 import traceback
                 traceback.print_exc()
                 resources = {"resources": []}
-            
+
             recommended = self._extract_recommended(resources)
 
             return {
@@ -424,13 +490,12 @@ class Orchestrator:
             print(f"【总控】⚠️ 加载用户状态失败: {e}")
             import traceback
             traceback.print_exc()
-            # 返回一个基本的状态，确保前端不会崩溃
             return {
                 "profile": {
                     "user_id": user_id,
-                    "major": None,
-                    "grade": None,
-                    "course": None,
+                    "major": "软件工程",
+                    "grade": "大二",
+                    "course": "操作系统",
                     "knowledge_level": {},
                     "weak_points": [],
                     "error_tags": [],
@@ -449,6 +514,7 @@ class Orchestrator:
                 "topic": "",
                 "current_progress": "learning"
             }
+
 
 
 # ============= 全局函数导出入口 =============
