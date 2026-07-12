@@ -8,10 +8,11 @@ from logger import log_behavior
 from cleanup import cleanup_events
 from analyzer import analyze_behavior
 
-
 import json
 from typing import Dict, Optional, List
 from datetime import datetime
+from functools import wraps
+import time
 
 # 导入画像Agent
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'agents', 'agent_profile'))
@@ -29,6 +30,26 @@ from backend.agents.agent_source.code_agent import agentcode as code_agent_class
 from backend.agents.agent_source.exercise_agent import agentexercise as exercise_agent_class
 from backend.agents.agent_source.main import generate_resources
 
+# 防抖装饰器
+def debounce(wait_time):
+    def decorator(func):
+        last_called = {}
+
+        @wraps(func)
+        def debounced(*args, **kwargs):
+            user_id = args[0]  # 假设第一个参数是 user_id
+            now = time.time()
+            
+            if user_id in last_called:
+                if now - last_called[user_id] < wait_time:
+                    print(f"【防抖】忽略用户 {user_id} 的重复调用，距离上次调用 {now - last_called[user_id]:.2f} 秒")
+                    return {}  # 如果在防抖时间内，直接返回空结果
+            last_called[user_id] = now
+            
+            return func(*args, **kwargs)
+        
+        return debounced
+    return decorator
 
 class Orchestrator:
     """多智能体总控调度器"""
@@ -129,6 +150,7 @@ class Orchestrator:
             "current_progress": profile.get("progress", {}).get("current_topic", "")
         }
 
+    @debounce(30)  # 添加防抖，30秒内只执行一次
     def finish_view_resource(self, user_id: str, resource_id: str, duration: int) -> Dict:
         print(f"【总控】用户 {user_id} 完成查看资源 {resource_id}，用时 {duration} 秒")
         self._log_behavior(user_id, "view_resource", f"resource:{resource_id}", duration)
@@ -164,6 +186,7 @@ class Orchestrator:
             "current_progress": path_data.get("current_progress", "")
         }
 
+    @debounce(30)  # 添加防抖，30秒内只执行一次
     def submit_answer_result(self, user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
         print(f"【总控】用户 {user_id} 提交 {topic} 的答题结果，正确率: {correct_rate}，用时: {duration} 秒")
         self._log_behavior(user_id, "submit_answer", topic, duration, correct_rate)
@@ -200,6 +223,16 @@ class Orchestrator:
 
     def _update_profile(self, user_id: str, message: str, behavior: Dict = None) -> Dict:
         print(f"【总控】开始更新用户 {user_id} 的画像")
+        
+        # 先获取当前画像
+        current_profile = self._get_profile_dict(user_id)
+        
+        # 如果 message 和 behavior 都没有变化，直接返回当前画像
+        if (current_profile.get("last_message") == message and 
+            current_profile.get("last_behavior") == behavior):
+            print(f"【总控】用户 {user_id} 的画像无变化，跳过更新")
+            return current_profile
+        
         try:
             resp = self.profile_agent.build_profile(user_id=user_id, user_input=message, behavior=behavior)
             if resp and resp.profile:
@@ -213,8 +246,10 @@ class Orchestrator:
                 if resp.profile.course is None:
                     resp.profile.course = "操作系统"
             
-                # 更新时间戳
+                # 更新时间戳和最后信息
                 resp.profile.updated_at = datetime.now()
+                resp.profile.last_message = message
+                resp.profile.last_behavior = behavior
             
                 # 保存到磁盘
                 try:

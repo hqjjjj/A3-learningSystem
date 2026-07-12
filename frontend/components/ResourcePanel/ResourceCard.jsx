@@ -17,8 +17,9 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
     return () => {
       const duration = Math.floor((Date.now() - startTime) / 1000);
       if (onFinishResource && resource) {
-        onFinishResource(resource.type, duration);
+        onFinishResource(resource.subtype, duration);
       }
+
     };
   }, [startTime, onFinishResource, resource]);
 

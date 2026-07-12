@@ -37,6 +37,10 @@ class StudentProfile(BaseModel):
     learning_goal: Optional[str] = None
     created_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
     updated_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
+    
+    # ✅ 新增：用于防抖检查的字段
+    last_message: Optional[str] = None
+    last_behavior: Optional[dict] = None
 
 class ProfileResponse(BaseModel):
     profile: StudentProfile
@@ -251,9 +255,35 @@ class ProfileAgent:
             if old_profile:
                 self.profiles[user_id] = old_profile
 
+        # ✅ 优化：只发送相关知识点，而不是整个知识图谱
+        relevant_topics = set() # 使用集合去重
+        
+        # 1. 从旧画像中获取当前主题
+        if old_profile and old_profile.progress.current_topic:
+            current_topic = old_profile.progress.current_topic
+            if current_topic in KNOWLEDGE_GRAPH:
+                relevant_topics.add(current_topic)
+        
+        # 2. 从用户输入中匹配主题
+        matched_topic = self._match_topic_locally(user_input)
+        if matched_topic:
+            relevant_topics.add(matched_topic)
+            
+        # 3. 从行为数据中获取主题（如果有）
+        if behavior and "topic" in behavior:
+            topic_name = behavior["topic"]
+            if topic_name in KNOWLEDGE_GRAPH:
+                relevant_topics.add(topic_name)
+        
+        # 4. 兜底：如果筛选不到，取前5个
+        if not relevant_topics:
+            relevant_topics = set(list(KNOWLEDGE_GRAPH.keys())[:5])
+
+        # 生成 topics_str
         topics_list = []
-        for tname, tdata in KNOWLEDGE_GRAPH.items():
-           topics_list.append(f"'{tname}' (难度: {tdata['difficulty']})")
+        for tname in relevant_topics:
+            tdata = KNOWLEDGE_GRAPH[tname]
+            topics_list.append(f"'{tname}' (难度: {tdata['difficulty']})")
         topics_str = "\n".join(topics_list)
 
         sys_prompt = f"""你是一个学习画像构建助手。分析学生的对话与行为数据，输出标准JSON。
@@ -386,6 +416,10 @@ class ProfileAgent:
 
         self._ensure_basic_info(profile)
         profile.updated_at = datetime.datetime.now()
+        
+        # ✅ 更新 last_message 和 last_behavior 用于防抖
+        profile.last_message = user_input
+        profile.last_behavior = behavior
         
         self.profiles[user_id] = profile
         self._save_profile_to_disk(profile)
