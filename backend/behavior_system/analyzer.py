@@ -5,7 +5,9 @@ from pathlib import Path
 
 ANALYZE_SIZE=100
 
-BEHAVIOR_PATH = Path("data/users_events")
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BEHAVIOR_PATH = BASE_DIR / "data" / "users_events"
 
 def analyze_behavior(user_id: str):
 

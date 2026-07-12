@@ -15,7 +15,8 @@ from datetime import datetime  # 补充导入 datetime
 # )
 
 file_lock = Lock()
-Behavior_Path = Path("data/users_events")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+Behavior_Path = BASE_DIR / "data" / "users_events"
 
 def log_event(event: BehaviorEvent):
     """Pydantic 模型标准记录函数"""

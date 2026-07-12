@@ -1,0 +1,2672 @@
+[
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:39.607342",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 175,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:39.608085",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 175,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:39.609009",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 175,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:39.611033",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 175,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:39.612816",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 175,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:52.183874",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:52.188842",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:52.632780",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:52.997034",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:22:53.862546",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:08.208781",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:08.215448",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:15.283608",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:17.058233",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:17.236400",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:20.802643",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:23.135387",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:24.896167",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:28.167231",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:33.602544",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:39.432705",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:43.014553",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:46.802803",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:47.388843",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:53.049039",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:23:54.584608",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 26,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:24:03.636156",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 26,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:24:08.125606",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 26,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:24:10.975927",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 26,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:24:11.578575",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 26,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-08T15:29:37.124463",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "你好，测试数据稳定度"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:29:37.136184",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 415,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:29:37.138570",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 415,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:29:37.140468",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 415,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:29:37.141221",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 415,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:29:37.141546",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 415,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:29:46.672328",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 425,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:29:49.103114",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 425,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:29:50.962367",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 425,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:00.458418",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 425,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:01.278076",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 425,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:02.261730",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 427,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:03.415284",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 427,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:06.100239",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 427,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:13.059833",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 427,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:14.759670",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 427,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:25.534450",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 429,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:27.521844",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 429,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:28.291937",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 429,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:31.865505",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 429,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:33.185909",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 429,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:37.737712",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 438,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:37.813828",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 438,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:40.559107",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 438,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:47.480825",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 438,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:53.319763",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 438,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:30:58.826870",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 439,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:31:01.046986",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 439,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:31:01.674370",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 439,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:31:05.179451",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 439,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:31:05.283696",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 439,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T15:31:11.625450",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 440,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:07.329647",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:07.330467",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:07.331715",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:07.332522",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:07.333662",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:10.307156",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:17.797614",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:29.344145",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:30.989378",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:31.534520",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:32.330738",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:32.394223",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:34.348796",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:40.599401",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:41.515434",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:47.764598",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:55.342456",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:55.532933",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:58.532545",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:49:58.929536",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:04.788262",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:12.599960",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:15.469021",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:19.505715",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:23.708237",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:25.124663",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:25.755174",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:28.259244",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:37.327083",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:39.445750",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:39.824568",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:46.954771",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:48.387908",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:49.097225",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:50:50.026430",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:57:30.496306",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:57:30.502844",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:57:30.508161",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:57:30.508988",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:57:30.509625",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:04.594652",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:04.601485",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:04.605714",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:04.607844",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:04.608940",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:30.619205",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:30.630787",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:30.633832",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:30.634617",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:30.634925",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:33.123257",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:33.123557",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:33.123702",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:33.123804",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:33.123924",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:35.719968",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:35.720154",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:35.720288",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:35.720446",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:35.720577",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:41.169573",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:41.176944",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:41.177305",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:41.177558",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:58:41.177706",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:12.726231",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:12.729395",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:12.733135",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:12.736391",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:12.739006",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:16.112644",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:16.112836",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:16.112981",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:16.113078",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:16.113399",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:18.251359",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:18.251558",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:18.251844",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:18.251992",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-08T16:59:18.252609",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:01:40.650864",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:01:40.650864",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:01:40.650864",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:01:40.650864",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:01:40.650864",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-12T11:06:04.740737",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是人工智能大一 ，正在学进程控制原语，我喜欢看视频。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-12T11:06:28.148281",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是人工智能大一 ，正在学进程控制原语，我喜欢看视频。"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:24.569741",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 34,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:24.569741",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 34,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:24.572678",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 34,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:24.577202",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 34,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:24.579362",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 34,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:25.992864",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:25.992864",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:26.157396",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:26.157396",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:26.196812",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:26.211021",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:27.363062",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:27.490447",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:27.594350",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:27.710624",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:27.728983",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:27.754395",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:28.973973",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:29.214946",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 3,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:29.410314",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:29.494962",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:29.529626",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:29.593111",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:30.659934",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:30.875402",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 5,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:31.243592",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 5,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:31.309427",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 6,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:31.389474",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 6,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:31.452641",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 6,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:32.489276",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 6,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:32.610214",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 7,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:32.982689",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 7,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:33.046851",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 7,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:33.164871",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 8,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:33.244927",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 8,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:34.301937",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 8,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:34.365729",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 9,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:34.735629",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 9,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:34.867153",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 9,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:34.933254",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 9,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:34.979961",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 9,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:35.846987",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 9,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:35.893157",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:36.101725",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:36.271404",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:36.419976",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:36.465581",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:37.234547",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:37.291021",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:37.426505",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:37.597904",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:37.787996",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:37.830180",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:38.612266",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 12,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:38.696032",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 13,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:38.777623",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 13,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:38.908725",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 13,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:39.148529",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 13,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:39.199832",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 14,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:40.015788",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 14,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:40.059922",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 14,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:40.186931",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 14,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:40.247659",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 15,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:40.539013",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 15,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T11:56:40.591784",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 15,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:29:08.761364",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:35:33.644569",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 383,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:35:34.810506",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 384,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:35:35.939318",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 385,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:35:37.317419",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 387,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:35:38.413416",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 388,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:35:39.563450",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 389,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:35:40.668870",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 390,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:35:41.743060",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 391,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:45.727135",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:45.728136",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:45.732872",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:45.733875",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:45.735984",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:47.221201",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:47.222443",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:47.222443",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:47.224927",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:47.240428",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:47.266305",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:48.647976",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:48.831685",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 0,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:48.847221",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:48.895350",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:48.931340",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:48.977109",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:49.983165",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 2,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:50.325341",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 3,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:50.367834",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 3,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:50.420577",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 3,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:50.457179",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 3,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:51.278847",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:51.691466",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:51.859434",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:51.922122",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:51.973550",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 4,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:52.815354",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 5,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:53.105065",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 6,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:53.196163",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 6,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:53.340292",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 6,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:53.380388",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 6,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:54.274341",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 7,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:54.574937",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 7,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:54.653478",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 7,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:54.830803",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 7,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:54.886473",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 7,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:55.700824",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 8,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:55.943242",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 8,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:56.133596",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 9,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:56.250749",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 9,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:56.348616",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 9,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:57.120455",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-12T12:37:57.250002",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  }
+]
