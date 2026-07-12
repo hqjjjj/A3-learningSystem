@@ -82,7 +82,7 @@ class ProfileAgent:
 
     def __init__(self, api_password: str = None):
         # 🔥 根据官方文档修正配置
-        self.api_password = api_password or "wgBxAZOFHyntyLUcGyiA:nOjHYLiHrgAffNqWCcUJ"  # 你的APIPassword
+        self.api_password = api_password or "RsgGrlvXfBMNuLCrewHn:LocQjXtrcchLshPHORMf"  # 你的APIPassword
         self.base_url = "https://spark-api-open.xf-yun.com/agent/v1/chat/completions"
         self.model = "spark-x"  # 🔥 关键修正：X2-flash版本对应的model必须填 "spark-x"
         
