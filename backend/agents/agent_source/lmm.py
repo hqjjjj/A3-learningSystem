@@ -3,7 +3,7 @@ from openai import OpenAI
 class SparkLLM:
     def __init__(self):
         self.client = OpenAI(
-            api_key="wgBxAZOFHyntyLUcGyiA:nOjHYLiHrgAffNqWCcUJ",  
+            api_key="RsgGrlvXfBMNuLCrewHn:LocQjXtrcchLshPHORMf",  
             base_url="https://spark-api-open.xf-yun.com/agent/v1/",
         )
 
