@@ -1,3 +1,5 @@
+
+// MainPage.jsx
 import React, { useState, useEffect } from 'react';   
 import ProfilePanel from '../components/ProfilePanel';
 import ChatPanel from "../components/ChatPanel/ChatPanel";
@@ -8,14 +10,18 @@ import './MainPage.css';
 import chatIcon from '../imgs/1779594814480.png';
 import profileIcon from '../imgs/1779594816401.png';
 import * as api from '../api/api';
+import { useCallback } from 'react';
+
 
 const MainPage = ({appState, setAppState, userId}) => {
   // 左侧折叠状态
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   
+  
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
+
 
   // 右侧主 Tab：'path' 或 'resource'
   const [activeMainTab, setActiveMainTab] = useState('path');
@@ -23,205 +29,141 @@ const MainPage = ({appState, setAppState, userId}) => {
   // 路径区子 Tab：'learningPath' 或 'knowledgeGraph'
   const [activePathTab, setActivePathTab] = useState('learningPath');
 
+
   const [isLoading, setIsLoading] = useState(false);
 
   // 辅助函数：用于合并后端返回更新
-  const mergeAppState = (updates) => {
-    setAppState(prev => {
-      const processedUpdates = typeof updates === 'function' ? updates(prev) : updates;
-      return {
-        ...prev,
-        ...processedUpdates,
-        profile: processedUpdates.profile ?? prev.profile,
-        recommended_resources: processedUpdates.recommended_resources ?? prev.recommended_resources,
-        generated_resource: processedUpdates.generated_resource ?? prev.generated_resource,
-        chat_history: processedUpdates.chat_history !== undefined ? processedUpdates.chat_history : prev.chat_history,
-        learning_path: processedUpdates.learning_path ?? prev.learning_path,
-        topic: processedUpdates.topic ?? prev.topic,
-        current_progress: processedUpdates.current_progress ?? prev.current_progress
-      };
-    });
-  };
-
-  // 组件挂载时加载初始数据
-  useEffect(() => {
-    if (!userId) return;
-
-    const loadInitialData = async () => {
-      setIsLoading(true);
-      try {
-        // 1. 加载用户状态（包含学习路径） - 修复：使用 api.loadUserState
-        const userData = await api.loadUserState(userId);
-        mergeAppState(userData);
-
-        // 2. 如果没有 topic，尝试从学习路径中获取第一个
-        // 修复：后端返回的 learning_path 是对象数组 [{name: "xxx", id: "yyy"}]，需要取 .name
-        if (!appState.topic && userData.learning_path && userData.learning_path.length > 0) {
-          const firstTopic = userData.learning_path[0];
-          const topicName = typeof firstTopic === 'object' ? firstTopic.name : firstTopic;
-          if (topicName) {
-            mergeAppState({
-              topic: topicName
-            });
-          }
-        }
-      } catch (error) {
-        console.error('加载初始数据失败:', error);
-      } finally {
-        setIsLoading(false);
-      }
+const mergeAppState =useCallback((updates) => {
+  setAppState(prev => {
+    const processedUpdates = typeof updates === 'function' ? updates(prev) : updates;
+    return {
+      ...prev,
+      ...processedUpdates,
+      profile: processedUpdates.profile ?? prev.profile,
+      recommended_resources: processedUpdates.recommended_resources ?? prev.recommended_resources,
+      generated_resource: processedUpdates.generated_resource ?? prev.generated_resource,
+      chat_history: processedUpdates.chat_history !== undefined ? processedUpdates.chat_history : prev.chat_history,
+      learning_path: processedUpdates.learning_path ?? prev.learning_path,
+      topic: processedUpdates.topic ?? prev.topic,
+      current_progress: processedUpdates.current_progress ?? prev.current_progress
     };
+  });
+}, [setAppState]);
 
-    loadInitialData();
-  }, [userId]);
 
   // 聊天模块回调函数
-  const handleSendMessage = async (message) => {
+  const handleSendMessage=useCallback(async(message)=>{
     // 乐观更新：立即显示用户消息
-    const userMsg = { role: 'user', content: message };
+    const userMsg={role :'user',content:message};
     setAppState(prev => ({
       ...prev,
       chat_history: [...prev.chat_history, userMsg]
     }));
     setIsLoading(true);
 
-    try {
-      // 1. 向总控发送消息
-      const data = await api.sendChat(userId, message);
+    try{
+      const data=await api.sendChat(userId,message);
 
       const assistantMsg = { role: 'assistant', content: data.reply };
       
-      // 2. 更新核心状态（包括聊天记录、画像、得到的 Topic 等）
-      mergeAppState({
-        chat_history: [...appState.chat_history, assistantMsg],
+      mergeAppState((prev) => ({
+        chat_history: [...prev.chat_history, assistantMsg],
         profile: data.profile,
         recommended_resources: data.recommended_resources,
-        learning_path: data.learning_path,
+        learning_path: data.learning_path,   // 后端可能返回更新的学习路径
         topic: data.topic,
         current_progress: data.current_progress
-      });
-
-      // 3. 如果后端成功解析出了 Topic，主动请求一次学习路径
-      if (data.topic) {
-        try {
-          const pathData = await api.fetchPath(userId, data.topic);
-          mergeAppState({
-            learning_path: pathData.learning_path,
-            recommended_resources: pathData.recommended_resources || []
-          });
-        } catch (pathErr) {
-          console.warn('（非致命）拉取学习路径失败:', pathErr);
-        }
-      }
-
-    } catch (error) {
+      }));
+    }catch(error){
       console.error('发送消息失败', error);
-      const errorMsg = { role: 'assistant', content: '抱歉，服务出错了，请稍后再试。' };
+      const errorMsg={ role: 'assistant', content: '抱歉，服务出错了，请稍后再试。' };
       setAppState(prev => ({
         ...prev,
         chat_history: [...prev.chat_history, errorMsg]
       }));
-    } finally {
+    }finally{
       setIsLoading(false);
     }
-  };
-   
-  // 资源生成回调函数
-  const handleGenerateResource = async (resourceType) => {
-    setIsLoading(true);
-    try {
-      const data = await api.generateResource(userId, appState.topic, resourceType);
+  }, [userId, setAppState, mergeAppState]
+)
+//资源生成回调函数
+const handleGenerateResource= useCallback(async(resourceType)=>{
+  setIsLoading(true);
+  try{
+        const data = await api.generateResource(userId, appState.topic, resourceType);
+      const newResource=data.generated_resource;
       mergeAppState({
-        generated_resource: data.generated_resource,
-        topic: data.topic,
-        current_progress: data.current_progress
+      generated_resource: data.generated_resource,   // 单个资源对象
+      topic: data.topic,
+      current_progress: data.current_progress
       });
-    } catch (error) {
-      console.error('生成资源失败', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 提交答案回调函数
-  const handleSubmitAnswer = async (correct_rate, duration) => {
-    setIsLoading(true);
-    try {
-      const data = await api.submitAnswer(userId, appState.topic, correct_rate, duration);
-      mergeAppState({
-        profile: data.profile,
-        learning_path: data.learning_path,
-        recommended_resources: data.recommended_resources,
-        topic: data.topic,
-        current_progress: data.current_progress
-      });
-    } catch (error) {
-      console.error('提交答案失败', error);
-      return { correct: false, message: '提交失败，请重试' };
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 完成浏览回调函数
-  const handleFinishResource = async (resourceType, duration) => {
-    try {
-      const data = await api.finishResource(userId, resourceType, appState.topic, duration);
-      mergeAppState({
-        profile: data.profile,
-        learning_path: data.learning_path,
-        recommended_resources: data.recommended_resources,
-        topic: data.topic,
-        current_progress: data.current_progress
-      });
-    } catch (error) {
-      console.error('上报资源浏览失败', error);
-    }
-  };
-
-  // 切换主题回调函数
-  const handleTopicChange = (newTopic) => {
-    try {
-      mergeAppState({
-        topic: newTopic
-      });
-    } catch (err) {
-      console.warn('更新主题失败:', err);
-      // 即使出错也尝试设置 topic（降级）
-      setAppState(prev => ({ ...prev, topic: newTopic }));
-    }
-  };
-
-  // 响应 topic 变化的 useEffect
-  useEffect(() => {
-    if (!userId || !appState.topic) return;
-    // 如果已经存在学习路径，则不再重复请求
-    if (appState.learning_path && appState.learning_path.length > 0) return;
-
-    let isMounted = true;
-    const loadPath = async () => {
-      setIsLoading(true);
-      try {
-        const pathData = await api.fetchPath(userId, appState.topic);
-        if (isMounted) {
-          mergeAppState({
-            learning_path: pathData.learning_path,
-            recommended_resources: pathData.recommended_resources || []
-          });
-        }
-      } catch (error) {
-        console.error('加载学习路径失败:', error);
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+      }catch(error){
+        console.error('生成资源失败', error);
+      }finally{
+        setIsLoading(false);
       }
-    };
-    loadPath();
-    return () => { 
-      isMounted = false;
-    };
-  }, [userId, appState.topic]);
+
+}, [userId, appState.topic, mergeAppState]);
+
+//提交答案回调函数
+const handleSubmitAnswer =useCallback(async(correct_rate,duration)=>{
+  setIsLoading(true);
+  try{
+    const data=await api.submitAnswer(userId,appState.topic,correct_rate,duration);
+    mergeAppState({
+      profile: data.profile,
+      learning_path: data.learning_path,
+      recommended_resources: data.recommended_resources,
+      topic: data.topic,
+      current_progress: data.current_progress
+    });
+  }catch(error)
+  {
+    console.error('提交答案失败', error);
+    return { correct: false, message: '提交失败，请重试' };
+  }finally{
+    setIsLoading(false);
+  }
+}, [userId, appState.topic, mergeAppState]);
+
+// 完成浏览回调函数
+const handleFinishResource=useCallback(async(resourceType,duration)=>{
+  try{
+    const data=await api.finishResource(userId,resourceType,appState.topic,duration);
+    mergeAppState({
+      profile: data.profile,
+      learning_path: data.learning_path,
+      recommended_resources: data.recommended_resources,
+      topic: data.topic,
+      current_progress: data.current_progress
+    })
+  }catch (error) {
+    console.error('上报资源浏览失败', error);
+  }
+}, [userId, appState.topic, mergeAppState])
+
+//切换主题回调函数
+const handlePathNodeClick = useCallback(async (newTopic) => {
+  // 1. 先乐观更新 topic（让界面立刻响应）
+  setAppState(prev => ({ ...prev, topic: newTopic }));
+
+  // 2. 拉取该主题下的路径和资源
+  setIsLoading(true);
+  try {
+    const pathData = await api.fetchPath(userId, newTopic);
+    mergeAppState({
+      learning_path: pathData.learning_path,
+      recommended_resources: pathData.recommended_resources || []
+    });
+  } catch (error) {
+    console.error('加载新主题路径失败', error);
+  } finally {
+    setIsLoading(false);
+  }
+}, [userId, mergeAppState, setAppState, setIsLoading]);
+
+
+ 
 
   return (
     <div className="main-page">
@@ -286,19 +228,19 @@ const MainPage = ({appState, setAppState, userId}) => {
               </div>
               {/* 子 Tab 内容 */}
               <div className="sub-tab-content">
-                {activePathTab === 'learningPath' && (
-                  <PathPanel
-                    learningPath={appState.learning_path}
-                    topic={appState.topic}
-                    onTopicChange={handleTopicChange}
-                  />
-                )}
+                {activePathTab === 'learningPath' 
+                && <PathPanel
+                     learningPath={appState.learning_path}
+                     topic={appState.topic}
+                     onTopicChange={handlePathNodeClick}
+                    />}
                 {activePathTab === 'knowledgeGraph' && (
                   <KnowledgeGraphPanel 
                     knowledgeGraph={appState.knowledge_graph}
                     userId={userId}
                   />
                 )}
+
               </div>
             </div>
           )}
@@ -312,7 +254,7 @@ const MainPage = ({appState, setAppState, userId}) => {
                 onFinishResource={handleFinishResource}
                 isLoading={isLoading}
                 userId={userId}
-              />
+                />
             </div>
           )}
         </div>

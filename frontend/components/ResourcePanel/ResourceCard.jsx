@@ -21,7 +21,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       }
 
     };
-  }, [startTime, onFinishResource, resource]);
+  }, []);
 
   const handleSubmitAnswer = async (correct_rate, duration) => {
     const result = await onSubmitAnswer(correct_rate, duration);
