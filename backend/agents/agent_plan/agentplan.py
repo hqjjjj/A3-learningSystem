@@ -25,9 +25,9 @@ OUTPUT_DIR = os.path.join(project_root, "data", "planner")
 KNOWLEDGE_DIR = os.path.join(project_root, "data", "knowledge")
 
 # 讯飞星火 API 配置
-IFLYTEK_APPID = "574c51e6"
-IFLYTEK_API_KEY = "mhWmBWSudeBYIxmQSWsm:vVmrsjInCRycULVTeosH"
-IFLYTEK_API_SECRET = "Nzg2NTVjMWNlZDYwNmY5ODdmNDk3ZTAw"
+IFLYTEK_APPID = "c878671b"
+IFLYTEK_API_KEY = "MCdXmPYbNgRCsEdxvFEX:RCGNRRQJmgCWjzyWyFJu"
+IFLYTEK_API_SECRET = "NTNiZjA0NGRlZmMyOWExY2Y1NGI2OWQw"
 
 # ==================== 知识图谱构建 ====================
 
@@ -473,33 +473,29 @@ class UserProfileMonitor:
             # 重新生成学习路径（使用LLM）
             learning_path = self.planner.get_learning_path(user_profile)
             
-            # 保存到输出目录（按用户ID分类）
-            user_output_dir = os.path.join(self.output_dir, user_id)
+            # ✅ 修改：保存到 users/{user_id}/ 目录
+            user_output_dir = os.path.join(self.output_dir, "users", user_id)
             os.makedirs(user_output_dir, exist_ok=True)
             
-            # 保存最新版本
+            # ✅ 保存学习路径（覆盖）
             output_path = os.path.join(user_output_dir, "learning_path.json")
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(learning_path, f, indent=2, ensure_ascii=False)
             
             print(f"[监控] ✅ 学习路径已更新: {output_path}")
             
-            # 保存历史版本
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            history_path = os.path.join(user_output_dir, f"learning_path_{timestamp}.json")
-            with open(history_path, 'w', encoding='utf-8') as f:
-                json.dump(learning_path, f, indent=2, ensure_ascii=False)
+            # ❌ 删除：不再保存历史版本
+            # timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            # history_path = os.path.join(user_output_dir, f"learning_path_{timestamp}.json")
             
-            print(f"[监控] 📚 历史版本已保存: {history_path}")
-            
-            # 保存教学输出
+            # ✅ 保存教学输出（覆盖）
             next_topic = self.planner.get_next_topic(user_profile)
             teaching_output = self.planner.get_teaching_output(user_profile, next_topic)
             teaching_path = os.path.join(user_output_dir, "teaching_output.json")
             with open(teaching_path, 'w', encoding='utf-8') as f:
                 json.dump(teaching_output, f, indent=2, ensure_ascii=False)
             
-            print(f"[监控] 📊 教学输出已保存: {teaching_path}")
+            print(f"[监控] ✅ 教学输出已更新: {teaching_path}")
             print(f"[监控] 📊 路径长度: {len(learning_path.get('learning_path', []))} 个知识点")
             print(f"[监控] ➡️  下一步: {learning_path.get('next_step', '无')}")
             print(f"{'='*60}\n")
@@ -611,8 +607,10 @@ def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
     # 初始化知识图谱
     kg = KnowledgeGraph(KNOWLEDGE_DIR)
     
-    # 1. 输出知识图谱
-    save_json(kg.to_json(), os.path.join(output_dir, "knowledge_graph.json"))
+    # 1. 输出知识图谱（全局共享，只生成一次）
+    kg_path = os.path.join(output_dir, "knowledge_graph.json")
+    if not os.path.exists(kg_path):
+        save_json(kg.to_json(), kg_path)
     
     # 初始化规划器
     planner = PlannerAgent(kg)
@@ -620,16 +618,28 @@ def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
     # 2. 计算下一个知识点
     next_topic = planner.get_next_topic(user_profile)
     
-    # 3. 输出给资源生成模块
+    # 3. 生成教学输出
     teaching_output = planner.get_teaching_output(user_profile, next_topic)
-    save_json(teaching_output, os.path.join(output_dir, "teaching_output.json"))
     
-    # 4. 输出学习路径（使用LLM规划）
+    # 4. 生成学习路径（使用LLM规划）
     learning_path = planner.get_learning_path(user_profile)
-    save_json(learning_path, os.path.join(output_dir, "learning_path.json"))
-
-       # ============ 新增：输出 {user_id}.json（与监控服务位置和格式完全一致） ============
+    
+    # ============ 修改：输出到 users/{user_id}/ 目录，覆盖更新 ============
     user_id = user_profile.get("user_id", "unknown")
+    
+    # 创建用户专属目录
+    user_dir = os.path.join(output_dir, "users", user_id)
+    os.makedirs(user_dir, exist_ok=True)
+    
+    # 保存 learning_path.json（覆盖）
+    learning_path_file = os.path.join(user_dir, "learning_path.json")
+    with open(learning_path_file, 'w', encoding='utf-8') as f:
+        json.dump(learning_path, f, indent=2, ensure_ascii=False)
+    
+    # 保存 teaching_output.json（覆盖）
+    teaching_file = os.path.join(user_dir, "teaching_output.json")
+    with open(teaching_file, 'w', encoding='utf-8') as f:
+        json.dump(teaching_output, f, indent=2, ensure_ascii=False)
     
     # 构建 current_topic
     user_current_topic = user_profile.get("progress", {}).get("current_topic")
@@ -651,13 +661,12 @@ def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
             "is_review": next_topic.get("is_review", False)
         }
     
-    # 构建 teaching_output（包含 current_topic）
+    # 保存 {user_id}.json（覆盖）
     teaching_output_with_current = teaching_output.copy()
     teaching_output_with_current["current_topic"] = current_topic_output
     
-    # ✅ 输出到 output_dir 目录下，文件名 {user_id}.json（与监控服务完全一致）
-    user_output_file = os.path.join(output_dir, f"{user_id}.json")
-    with open(user_output_file, "w", encoding="utf-8") as f:
+    user_file = os.path.join(user_dir, f"{user_id}.json")
+    with open(user_file, 'w', encoding='utf-8') as f:
         json.dump({
             "user_id": user_id,
             "current_topic": current_topic_output,
@@ -666,7 +675,7 @@ def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
             "updated_at": datetime.now().isoformat()
         }, f, indent=2, ensure_ascii=False)
     
-    print(f"✅ 已输出: {user_output_file}")
+    print(f"✅ 用户 {user_id} 学习路径已更新: {user_file}")
     
     # 返回（保持原有格式不变）
     return planner, user_profile, next_topic

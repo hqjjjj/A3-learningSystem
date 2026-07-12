@@ -1,79 +1,68 @@
 {
-  "user_id": "u001",
   "learning_path": [
-    "进程通信的类型",
-    "消息传递通信的实现",
-    "链接组织方式",
-    "I/O虚拟化",
-    "读者-写者问题",
-    "进程控制块（PCB）",
-    "用户级线程与内核支持线程"
+    "多处理机系统的引入与类型",
+    "多处理机系统结构（UMA）",
+    "非统一内存访问（NUMA）结构",
+    "多处理机操作系统的特征与类型",
+    "处理机调度的层次",
+    "多处理机进程分配与调度"
   ],
-  "current_step": "云计算",
+  "current_step": "os_mp_01",
   "next_step": "多处理机系统的引入与类型",
   "path_nodes": [
     {
-      "id": "os_process_08",
-      "name": "进程通信的类型",
-      "difficulty": "medium",
+      "id": "os_mp_01",
+      "name": "多处理机系统的引入与类型",
+      "difficulty": "easy",
       "status": "pending",
-      "understanding": 0.0,
-      "x": 531.4523782890726,
-      "y": -9.483976327446754
+      "understanding": 0,
+      "x": 242.98557437812758,
+      "y": 497.406473344903
     },
     {
-      "id": "os_process_09",
-      "name": "消息传递通信的实现",
+      "id": "os_mp_02",
+      "name": "多处理机系统结构（UMA）",
       "difficulty": "medium",
       "status": "pending",
-      "understanding": 0.0,
-      "x": -88.62333140136735,
-      "y": -5.820525892020555
+      "understanding": 0,
+      "x": 674.4981115651195,
+      "y": 364.10754764893454
     },
     {
-      "id": "os_disk_02",
-      "name": "链接组织方式",
+      "id": "os_mp_03",
+      "name": "非统一内存访问（NUMA）结构",
       "difficulty": "medium",
       "status": "pending",
-      "understanding": 0.0,
-      "x": 408.4907483178829,
-      "y": 350.671560088711
+      "understanding": 0,
+      "x": -42.26854088156813,
+      "y": -16.18626552978057
     },
     {
-      "id": "os_virt_06",
-      "name": "I/O虚拟化",
+      "id": "os_mp_04",
+      "name": "多处理机操作系统的特征与类型",
       "difficulty": "medium",
       "status": "pending",
-      "understanding": 0.0,
-      "x": 57.60297703315726,
-      "y": -55.551530187993336
+      "understanding": 0,
+      "x": -147.4817511472786,
+      "y": 349.5189752071269
     },
     {
-      "id": "os_sync_07",
-      "name": "读者-写者问题",
+      "id": "os_schedule_01",
+      "name": "处理机调度的层次",
+      "difficulty": "easy",
+      "status": "pending",
+      "understanding": 0,
+      "x": 120.12774693341098,
+      "y": 265.5918328444241
+    },
+    {
+      "id": "os_mp_07",
+      "name": "多处理机进程分配与调度",
       "difficulty": "hard",
       "status": "pending",
-      "understanding": 0.0,
-      "x": -157.86092511816747,
-      "y": 103.91742386944517
-    },
-    {
-      "id": "os_process_06",
-      "name": "进程控制块（PCB）",
-      "difficulty": "medium",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 741.8874796884963,
-      "y": 287.21701212998835
-    },
-    {
-      "id": "os_process_11",
-      "name": "用户级线程与内核支持线程",
-      "difficulty": "hard",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": -99.92736013943141,
-      "y": 107.98712580188368
+      "understanding": 0,
+      "x": -90.03923951817654,
+      "y": 21.947066157396733
     }
   ],
   "edges": [
@@ -622,5 +611,5 @@
       "target": "os_disk_13"
     }
   ],
-  "updated_at": "2026-07-12T22:50:47.123243"
+  "timestamp": "2026-07-12T23:16:25.923669"
 }

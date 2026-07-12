@@ -1,79 +1,108 @@
 {
-  "user_id": "u001",
   "learning_path": [
-    "进程通信的类型",
-    "消息传递通信的实现",
-    "链接组织方式",
-    "I/O虚拟化",
-    "读者-写者问题",
-    "进程控制块（PCB）",
-    "用户级线程与内核支持线程"
+    "信号量机制",
+    "多处理机进程同步——自旋锁",
+    "RCU锁与同步算法",
+    "多处理机进程分配与调度",
+    "成组调度与自调度",
+    "死锁的预防与避免",
+    "索引组织方式",
+    "外存组织方式",
+    "页面置换算法综合计算",
+    "磁盘调度算法综合"
   ],
   "current_step": "云计算",
   "next_step": "多处理机系统的引入与类型",
   "path_nodes": [
     {
-      "id": "os_process_08",
-      "name": "进程通信的类型",
-      "difficulty": "medium",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 531.4523782890726,
-      "y": -9.483976327446754
-    },
-    {
-      "id": "os_process_09",
-      "name": "消息传递通信的实现",
-      "difficulty": "medium",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": -88.62333140136735,
-      "y": -5.820525892020555
-    },
-    {
-      "id": "os_disk_02",
-      "name": "链接组织方式",
-      "difficulty": "medium",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 408.4907483178829,
-      "y": 350.671560088711
-    },
-    {
-      "id": "os_virt_06",
-      "name": "I/O虚拟化",
-      "difficulty": "medium",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 57.60297703315726,
-      "y": -55.551530187993336
-    },
-    {
-      "id": "os_sync_07",
-      "name": "读者-写者问题",
+      "id": "os_sync_04",
+      "name": "信号量机制",
       "difficulty": "hard",
       "status": "pending",
       "understanding": 0.0,
-      "x": -157.86092511816747,
-      "y": 103.91742386944517
+      "x": -50.54710878711796,
+      "y": 439.71685441930083
     },
     {
-      "id": "os_process_06",
-      "name": "进程控制块（PCB）",
+      "id": "os_mp_05",
+      "name": "多处理机进程同步——自旋锁",
       "difficulty": "medium",
       "status": "pending",
       "understanding": 0.0,
-      "x": 741.8874796884963,
-      "y": 287.21701212998835
+      "x": 458.7637821510864,
+      "y": 459.7702028854045
     },
     {
-      "id": "os_process_11",
-      "name": "用户级线程与内核支持线程",
+      "id": "os_mp_06",
+      "name": "RCU锁与同步算法",
       "difficulty": "hard",
       "status": "pending",
       "understanding": 0.0,
-      "x": -99.92736013943141,
-      "y": 107.98712580188368
+      "x": 672.3675674223881,
+      "y": 6.823961616658522
+    },
+    {
+      "id": "os_mp_07",
+      "name": "多处理机进程分配与调度",
+      "difficulty": "hard",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": -90.03923951817654,
+      "y": 21.947066157396733
+    },
+    {
+      "id": "os_mp_08",
+      "name": "成组调度与自调度",
+      "difficulty": "medium",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 158.9542741113355,
+      "y": -57.48800900623968
+    },
+    {
+      "id": "os_schedule_10",
+      "name": "死锁的预防与避免",
+      "difficulty": "hard",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 513.3869772880537,
+      "y": 473.92601083915554
+    },
+    {
+      "id": "os_disk_03",
+      "name": "索引组织方式",
+      "difficulty": "medium",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": -49.21975240287122,
+      "y": 399.58746196639424
+    },
+    {
+      "id": "os_file_08",
+      "name": "外存组织方式",
+      "difficulty": "hard",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 510.801681446747,
+      "y": 425.63776037258503
+    },
+    {
+      "id": "os_virtual_09",
+      "name": "页面置换算法综合计算",
+      "difficulty": "hard",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 514.9771453200352,
+      "y": -55.36799509895326
+    },
+    {
+      "id": "os_disk_13",
+      "name": "磁盘调度算法综合",
+      "difficulty": "hard",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": -159.27158517286324,
+      "y": 269.9489693156336
     }
   ],
   "edges": [
@@ -622,5 +651,5 @@
       "target": "os_disk_13"
     }
   ],
-  "updated_at": "2026-07-12T22:50:47.123243"
+  "timestamp": "2026-07-12T23:16:58.348578"
 }
