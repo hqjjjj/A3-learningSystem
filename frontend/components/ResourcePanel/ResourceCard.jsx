@@ -19,9 +19,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       if (onFinishResource && resource) {
         onFinishResource(resource.subtype, duration);
       }
-      else {
-        console.warn('【frontend\components\ResourcePanel\ResourceCard.jsx】资源无 subtype，无法上报', resource);
-      }
+
     };
   }, [startTime, onFinishResource, resource]);
 
