@@ -2,8 +2,10 @@
 import json
 from pathlib import Path
 
-BEHAVIOR_PATH = Path("data/users_events")
-MAX_EVENTS = 500  # 修正了变量名拼写错误 (原为 MAX_EVETS)
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BEHAVIOR_PATH = BASE_DIR / "data" / "users_events"
+MAX_EVENTS = 500  
 
 def clean_user_events(user_id: str):
     """清洗用户行为记录，保留最近 MAX_EVENTS 条"""
