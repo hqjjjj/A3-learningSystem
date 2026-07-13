@@ -9,7 +9,7 @@ class SparkLLM:
 
     def generate(self, system_prompt: str, user_prompt: str) -> str:
         response = self.client.chat.completions.create(
-            model="qwen-plus",  
+            model="qwen3.7-plus",  
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
