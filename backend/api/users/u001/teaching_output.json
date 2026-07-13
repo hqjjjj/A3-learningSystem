@@ -1,0 +1,30 @@
+{
+  "learning_style": "visual",
+  "weak_points": [
+    "多处理机死锁",
+    "云计算",
+    "进程控制原语",
+    "分段存储管理方式"
+  ],
+  "cognitive_level": {
+    "level": "beginner",
+    "understanding_avg": 0.01
+  },
+  "error_patterns": [],
+  "preference": {
+    "resource_type": [
+      "code_example",
+      "explanation",
+      "code",
+      "exercise",
+      "mindmap"
+    ],
+    "difficulty": "medium"
+  },
+  "learning_pace": "normal",
+  "current_topic": {
+    "id": "os_mp_01",
+    "name": "多处理机系统的引入与类型",
+    "is_review": true
+  }
+}

@@ -2668,5 +2668,25 @@
     "correct_rate": null,
     "duration": 10,
     "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-13T14:31:15.819961",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想看知识点解析"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-13T14:59:07.765354",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我现在要学习云计算，我想看题目和解析"
   }
 ]

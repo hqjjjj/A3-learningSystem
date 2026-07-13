@@ -1,0 +1,41 @@
+{
+  "type": "code",
+  "title": "模拟两级页表的地址分解与查表过程",
+  "language": "python",
+  "code_lines": [
+    "def split_logical_address(addr, bits_outer, bits_inner, bits_offset):",
+    "    # 将32位逻辑地址按两级页表结构拆分为：外层页号、内层页号、页内偏移",
+    "    outer = (addr >> (bits_inner + bits_offset)) & ((1 << bits_outer) - 1)",
+    "    inner = (addr >> bits_offset) & ((1 << bits_inner) - 1)",
+    "    offset = addr & ((1 << bits_offset) - 1)",
+    "    return outer, inner, offset",
+    "",
+    "# 示例：32位系统，页面大小4KB（12位偏移），每页存1024个页表项（10位）",
+    "# 则外层页号占10位，内层页号占10位，页内偏移占12位",
+    "LOGICAL_ADDR = 0x12345678  # 示例逻辑地址",
+    "outer, inner, offset = split_logical_address(LOGICAL_ADDR, 10, 10, 12)",
+    "print(f'逻辑地址 0x{LOGICAL_ADDR:X} -> 外层页号: {outer}, 内层页号: {inner}, 页内偏移: {offset}')",
+    "",
+    "# 模拟查表（简化）：外层页表在内存中，索引outer得内层页表基址；再用inner查物理块号",
+    "outer_page_table = [0x1000, 0x2000, 0x3000] + [0] * 1021  # 假设前3项有效，其余未加载",
+    "if outer < len(outer_page_table) and outer_page_table[outer] != 0:",
+    "    inner_page_table_base = outer_page_table[outer]",
+    "    # 实际中需从内存读取该页表页，此处简化为假设已知其内容",
+    "    inner_page_table = [0x10000, 0x11000, 0x12000] + [0] * 1021",
+    "    if inner < len(inner_page_table) and inner_page_table[inner] != 0:",
+    "        frame_base = inner_page_table[inner]",
+    "        physical_addr = frame_base + offset",
+    "        print(f'→ 物理地址: 0x{physical_addr:X}')",
+    "    else:",
+    "        print('→ 缺页：内层页表项未加载')",
+    "else:",
+    "    print('→ 缺页：外层页表项未加载')"
+  ],
+  "description": "本代码演示两级页表中逻辑地址的分解方式（外层页号/内层页号/页内偏移）及查表流程。强调‘页表可离散存放’和‘按需加载’特性——仅当外层和内层页表项存在时才继续查表，否则触发缺页。帮助学生理解两级页表如何节省内存空间。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《存储器管理》两级页表和多级页表",
+    "采用两级页表可将页表分页离散存放，再为这些页表分页建立外层页表",
+    "两级页表只需将当前需要的部分页表项调入内存，可节省内存空间"
+  ],
+  "subtype": "code_example"
+}
