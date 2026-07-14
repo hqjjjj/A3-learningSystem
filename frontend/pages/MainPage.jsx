@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';   
+// MainPage.jsx
+import React, { useState, useEffect, useCallback } from 'react';   
 import ProfilePanel from '../components/ProfilePanel';
 import ChatPanel from "../components/ChatPanel/ChatPanel";
 import KnowledgeGraphPanel from "../components/KnowledgeGraphPanel/KnowledgeGraphPanel";
@@ -8,38 +9,25 @@ import './MainPage.css';
 import chatIcon from '../imgs/1779594814480.png';
 import profileIcon from '../imgs/1779594816401.png';
 import * as api from '../api/api';
-import { useCallback } from 'react';
 
-const MainPage = ({ initialAppState, userId }) => {
-  // 使用内部状态管理，合并传入的初始状态
-  const [appState, setAppState] = useState({
-    profile: null,
-    learning_path: null,
-    topic: '',
-    current_progress: 'learning',
-    recommended_resources: [],
-    generated_resource: null,
-    chat_history: [],
-    knowledge_graph: null,
-    ...initialAppState  // 合并传入的初始状态
-  });
-
-  // 左侧折叠状态
+const MainPage = ({ appState, setAppState, userId }) => {
+  // ===== 左侧折叠状态 =====
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  // 右侧主 Tab：'path' 或 'resource'
+  // ===== 右侧主 Tab =====
   const [activeMainTab, setActiveMainTab] = useState('path');
 
-  // 路径区子 Tab：'learningPath' 或 'knowledgeGraph'
+  // ===== 路径区子 Tab =====
   const [activePathTab, setActivePathTab] = useState('learningPath');
 
+  // ===== 加载状态 =====
   const [isLoading, setIsLoading] = useState(false);
 
-  // 辅助函数：用于合并后端返回更新
+  // ===== 辅助函数：合并后端返回更新 =====
   const mergeAppState = useCallback((updates) => {
     setAppState(prev => {
       const processedUpdates = typeof updates === 'function' ? updates(prev) : updates;
@@ -59,7 +47,7 @@ const MainPage = ({ initialAppState, userId }) => {
     });
   }, [setAppState]);
 
-  // 添加初始数据加载
+  // ===== 初始数据加载 =====
   useEffect(() => {
     const loadInitialData = async () => {
       try {
@@ -77,9 +65,8 @@ const MainPage = ({ initialAppState, userId }) => {
     loadInitialData();
   }, [userId, mergeAppState]);
 
-  // 聊天模块回调函数
-  const handleSendMessage = useCallback(async(message) => {
-    // 乐观更新：立即显示用户消息
+  // ===== 聊天模块回调函数 =====
+  const handleSendMessage = useCallback(async (message) => {
     const userMsg = { role: 'user', content: message };
     setAppState(prev => ({
       ...prev,
@@ -109,10 +96,10 @@ const MainPage = ({ initialAppState, userId }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [userId, mergeAppState]);
+  }, [userId, setAppState, mergeAppState]);
 
-  // 资源生成回调函数
-  const handleGenerateResource = useCallback(async(resourceType) => {
+  // ===== 资源生成回调函数 =====
+  const handleGenerateResource = useCallback(async (resourceType) => {
     setIsLoading(true);
     try {
       const data = await api.generateResource(userId, appState.topic, resourceType);
@@ -128,8 +115,8 @@ const MainPage = ({ initialAppState, userId }) => {
     }
   }, [userId, appState.topic, mergeAppState]);
 
-  // 提交答案回调函数
-  const handleSubmitAnswer = useCallback(async(correct_rate, duration) => {
+  // ===== 提交答案回调函数 =====
+  const handleSubmitAnswer = useCallback(async (correct_rate, duration) => {
     setIsLoading(true);
     try {
       const data = await api.submitAnswer(userId, appState.topic, correct_rate, duration);
@@ -148,8 +135,8 @@ const MainPage = ({ initialAppState, userId }) => {
     }
   }, [userId, appState.topic, mergeAppState]);
 
-  // 完成浏览回调函数
-  const handleFinishResource = useCallback(async(resourceType, duration) => {
+  // ===== 完成浏览回调函数 =====
+  const handleFinishResource = useCallback(async (resourceType, duration) => {
     try {
       const data = await api.finishResource(userId, resourceType, appState.topic, duration);
       mergeAppState({
@@ -164,12 +151,10 @@ const MainPage = ({ initialAppState, userId }) => {
     }
   }, [userId, appState.topic, mergeAppState]);
 
-  // 切换主题回调函数
+  // ===== 切换主题回调函数 =====
   const handlePathNodeClick = useCallback(async (newTopic) => {
-    // 1. 先乐观更新 topic（让界面立刻响应）
     setAppState(prev => ({ ...prev, topic: newTopic }));
 
-    // 2. 拉取该主题下的路径和资源
     setIsLoading(true);
     try {
       const pathData = await api.fetchPath(userId, newTopic);
@@ -210,7 +195,6 @@ const MainPage = ({ initialAppState, userId }) => {
 
       {/* 右侧主内容 */}
       <main className="main-content">
-        {/* 顶部主 TabBar */}
         <div className="main-tab-bar">
           <button
             className={activeMainTab === 'path' ? 'active' : ''}
@@ -226,11 +210,9 @@ const MainPage = ({ initialAppState, userId }) => {
           </button>
         </div>
 
-        {/* 主 Tab 内容 */}
         <div className="main-tab-content">
           {activeMainTab === 'path' && (
             <div className="path-container">
-              {/* 路径区子 TabBar */}
               <div className="sub-tab-bar">
                 <button
                   className={activePathTab === 'learningPath' ? 'active' : ''}
@@ -245,7 +227,6 @@ const MainPage = ({ initialAppState, userId }) => {
                   知识图谱
                 </button>
               </div>
-              {/* 子 Tab 内容 */}
               <div className="sub-tab-content">
                 {activePathTab === 'learningPath' && (
                   <PathPanel

@@ -1,25 +1,52 @@
 {
   "learning_path": [
-    "云计算",
+    "虚拟化的基本概念",
+    "虚拟化的发展",
+    "虚拟化的实现方法",
+    "I/O虚拟化",
     "虚拟机监视器（VMM）",
-    "CPU虚拟化与内存虚拟化",
-    "IA-32/x86-64架构的内存管理",
-    "分页存储管理方式",
-    "页面置换算法综合计算",
-    "实时调度",
-    "多处理机进程分配与调度"
+    "前趋图",
+    "程序顺序执行与并发执行",
+    "进程的定义与特征"
   ],
   "current_step": "虚拟化的基本概念",
   "next_step": "虚拟化的基本概念",
   "path_nodes": [
     {
-      "id": "os_virt_08",
-      "name": "云计算",
+      "id": "os_virt_01",
+      "name": "虚拟化的基本概念",
+      "difficulty": "easy",
+      "status": "pending",
+      "understanding": 0.45,
+      "x": 235.36928861206633,
+      "y": 466.99383051874116
+    },
+    {
+      "id": "os_virt_02",
+      "name": "虚拟化的发展",
+      "difficulty": "easy",
+      "status": "pending",
+      "understanding": 0,
+      "x": -162.98561686547106,
+      "y": 240.894765767848
+    },
+    {
+      "id": "os_virt_03",
+      "name": "虚拟化的实现方法",
+      "difficulty": "hard",
+      "status": "pending",
+      "understanding": 0,
+      "x": 310.6796784431791,
+      "y": -95.24892758275661
+    },
+    {
+      "id": "os_virt_06",
+      "name": "I/O虚拟化",
       "difficulty": "medium",
       "status": "pending",
       "understanding": 0,
-      "x": -180.37197079084928,
-      "y": 208.77320881097233
+      "x": 57.60297703315726,
+      "y": -55.551530187993336
     },
     {
       "id": "os_virt_04",
@@ -31,58 +58,31 @@
       "y": -81.31795758163264
     },
     {
-      "id": "os_virt_05",
-      "name": "CPU虚拟化与内存虚拟化",
-      "difficulty": "hard",
+      "id": "os_process_01",
+      "name": "前趋图",
+      "difficulty": "easy",
       "status": "pending",
       "understanding": 0,
-      "x": 5.239701532303457,
-      "y": 459.03526499859674
+      "x": 231.65489081394543,
+      "y": -92.14256633430381
     },
     {
-      "id": "os_memory_10",
-      "name": "IA-32/x86-64架构的内存管理",
-      "difficulty": "hard",
+      "id": "os_process_02",
+      "name": "程序顺序执行与并发执行",
+      "difficulty": "easy",
       "status": "pending",
       "understanding": 0,
-      "x": 743.3162164114017,
-      "y": 47.83016584943559
+      "x": -83.62202840636206,
+      "y": 49.74731598695408
     },
     {
-      "id": "os_memory_05",
-      "name": "分页存储管理方式",
-      "difficulty": "medium",
+      "id": "os_process_03",
+      "name": "进程的定义与特征",
+      "difficulty": "easy",
       "status": "pending",
-      "understanding": 0.0,
-      "x": 762.1448262740464,
-      "y": 335.52145588126575
-    },
-    {
-      "id": "os_virtual_09",
-      "name": "页面置换算法综合计算",
-      "difficulty": "hard",
-      "status": "pending",
-      "understanding": 0,
-      "x": 514.9771453200352,
-      "y": -55.36799509895326
-    },
-    {
-      "id": "os_schedule_07",
-      "name": "实时调度",
-      "difficulty": "hard",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 621.4222422043551,
-      "y": -22.776263914393923
-    },
-    {
-      "id": "os_mp_07",
-      "name": "多处理机进程分配与调度",
-      "difficulty": "hard",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": -90.03923951817654,
-      "y": 21.947066157396733
+      "understanding": 0.45,
+      "x": 633.8100677359682,
+      "y": 395.05220339143517
     }
   ],
   "edges": [
@@ -631,5 +631,5 @@
       "target": "os_disk_13"
     }
   ],
-  "timestamp": "2026-07-14T14:59:35.277302"
+  "timestamp": "2026-07-14T15:57:45.314009"
 }
