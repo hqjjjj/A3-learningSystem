@@ -1,5 +1,6 @@
 {
   "learning_path": [
+<<<<<<< HEAD
     "操作系统的目标",
     "进程的定义与特征",
     "进程的基本状态与转换",
@@ -26,11 +27,20 @@
     "Clock页面置换算法",
     "死锁的基本概念与必要条件",
     "死锁的预防与避免"
+=======
+    "虚拟化的基本概念",
+    "虚拟化的实现方法",
+    "虚拟机监视器（VMM）",
+    "CPU虚拟化与内存虚拟化",
+    "多核虚拟化与虚拟机迁移",
+    "云计算"
+>>>>>>> 前端
   ],
   "current_step": "云计算",
   "next_step": "多处理机系统的引入与类型",
   "path_nodes": [
     {
+<<<<<<< HEAD
       "id": "os_intro_01",
       "name": "操作系统的目标",
       "difficulty": "easy",
@@ -263,6 +273,60 @@
       "understanding": 0.0,
       "x": 513.3869772880537,
       "y": 473.92601083915554
+=======
+      "id": "os_virt_01",
+      "name": "虚拟化的基本概念",
+      "difficulty": "easy",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 235.36928861206633,
+      "y": 466.99383051874116
+    },
+    {
+      "id": "os_virt_03",
+      "name": "虚拟化的实现方法",
+      "difficulty": "hard",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 310.6796784431791,
+      "y": -95.24892758275661
+    },
+    {
+      "id": "os_virt_04",
+      "name": "虚拟机监视器（VMM）",
+      "difficulty": "medium",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 366.25321262210116,
+      "y": -81.31795758163264
+    },
+    {
+      "id": "os_virt_05",
+      "name": "CPU虚拟化与内存虚拟化",
+      "difficulty": "hard",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 5.239701532303457,
+      "y": 459.03526499859674
+    },
+    {
+      "id": "os_virt_07",
+      "name": "多核虚拟化与虚拟机迁移",
+      "difficulty": "medium",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 721.8965060068772,
+      "y": 101.61116009258777
+    },
+    {
+      "id": "os_virt_08",
+      "name": "云计算",
+      "difficulty": "medium",
+      "status": "pending",
+      "understanding": 0.46,
+      "x": -180.37197079084928,
+      "y": 208.77320881097233
+>>>>>>> 前端
     }
   ],
   "edges": [
@@ -811,5 +875,9 @@
       "target": "os_disk_13"
     }
   ],
+<<<<<<< HEAD
   "timestamp": "2026-07-13T14:59:41.677170"
+=======
+  "timestamp": "2026-07-14T12:37:05.596637"
+>>>>>>> 前端
 }

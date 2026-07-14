@@ -55,15 +55,10 @@ const LoginPage = ({ onLogin }) => {
           textAlign: 'center',
           marginBottom: '24px'
         }}>
-          <div style={{
-            fontSize: '48px',
-            marginBottom: '12px'
-          }}>
-            📚
-          </div>
+        
           <h1 style={{
             margin: 0,
-            fontSize: '24px',
+            fontSize: '28px',
             fontWeight: 600,
             color: '#1a1a2e'
           }}>
@@ -81,20 +76,12 @@ const LoginPage = ({ onLogin }) => {
         {/* 表单 */}
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '20px' }}>
-            <label style={{
-              display: 'block',
-              marginBottom: '8px',
-              fontSize: '14px',
-              fontWeight: 500,
-              color: '#374151'
-            }}>
-              用户ID
-            </label>
+           
             <input
               type="text"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              placeholder="例如: u001"
+              placeholder="请输入用户ID"
               style={{
                 width: '100%',
                 padding: '10px 14px',

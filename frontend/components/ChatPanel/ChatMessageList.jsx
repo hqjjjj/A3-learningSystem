@@ -9,10 +9,9 @@ const ChatMessageList = ({ chatHistory, isLoading, messagesEndRef }) => {
         padding: '60px 20px',
         color: '#9ca3af'
       }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>🤖</div>
-        <p style={{ margin: 0, fontSize: '16px' }}>您好！我是您的学习助手</p >
+        <p style={{ margin: 0, fontSize: '14px' }}>您好！我是您的朋友小咚</p >
         <p style={{ margin: '8px 0 0 0', fontSize: '13px' }}>
-          您可以问我关于操作系统内存管理的问题
+          您可以问我关于操作系统的问题
         </p >
       </div>
     );

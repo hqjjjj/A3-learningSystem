@@ -50,7 +50,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
         cursor: 'pointer'
       }}>
         <summary style={{ fontWeight: 500 }}>
-          📚 来源（{resource.knowledge_base_quote.length}个）
+          来源（{resource.knowledge_base_quote.length}个）
         </summary>
         <ul style={{ margin: '8px 0 0 0', paddingLeft: '16px' }}>
           {resource.knowledge_base_quote.map((source, idx) => (
@@ -81,7 +81,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
               fontSize: '13px',
               fontWeight: 500
             }}>
-              🎬 {resource.title}
+              {resource.title}
             </div>
             <iframe
               srcDoc={resource.html_content}

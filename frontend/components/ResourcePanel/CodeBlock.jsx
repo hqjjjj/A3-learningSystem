@@ -12,22 +12,23 @@ const CodeBlock = ({ code, language = 'javascript' }) => {
 
   return (
     <div style={{
-      background: '#1f2937',
+      background: '#ffffff',
+      border: '1px solid #E2E8F0',
       borderRadius: '8px',
       overflow: 'hidden'
     }}>
       <div style={{
         padding: '8px 12px',
-        background: '#374151',
+        background: '#f8fafc',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <span style={{ fontSize: '12px', color: '#9ca3af' }}>{language}</span>
+        <span style={{ fontSize: '12px', color: '#475569' }}>{language}</span>
         <button
           style={{
             padding: '4px 8px',
-            background: '#4b5563',
+            background: '#3b82f6',
             color: 'white',
             border: 'none',
             borderRadius: '4px',
@@ -44,7 +45,7 @@ const CodeBlock = ({ code, language = 'javascript' }) => {
         margin: 0,
         overflow: 'auto',
         fontSize: '12px',
-        color: '#e5e7eb'
+        color: '#1E293B'
       }}>
         <code>{code}</code>
       </pre>

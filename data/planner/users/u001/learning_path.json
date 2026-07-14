@@ -1,19 +1,37 @@
 {
   "learning_path": [
+    "进程的定义与特征",
+    "进程同步的基本概念",
     "信号量机制",
     "多处理机进程同步——自旋锁",
     "RCU锁与同步算法",
-    "多处理机进程分配与调度",
-    "成组调度与自调度",
-    "死锁的预防与避免",
-    "索引组织方式",
-    "外存组织方式",
-    "页面置换算法综合计算",
-    "磁盘调度算法综合"
+    "分页存储管理方式",
+    "地址变换机构与快表",
+    "虚拟存储器的基本概念",
+    "请求分页存储管理方式",
+    "最近最久未使用页面置换算法（LRU）"
   ],
   "current_step": "云计算",
   "next_step": "多处理机系统的引入与类型",
   "path_nodes": [
+    {
+      "id": "os_process_03",
+      "name": "进程的定义与特征",
+      "difficulty": "easy",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 633.8100677359682,
+      "y": 395.05220339143517
+    },
+    {
+      "id": "os_sync_01",
+      "name": "进程同步的基本概念",
+      "difficulty": "easy",
+      "status": "pending",
+      "understanding": 0.0,
+      "x": 119.32364378832895,
+      "y": -71.46266743968289
+    },
     {
       "id": "os_sync_04",
       "name": "信号量机制",
@@ -42,67 +60,49 @@
       "y": 6.823961616658522
     },
     {
-      "id": "os_mp_07",
-      "name": "多处理机进程分配与调度",
-      "difficulty": "hard",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": -90.03923951817654,
-      "y": 21.947066157396733
-    },
-    {
-      "id": "os_mp_08",
-      "name": "成组调度与自调度",
+      "id": "os_memory_05",
+      "name": "分页存储管理方式",
       "difficulty": "medium",
       "status": "pending",
       "understanding": 0.0,
-      "x": 158.9542741113355,
-      "y": -57.48800900623968
+      "x": 762.1448262740464,
+      "y": 335.52145588126575
     },
     {
-      "id": "os_schedule_10",
-      "name": "死锁的预防与避免",
-      "difficulty": "hard",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 513.3869772880537,
-      "y": 473.92601083915554
-    },
-    {
-      "id": "os_disk_03",
-      "name": "索引组织方式",
+      "id": "os_memory_06",
+      "name": "地址变换机构与快表",
       "difficulty": "medium",
       "status": "pending",
       "understanding": 0.0,
-      "x": -49.21975240287122,
-      "y": 399.58746196639424
+      "x": 612.6345300560321,
+      "y": 173.06338017012678
     },
     {
-      "id": "os_file_08",
-      "name": "外存组织方式",
-      "difficulty": "hard",
+      "id": "os_virtual_01",
+      "name": "虚拟存储器的基本概念",
+      "difficulty": "easy",
       "status": "pending",
       "understanding": 0.0,
-      "x": 510.801681446747,
-      "y": 425.63776037258503
+      "x": 81.51512912530228,
+      "y": 452.8167229187153
     },
     {
-      "id": "os_virtual_09",
-      "name": "页面置换算法综合计算",
-      "difficulty": "hard",
+      "id": "os_virtual_02",
+      "name": "请求分页存储管理方式",
+      "difficulty": "medium",
       "status": "pending",
       "understanding": 0.0,
-      "x": 514.9771453200352,
-      "y": -55.36799509895326
+      "x": 189.26979668941257,
+      "y": 372.0547456488057
     },
     {
-      "id": "os_disk_13",
-      "name": "磁盘调度算法综合",
-      "difficulty": "hard",
+      "id": "os_virtual_05",
+      "name": "最近最久未使用页面置换算法（LRU）",
+      "difficulty": "medium",
       "status": "pending",
       "understanding": 0.0,
-      "x": -159.27158517286324,
-      "y": 269.9489693156336
+      "x": 38.249641427694996,
+      "y": -38.46017058840499
     }
   ],
   "edges": [
@@ -651,5 +651,5 @@
       "target": "os_disk_13"
     }
   ],
-  "timestamp": "2026-07-12T23:16:58.348578"
+  "timestamp": "2026-07-14T11:50:12.983016"
 }
