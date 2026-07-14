@@ -385,13 +385,13 @@
       "y": -78.71322256604714
     },
     {
-      "id": "os_schedule_10",
-      "name": "死锁的预防与避免",
-      "difficulty": "hard",
+      "id": "os_virtual_01",
+      "name": "虚拟存储器的基本概念",
+      "difficulty": "easy",
       "status": "pending",
       "understanding": 0.0,
-      "x": 513.3869772880537,
-      "y": 473.92601083915554
+      "x": 81.51512912530228,
+      "y": 452.8167229187153
     },
     {
       "id": "os_virt_02",
@@ -592,9 +592,9 @@
       "y": 33.72895600751707
     },
     {
-      "id": "os_file_08",
-      "name": "外存组织方式",
-      "difficulty": "hard",
+      "id": "os_virtual_05",
+      "name": "最近最久未使用页面置换算法（LRU）",
+      "difficulty": "medium",
       "status": "pending",
       "understanding": 0.0,
       "x": 510.801681446747,

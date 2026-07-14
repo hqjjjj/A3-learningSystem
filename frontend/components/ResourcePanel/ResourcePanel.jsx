@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ResourceCard from './ResourceCard';
 import ResourceGeneratorButton from './ResourceGeneratorButton';
+import ResourceGenerationProgress from './ResourceGenerationProgress';
+
 
 const ResourcePanel = ({
   recommendedResources = [],
@@ -12,6 +14,37 @@ const ResourcePanel = ({
   userId
 }) => {
   const [activeTab, setActiveTab] = useState('recommended');
+
+  const [showProgress, setShowProgress] = useState(false);
+  const [generatingType, setGeneratingType] = useState('explanation');
+
+  // 确保是数组
+  const generatedList = Array.isArray(generatedResources) 
+    ? generatedResources 
+    : (generatedResources ? [generatedResources] : []);
+
+  // 处理生成资源
+  const handleGenerate = async (resourceType) => {
+    setGeneratingType(resourceType);
+    setShowProgress(true);
+    
+    try {
+      await onGenerateResource(resourceType);
+    } catch (error) {
+      console.error('生成失败:', error);
+      setShowProgress(false);
+    }
+  };
+
+  // 进度条完成回调
+  const handleProgressComplete = () => {
+    setShowProgress(false);
+  };
+
+  // 取消生成
+  const handleProgressCancel = () => {
+    setShowProgress(false);
+  };
 
   const isEmptyGenerated = !generatedResources || 
                           (typeof generatedResources === 'object' && 
@@ -34,7 +67,7 @@ const ResourcePanel = ({
         borderBottom: '1px solid #e5e7eb',
         flexShrink: 0
       }}>
-        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>📚 学习资源</h3>
+        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>学习资源</h3>
         <p style={{ margin: '8px 0 0 0', fontSize: '13px', color: '#6b7280' }}>
           根据您的学习情况推荐
         </p>
@@ -144,7 +177,7 @@ const ResourcePanel = ({
                 padding: '60px 20px',
                 color: '#9ca3af'
               }}>
-                <div style={{ fontSize: '48px', marginBottom: '12px' }}>🔧</div>
+               
                 <p style={{ margin: 0, fontSize: '14px' }}>暂无生成的资源</p>
                 <p style={{ margin: '8px 0 0 0', fontSize: '12px' }}>
                   点击上方按钮生成定制资源
@@ -161,6 +194,13 @@ const ResourcePanel = ({
           </>
         )}
       </div>
+      {/* 生成进度条 */}
+      <ResourceGenerationProgress
+        isVisible={showProgress}
+        onComplete={handleProgressComplete}
+        onCancel={handleProgressCancel}
+        resourceType={generatingType}
+      />
     </div>
   );
 };

@@ -1,12 +1,11 @@
 
-import React, { useState, useEffect } from 'react';  // ← 新增 useEffect
+import React, { useState, useEffect } from 'react';
 
-const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增 resetTrigger 参数
+const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [startTime] = useState(Date.now());
 
-    // ← 新增：监听重置触发器
   useEffect(() => {
     setAnswer('');
     setSubmitted(false);
@@ -14,7 +13,7 @@ const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增
 
   const handleSubmit = () => {
     if (!answer.trim()) return;
-    
+
     const duration = Math.floor((Date.now() - startTime) / 1000);
     
     setSubmitted(true);
@@ -22,8 +21,10 @@ const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增
   };
 
   return (
-    <div>
-      <h4 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>{question.text}</h4>
+    <div style={{ border: '1px solid #E2E8F0', borderRadius: 10, padding: 20 }}>
+      <h4 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 600, color: '#1E293B' }}>
+        {question.text}
+      </h4>
       <textarea
         style={{
           width: '100%',
@@ -34,7 +35,8 @@ const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增
           fontFamily: 'inherit',
           resize: 'vertical',
           marginBottom: '16px',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          background: '#fff'
         }}
         value={answer}
         onChange={(e) => setAnswer(e.target.value)}
@@ -58,8 +60,6 @@ const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {  // ← 新增
           提交答案
         </button>
       )}
-   
-      {/* 提交后显示参考答案 */}
       {submitted && question.correctAnswer && (
         <div style={{
           marginTop: '16px',
