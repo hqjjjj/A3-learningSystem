@@ -7,6 +7,7 @@ from backend.agents.agent_source.exercise_agent import agentexercise
 from backend.agents.agent_source.kn_agent import agentkn
 from data.knowledge.KnowledgeBaseManager import KnowledgeBaseManager
 from backend.agents.agent_source.lmm import SparkLLM
+from backend.agents.agent_source.security_utils import filter_sensitive_fields
 import json
 import os, json, hashlib
 from pathlib import Path
@@ -218,7 +219,7 @@ def generate_resources(input_data: dict) -> dict:
     final_resources = []
     missing_types = []
 
-    # 1. 检查缓存（对每种资源类型分别查询）
+    #检查缓存
     for res_type in requested_types:
         cached = get_cached_resource(user_id, topic_id, res_type, profile_hash)
         if cached is not None:
@@ -226,38 +227,38 @@ def generate_resources(input_data: dict) -> dict:
         else:
             missing_types.append(res_type)
 
-    # 2. 如果全部命中，直接返回
+    # 如果全部命中，过滤后返回
     if not missing_types:
-        return {"resources": final_resources}
+        return {"resources": [filter_sensitive_fields(r) for r in final_resources]}
 
-    # 3. 有缺失类型 → 仅生成缺失的部分
+    #有缺失类型 ：生成缺失部分
     new_input = input_data.copy()
     new_input["resource_type"] = missing_types
     agent = agentCore()
-    result = agent.run(new_input)  
+    result = agent.run(new_input)
 
-    # 4. 存储新生成的资源并合并
+    #存储并合并（存储前和返回前都过滤）
     for res in result.get("resources", []):
-        res_type = res.get("subtype")
+        safe_res = filter_sensitive_fields(res)
+        res_type = safe_res.get("subtype")
         if res_type:
-            save_resource(user_id, topic_id, res_type, profile_hash, res)
-        final_resources.append(res)
+            save_resource(user_id, topic_id, res_type, profile_hash, safe_res)
+        final_resources.append(safe_res)
 
     return {"resources": final_resources}
 
 
-
-# if __name__ == "__main__":
-#     # 仅用于本地手动测试，不会影响正式导入
-#     test_input = {
-#         "user_id": "u001", 
-#         "topic_id": "os_memory_06",
-#         "module": "存储器管理",
-#         "difficulty": "medium",
-#         "resource_type": ["animation", "code_example", "exercise", "mindmap","explanation","materials"]
-#     }
-#     result = generate_resources(test_input)
-#     print(json.dumps(result, ensure_ascii=False, indent=2))
+if __name__ == "__main__":
+    # 仅用于本地手动测试，不会影响正式导入
+    test_input = {
+        "user_id": "u001", 
+        "topic_id": "os_memory_06",
+        "module": "存储器管理",
+        "difficulty": "medium",
+        "resource_type": ["animation", "code_example", "exercise", "mindmap","explanation","materials"]
+    }
+    result = generate_resources(test_input)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
 # 调用提示
 # data.resources.forEach(res => {
 #   switch(res.type) {
