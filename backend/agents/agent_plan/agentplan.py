@@ -417,8 +417,19 @@ class PlannerAgent:
                 temperature=0.7,
                 max_tokens=2000
             )
+            # ✅ 打印完整响应对象，检查是否有错误字段
+            print(f"[LLM] 完整响应对象: {response}")
+            if not response.choices:
+                print("[LLM] 响应中没有 choices")
+                return None
+
             result_text = response.choices[0].message.content
             print(f"[LLM] 响应: {result_text[:200]}")
+
+            if not result_text or not result_text.strip():
+                print("[LLM] 响应内容为空")
+                return None
+
 
             import re
             json_match = re.search(r'\{[\s\S]*\}', result_text)
@@ -678,7 +689,7 @@ def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
     print(f"✅ 用户 {user_id} 学习路径已更新: {user_file}")
     
     # 返回（保持原有格式不变）
-    return planner, user_profile, next_topic
+    return planner, user_profile, next_topic,learning_path
 
 
 # ==================== 监控启动函数（新增） ====================

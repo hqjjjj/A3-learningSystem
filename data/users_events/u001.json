@@ -2708,5 +2708,45 @@
     "correct_rate": null,
     "duration": null,
     "message": "我已经学完了进程的定义与特征，接下来我想学虚拟化的基本概念"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-14T19:50:54.376748",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 91,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-14T20:06:25.313157",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 96,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-14T20:08:08.594129",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-14T20:10:34.085658",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 137,
+    "message": null
   }
 ]

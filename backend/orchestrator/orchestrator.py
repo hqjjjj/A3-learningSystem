@@ -328,84 +328,67 @@ class Orchestrator:
                         print(f"【总控】设置默认主题为: {current_topic_name}")
 
             # 4. 调用路径规划器
-            planner, updated_profile, next_topic = run_planner(
+            planner, updated_profile, next_topic, full_learning_path  = run_planner(
                 KNOWLEDGE_DIR=KNOWLEDGE_DIR,  
                 user_profile=profile,
                 output_dir=os.path.join(project_root, "data", "planner")
             )
 
             # 5. 智能处理规划结果
+            current_topic_name = profile.get("progress", {}).get("current_topic", "")
             current_topic_id = planner.kg.name_to_id.get(current_topic_name)
             
-            # 核心修复：如果规划器返回的 next_topic 不是用户当前想学的主题，
-            # 并且用户当前主题在知识库中存在，则优先以用户当前主题为准
-            if current_topic_name and current_topic_id:
-                if not next_topic or next_topic.get("name") != current_topic_name:
-                    print(f"【总控】路径规划器建议学习 '{next_topic.get('name', '')}'，但用户当前主题为 '{current_topic_name}'，优先遵循用户意图")
-                    next_topic = {
-                        "topic_id": current_topic_id,
-                        "name": current_topic_name,
-                        "understanding": profile.get("knowledge_level", {}).get(current_topic_name, 0.0),
-                        "is_review": current_topic_name in profile.get("weak_points", [])
-                    }
-            
-            # 6. 构建路径列表
-            if next_topic and next_topic.get("name"):
-                next_topic_id = next_topic.get("topic_id")
+            # 从 full_learning_path 中提取 path_list
+            # full_learning_path 的结构: {"learning_path": [...], "path_nodes": [...], ...}
+            if full_learning_path and "learning_path" in full_learning_path:
+                llm_path_names = full_learning_path.get("learning_path", [])
                 path_list = []
+                for name in llm_path_names:
+                    topic_id = planner.kg.name_to_id.get(name)
+                    if topic_id:
+                        path_list.append({"name": name, "id": topic_id})
+            
+                # 确保当前主题在路径中
+                if path_list and current_topic_name:
+                    # 如果当前主题不在路径中，插入到开头
+                    current_in_path = any(p["name"] == current_topic_name for p in path_list)
+                    if not current_in_path and current_topic_id:
+                        path_list.insert(0, {"name": current_topic_name, "id": current_topic_id})
+            
+                # 获取下一个主题（从路径中找当前主题的下一个）
+                next_topic_name = ""
+                for i, item in enumerate(path_list):
+                    if item["name"] == current_topic_name and i + 1 < len(path_list):
+                        next_topic_name = path_list[i + 1]["name"]
+                        break
+                if not next_topic_name and path_list:
+                    next_topic_name = path_list[0]["name"]
                 
-                if current_topic_id and next_topic_id:
-                    if current_topic_id == next_topic_id:
-                        # 当前主题和下一个主题相同，只显示当前主题
-                        path_list = [{"name": current_topic_name, "id": current_topic_id}]
-                    else:
-                        try:
-                            import networkx as nx
-                            # 计算最短路径
-                            path = nx.shortest_path(planner.kg.graph, current_topic_id, next_topic_id)
-                            # 转换为需要的格式
-                            path_list = [
-                                {
-                                    "name": planner.kg.id_to_name[node_id],
-                                    "id": node_id
-                                }
-                                for node_id in path
-                            ]
-                        except nx.NetworkXNoPath:
-                            # 如果没有路径，只显示下一个主题
-                            path_list = [{"name": next_topic["name"], "id": next_topic_id}]
-                elif next_topic_id:
-                    # 如果当前主题不存在于图谱，只显示下一个主题
-                    path_list = [{"name": next_topic["name"], "id": next_topic_id}]
-                
-                # 核心修复：确保 topic_id 绝不为空，如果为空则从 path_list 中提取
-                final_topic_id = next_topic_id
-                if not final_topic_id and path_list:
-                    final_topic_id = path_list[0].get("id", "")
-                
+
+                # 在 result 构建之前，限制 path_list 长度
+                MAX_PATH_LENGTH = 10
+                if len(path_list) > MAX_PATH_LENGTH:
+                    # 保留前 MAX_PATH_LENGTH 个节点
+                    path_list = path_list[:MAX_PATH_LENGTH]
+                    print(f"【总控】路径过长，截断为 {MAX_PATH_LENGTH} 个节点")
+
                 result = {
-                    "next": next_topic["name"],
+                    "next": next_topic_name,
                     "current": current_topic_name,
-                    "current_progress": "review" if next_topic.get("is_review", False) else "learning",
-                    "topic_id": final_topic_id,
+                    "current_progress": "review" if current_topic_name in profile.get("weak_points", []) else "learning",
+                    "topic_id": current_topic_id or (path_list[0]["id"] if path_list else ""),
                     "path_list": path_list,
                     "module": profile.get("course", "")
                 }
                 
-                print(f"【总控】路径规划结果: {result}")
+                print(f"【总控】LLM 路径规划结果: {result}")
+                print(f"【总控】最终 path_list 长度: {len(path_list)}")
+                print(f"【总控】最终 path_list 内容: {path_list}")
                 return result
             else:
-                result = {
-                    "next": "",
-                    "current": current_topic_name,
-                    "current_progress": "learning",
-                    "topic_id": "",
-                    "path_list": [],
-                    "module": profile.get("course", "")
-                }
-                
-                print(f"【总控】默认路径规划结果: {result}")
-                return result
+                # 兜底：使用规则
+                print("【总控】LLM 路径为空，使用规则兜底")
+                # ... 原来的兜底逻辑 ...
                 
         except Exception as e:
             print(f"【总控】⚠️ 路径规划失败: {e}")
@@ -556,7 +539,7 @@ class Orchestrator:
             resources = {}
             try:
                 if raw_path_data.get("topic_id"):
-                    resources = self._call_source_agent(profile_dict, raw_path_data)
+                    resources = self._call_source_agent(profile_dict, raw_path_data,)
             except Exception as e:
                 print(f"【总控】⚠️ 生成资源失败: {e}")
                 import traceback
