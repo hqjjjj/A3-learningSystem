@@ -417,8 +417,19 @@ class PlannerAgent:
                 temperature=0.7,
                 max_tokens=2000
             )
+            # ✅ 打印完整响应对象，检查是否有错误字段
+            print(f"[LLM] 完整响应对象: {response}")
+            if not response.choices:
+                print("[LLM] 响应中没有 choices")
+                return None
+
             result_text = response.choices[0].message.content
             print(f"[LLM] 响应: {result_text[:200]}")
+
+            if not result_text or not result_text.strip():
+                print("[LLM] 响应内容为空")
+                return None
+
 
             import re
             json_match = re.search(r'\{[\s\S]*\}', result_text)
