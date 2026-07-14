@@ -26,7 +26,7 @@ KNOWLEDGE_DIR = os.path.join(project_root, "data", "knowledge")
 
 # 讯飞星火 API 配置
 IFLYTEK_APPID = "c878671b"
-IFLYTEK_API_KEY = "MCdXmPYbNgRCsEdxvFEX:RCGNRRQJmgCWjzyWyFJu"
+IFLYTEK_API_KEY = "DakrisXotjLWfGiORfpN:xTQNcYCprdxJnQEyCOdp"
 IFLYTEK_API_SECRET = "NTNiZjA0NGRlZmMyOWExY2Y1NGI2OWQw"
 
 # ==================== 知识图谱构建 ====================
@@ -161,7 +161,7 @@ class PlannerAgent:
             from openai import OpenAI
             self.llm = OpenAI(
                 api_key=IFLYTEK_API_KEY,
-                base_url="https://spark-api-open.xf-yun.com/x2/"
+                base_url="https://spark-api-open.xf-yun.com/agent/v1"
             )
             print("[LLM] 讯飞星火已初始化")
         except Exception as e:

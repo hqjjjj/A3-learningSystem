@@ -2688,5 +2688,25 @@
     "correct_rate": null,
     "duration": null,
     "message": "我现在要学习云计算，我想看题目和解析"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-14T15:01:18.259908",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想学进程的定义与特征"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-14T15:08:38.162485",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我已经学完了进程的定义与特征，接下来我想学虚拟化的基本概念"
   }
 ]

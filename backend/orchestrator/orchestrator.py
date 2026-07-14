@@ -91,7 +91,7 @@ class Orchestrator:
         return {
             "reply": reply,
             "profile": profile_dict, 
-            "learning_path": path_data.get("path_list", []),
+            "learning_path": path_data.get("learning_path", []),
             "recommended_resources": recommended,
             "topic": profile_dict.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
@@ -120,6 +120,23 @@ class Orchestrator:
             )
             self.profile_agent._save_profile_to_disk(profile_obj)
             self.profile_agent.profiles[user_id] = profile_obj
+        
+         # ✅ 新增：如果用户没有 current_topic，设置一个默认值
+        if profile_obj and not profile_obj.progress.current_topic:
+            print(f"【总控】用户没有当前主题，从知识库获取默认主题")
+            try:
+                sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'knowledge'))
+                from KnowledgeBaseManager import KnowledgeBaseManager
+                kb_manager = KnowledgeBaseManager()
+                if len(kb_manager.topics_index) > 0:
+                    first_id = list(kb_manager.topics_index.keys())[0]
+                    first_topic = kb_manager.get_topic_by_id(first_id)
+                    if first_topic:
+                        profile_obj.progress.current_topic = first_topic.get("name", "")
+                        self.profile_agent._save_profile_to_disk(profile_obj)
+                        print(f"【总控】设置默认主题为: {profile_obj.progress.current_topic}")
+            except Exception as e:
+                print(f"【总控】⚠️ 设置默认主题失败: {e}")
     
         if topic and profile_obj:
             print(f"【总控】设置用户 {user_id} 的当前主题为: {topic}")
@@ -180,7 +197,7 @@ class Orchestrator:
 
         return {
             "profile": profile,
-            "learning_path": path_data.get("path_list", []),
+            "learning_path": path_data.get("learning_path", []),
             "recommended_resources": recommended,
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
@@ -213,7 +230,7 @@ class Orchestrator:
 
         return {
             "profile": profile,
-            "learning_path": path_data.get("path_list", []),
+            "learning_path": path_data.get("learning_path", []),
             "recommended_resources": recommended,
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
@@ -309,70 +326,87 @@ class Orchestrator:
                         current_topic_name = first_topic.get("name", "")
                         profile["progress"]["current_topic"] = current_topic_name
                         print(f"【总控】设置默认主题为: {current_topic_name}")
-            
+
             # 4. 调用路径规划器
             planner, updated_profile, next_topic = run_planner(
                 KNOWLEDGE_DIR=KNOWLEDGE_DIR,  
                 user_profile=profile,
-                output_dir=os.path.join(project_root, "data", "planner")  # 使用正确的输出目录
+                output_dir=os.path.join(project_root, "data", "planner")
             )
 
-            # 5. 从输出文件中读取学习路径
-            user_id = profile.get("user_id", "unknown")
-            learning_path_file = os.path.join(
-                project_root, 
-                "data", 
-                "planner", 
-                "users", 
-                user_id, 
-                "learning_path.json"
-            )
-
-            if os.path.exists(learning_path_file):
-                with open(learning_path_file, "r", encoding="utf-8") as f:
-                    learning_path_data = json.load(f)
-
-                # 获取当前主题和下一个主题
-                current_step = learning_path_data.get("current_step", "")
-                next_step = learning_path_data.get("next_step", "")
-
-                # 获取完整的学习路径
-                learning_path = learning_path_data.get("learning_path", [])
-
-                # 转换为前端需要的格式
-                path_list = [
-                    {
-                        "name": topic,
-                        "id": planner.kg.name_to_id.get(topic)
-                    }
-                    for topic in learning_path
-               ]
+            # 5. 智能处理规划结果
+            current_topic_id = planner.kg.name_to_id.get(current_topic_name)
             
+            # 核心修复：如果规划器返回的 next_topic 不是用户当前想学的主题，
+            # 并且用户当前主题在知识库中存在，则优先以用户当前主题为准
+            if current_topic_name and current_topic_id:
+                if not next_topic or next_topic.get("name") != current_topic_name:
+                    print(f"【总控】路径规划器建议学习 '{next_topic.get('name', '')}'，但用户当前主题为 '{current_topic_name}'，优先遵循用户意图")
+                    next_topic = {
+                        "topic_id": current_topic_id,
+                        "name": current_topic_name,
+                        "understanding": profile.get("knowledge_level", {}).get(current_topic_name, 0.0),
+                        "is_review": current_topic_name in profile.get("weak_points", [])
+                    }
+            
+            # 6. 构建路径列表
+            if next_topic and next_topic.get("name"):
+                next_topic_id = next_topic.get("topic_id")
+                path_list = []
+                
+                if current_topic_id and next_topic_id:
+                    if current_topic_id == next_topic_id:
+                        # 当前主题和下一个主题相同，只显示当前主题
+                        path_list = [{"name": current_topic_name, "id": current_topic_id}]
+                    else:
+                        try:
+                            import networkx as nx
+                            # 计算最短路径
+                            path = nx.shortest_path(planner.kg.graph, current_topic_id, next_topic_id)
+                            # 转换为需要的格式
+                            path_list = [
+                                {
+                                    "name": planner.kg.id_to_name[node_id],
+                                    "id": node_id
+                                }
+                                for node_id in path
+                            ]
+                        except nx.NetworkXNoPath:
+                            # 如果没有路径，只显示下一个主题
+                            path_list = [{"name": next_topic["name"], "id": next_topic_id}]
+                elif next_topic_id:
+                    # 如果当前主题不存在于图谱，只显示下一个主题
+                    path_list = [{"name": next_topic["name"], "id": next_topic_id}]
+                
+                # 核心修复：确保 topic_id 绝不为空，如果为空则从 path_list 中提取
+                final_topic_id = next_topic_id
+                if not final_topic_id and path_list:
+                    final_topic_id = path_list[0].get("id", "")
+                
                 result = {
-                    "next": next_step,
-                    "current": current_step,
+                    "next": next_topic["name"],
+                    "current": current_topic_name,
                     "current_progress": "review" if next_topic.get("is_review", False) else "learning",
-                    "topic_id": next_topic.get("topic_id", ""),
+                    "topic_id": final_topic_id,
                     "path_list": path_list,
                     "module": profile.get("course", "")
                 }
-
+                
                 print(f"【总控】路径规划结果: {result}")
                 return result
             else:
-                # 如果输出文件不存在，使用默认值
                 result = {
-                    "next": next_topic.get("name", "") if next_topic else "",
+                    "next": "",
                     "current": current_topic_name,
-                    "current_progress": "review" if next_topic.get("is_review", False) else "learning",
-                    "topic_id": next_topic.get("topic_id", "") if next_topic else "",
+                    "current_progress": "learning",
+                    "topic_id": "",
                     "path_list": [],
                     "module": profile.get("course", "")
                 }
-
+                
                 print(f"【总控】默认路径规划结果: {result}")
                 return result
-
+                
         except Exception as e:
             print(f"【总控】⚠️ 路径规划失败: {e}")
             import traceback
@@ -531,7 +565,7 @@ class Orchestrator:
 
             return {
                 "profile": profile_dict,
-                "learning_path": path_data.get("path_list", []),
+                "learning_path": path_data.get("learning_path", []),
                 "recommended_resources": recommended,
                 "topic": profile_dict.get("progress", {}).get("current_topic", ""),
                 "current_progress": path_data.get("current_progress", "learning")
