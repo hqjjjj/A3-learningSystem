@@ -14,20 +14,19 @@ const ChoiceQuestion = ({ question, onSubmit, resetTrigger }) => {
 
   const handleSubmit = () => {
     if (selectedOption === null) return;
-    
     const duration = Math.floor((Date.now() - startTime) / 1000);
-    // ✅ 使用 answer 字段（新格式）
     const isCorrect = (selectedOption === (question.answer || question.correctAnswer));
     const correctRate = isCorrect ? 1.0 : 0.0;
-    
     setSubmitted(true);
     setShowAnswer(true);
     onSubmit(correctRate, duration);
   };
 
   return (
-    <div>
-      <h4 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>{question.text || question.question}</h4>
+    <div style={{ border: '1px solid #E2E8F0', borderRadius: 10, padding: 20 }}>
+      <h4 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 600, color: '#1E293B' }}>
+        {question.text || question.question}
+      </h4>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
         {question.options?.map((opt, idx) => {
           const correctAnswer = question.answer || question.correctAnswer;
@@ -52,6 +51,8 @@ const ChoiceQuestion = ({ question, onSubmit, resetTrigger }) => {
               cursor: submitted ? 'default' : 'pointer',
               padding: '8px 12px',
               borderRadius: '6px',
+              border: '1px solid #E2E8F0',
+              background: '#fff',
               ...optionStyle
             }}>
               <input
@@ -84,13 +85,13 @@ const ChoiceQuestion = ({ question, onSubmit, resetTrigger }) => {
           提交答案
         </button>
       )}
-      {/* ✅ 显示解析 */}
       {showAnswer && question.analysis && (
         <div style={{ 
           marginTop: '12px', 
           padding: '12px', 
-          background: '#f8f9fa', 
+          background: '#f8fafc', 
           borderRadius: '6px',
+          border: '1px solid #E2E8F0',
           borderLeft: '4px solid #3b82f6'
         }}>
           <p style={{ margin: 0, fontSize: '14px', color: '#333' }}>

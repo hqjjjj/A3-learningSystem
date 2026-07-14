@@ -4,10 +4,14 @@ const ResourceGeneratorButton = ({ onGenerate, isLoading, userId }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [selectedType, setSelectedType] = useState('exercise');
 
+ // 将 resourceTypes 改为：
   const resourceTypes = [
-    { value: 'exercise', label: '📝 生成习题' },
-    { value: 'code', label: '💻 生成代码示例' },
-    { value: 'explanation', label: '📖 生成讲解' }
+    { value: 'explanation', label: '📖 知识点讲解' },
+    { value: 'exercise', label: '✏️ 练习题' },
+    { value: 'code', label: '💻 代码示例' },
+    { value: 'mindmap', label: '🧠 思维导图' },
+    { value: 'materials', label: '📚 扩展材料' },
+    { value: 'animation', label: '🎬 动画演示' }
   ];
 
   const handleGenerate = () => {
@@ -21,7 +25,7 @@ const ResourceGeneratorButton = ({ onGenerate, isLoading, userId }) => {
         style={{
           width: '100%',
           padding: '12px 16px',
-          background: '#10b981',
+          background: '#82aaf3',
           color: 'white',
           border: 'none',
           borderRadius: '8px',
@@ -32,13 +36,13 @@ const ResourceGeneratorButton = ({ onGenerate, isLoading, userId }) => {
         onClick={() => setShowOptions(!showOptions)}
         disabled={isLoading}
       >
-        {isLoading ? '生成中...' : '✨ 生成更多资源'}
+        {isLoading ? '生成中...' : ' 生成更多资源'}
       </button>
 
       {showOptions && (
         <div style={{
           position: 'absolute',
-          bottom: '100%',
+          top: '100%',
           left: 0,
           right: 0,
           background: 'white',

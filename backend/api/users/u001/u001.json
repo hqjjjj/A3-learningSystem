@@ -1,0 +1,656 @@
+{
+  "user_id": "u001",
+  "current_topic": {
+    "id": "os_virt_08",
+    "name": "云计算",
+    "understanding": 0.46,
+    "is_review": true
+  },
+  "teaching_output": {
+    "learning_style": "textual",
+    "weak_points": [
+      "多处理机死锁",
+      "云计算",
+      "进程控制原语",
+      "分段存储管理方式"
+    ],
+    "cognitive_level": {
+      "level": "beginner",
+      "understanding_avg": 0.01
+    },
+    "error_patterns": [],
+    "preference": {
+      "resource_type": [
+        "code",
+        "exercise",
+        "explanation",
+        "code_example",
+        "mindmap"
+      ],
+      "difficulty": "medium"
+    },
+    "learning_pace": "normal",
+    "current_topic": {
+      "id": "os_virt_08",
+      "name": "云计算",
+      "understanding": 0.46,
+      "is_review": true
+    }
+  },
+  "learning_path": {
+    "learning_path": [
+      "虚拟化的基本概念",
+      "虚拟化的实现方法",
+      "虚拟机监视器（VMM）",
+      "CPU虚拟化与内存虚拟化",
+      "多核虚拟化与虚拟机迁移",
+      "云计算"
+    ],
+    "current_step": "云计算",
+    "next_step": "多处理机系统的引入与类型",
+    "path_nodes": [
+      {
+        "id": "os_virt_01",
+        "name": "虚拟化的基本概念",
+        "difficulty": "easy",
+        "status": "pending",
+        "understanding": 0.0,
+        "x": 235.36928861206633,
+        "y": 466.99383051874116
+      },
+      {
+        "id": "os_virt_03",
+        "name": "虚拟化的实现方法",
+        "difficulty": "hard",
+        "status": "pending",
+        "understanding": 0.0,
+        "x": 310.6796784431791,
+        "y": -95.24892758275661
+      },
+      {
+        "id": "os_virt_04",
+        "name": "虚拟机监视器（VMM）",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0.0,
+        "x": 366.25321262210116,
+        "y": -81.31795758163264
+      },
+      {
+        "id": "os_virt_05",
+        "name": "CPU虚拟化与内存虚拟化",
+        "difficulty": "hard",
+        "status": "pending",
+        "understanding": 0.0,
+        "x": 5.239701532303457,
+        "y": 459.03526499859674
+      },
+      {
+        "id": "os_virt_07",
+        "name": "多核虚拟化与虚拟机迁移",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0.0,
+        "x": 721.8965060068772,
+        "y": 101.61116009258777
+      },
+      {
+        "id": "os_virt_08",
+        "name": "云计算",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0.46,
+        "x": -180.37197079084928,
+        "y": 208.77320881097233
+      }
+    ],
+    "edges": [
+      {
+        "source": "os_mp_01",
+        "target": "os_mp_02"
+      },
+      {
+        "source": "os_mp_02",
+        "target": "os_mp_03"
+      },
+      {
+        "source": "os_mp_01",
+        "target": "os_mp_04"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_mp_05"
+      },
+      {
+        "source": "os_mp_05",
+        "target": "os_mp_06"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_mp_07"
+      },
+      {
+        "source": "os_mp_07",
+        "target": "os_mp_08"
+      },
+      {
+        "source": "os_schedule_09",
+        "target": "os_mp_09"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_02"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_03"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_04"
+      },
+      {
+        "source": "os_virt_03",
+        "target": "os_virt_04"
+      },
+      {
+        "source": "os_virt_03",
+        "target": "os_virt_05"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_virt_05"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_06"
+      },
+      {
+        "source": "os_virt_04",
+        "target": "os_virt_07"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_08"
+      },
+      {
+        "source": "os_virt_04",
+        "target": "os_virt_09"
+      },
+      {
+        "source": "os_security_02",
+        "target": "os_security_03"
+      },
+      {
+        "source": "os_security_03",
+        "target": "os_security_04"
+      },
+      {
+        "source": "os_security_06",
+        "target": "os_security_07"
+      },
+      {
+        "source": "os_security_07",
+        "target": "os_security_08"
+      },
+      {
+        "source": "os_security_07",
+        "target": "os_security_09"
+      },
+      {
+        "source": "os_security_08",
+        "target": "os_security_09"
+      },
+      {
+        "source": "os_security_01",
+        "target": "os_security_10"
+      },
+      {
+        "source": "os_security_01",
+        "target": "os_security_11"
+      },
+      {
+        "source": "os_security_10",
+        "target": "os_security_11"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_02"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_03"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_04"
+      },
+      {
+        "source": "os_intro_03",
+        "target": "os_intro_04"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_05"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_06"
+      },
+      {
+        "source": "os_intro_04",
+        "target": "os_intro_06"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_07"
+      },
+      {
+        "source": "os_intro_05",
+        "target": "os_intro_08"
+      },
+      {
+        "source": "os_process_01",
+        "target": "os_process_02"
+      },
+      {
+        "source": "os_process_02",
+        "target": "os_process_03"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_process_04"
+      },
+      {
+        "source": "os_process_04",
+        "target": "os_process_05"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_process_06"
+      },
+      {
+        "source": "os_process_04",
+        "target": "os_process_06"
+      },
+      {
+        "source": "os_process_04",
+        "target": "os_process_07"
+      },
+      {
+        "source": "os_process_05",
+        "target": "os_process_07"
+      },
+      {
+        "source": "os_process_06",
+        "target": "os_process_07"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_process_08"
+      },
+      {
+        "source": "os_process_08",
+        "target": "os_process_09"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_process_10"
+      },
+      {
+        "source": "os_process_10",
+        "target": "os_process_11"
+      },
+      {
+        "source": "os_process_11",
+        "target": "os_process_12"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_02"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_03"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_04"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_05"
+      },
+      {
+        "source": "os_schedule_04",
+        "target": "os_schedule_06"
+      },
+      {
+        "source": "os_schedule_05",
+        "target": "os_schedule_06"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_07"
+      },
+      {
+        "source": "os_schedule_04",
+        "target": "os_schedule_07"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_08"
+      },
+      {
+        "source": "os_schedule_04",
+        "target": "os_schedule_08"
+      },
+      {
+        "source": "os_schedule_09",
+        "target": "os_schedule_10"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_sync_01"
+      },
+      {
+        "source": "os_sync_01",
+        "target": "os_sync_02"
+      },
+      {
+        "source": "os_sync_02",
+        "target": "os_sync_03"
+      },
+      {
+        "source": "os_sync_01",
+        "target": "os_sync_04"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_05"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_06"
+      },
+      {
+        "source": "os_sync_05",
+        "target": "os_sync_06"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_07"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_08"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_09"
+      },
+      {
+        "source": "os_memory_01",
+        "target": "os_memory_03"
+      },
+      {
+        "source": "os_memory_02",
+        "target": "os_memory_04"
+      },
+      {
+        "source": "os_memory_02",
+        "target": "os_memory_05"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_06"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_07"
+      },
+      {
+        "source": "os_memory_06",
+        "target": "os_memory_07"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_08"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_09"
+      },
+      {
+        "source": "os_memory_08",
+        "target": "os_memory_09"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_10"
+      },
+      {
+        "source": "os_memory_08",
+        "target": "os_memory_10"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_11"
+      },
+      {
+        "source": "os_memory_01",
+        "target": "os_virtual_01"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_virtual_02"
+      },
+      {
+        "source": "os_virtual_01",
+        "target": "os_virtual_02"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_03"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_04"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_05"
+      },
+      {
+        "source": "os_virtual_05",
+        "target": "os_virtual_06"
+      },
+      {
+        "source": "os_virtual_06",
+        "target": "os_virtual_07"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_08"
+      },
+      {
+        "source": "os_virtual_03",
+        "target": "os_virtual_09"
+      },
+      {
+        "source": "os_virtual_04",
+        "target": "os_virtual_09"
+      },
+      {
+        "source": "os_virtual_05",
+        "target": "os_virtual_09"
+      },
+      {
+        "source": "os_virtual_06",
+        "target": "os_virtual_09"
+      },
+      {
+        "source": "os_memory_08",
+        "target": "os_virtual_10"
+      },
+      {
+        "source": "os_virtual_01",
+        "target": "os_virtual_10"
+      },
+      {
+        "source": "os_virtual_10",
+        "target": "os_virtual_11"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_12"
+      },
+      {
+        "source": "os_virtual_10",
+        "target": "os_virtual_12"
+      },
+      {
+        "source": "os_io_01",
+        "target": "os_io_02"
+      },
+      {
+        "source": "os_io_02",
+        "target": "os_io_03"
+      },
+      {
+        "source": "os_io_02",
+        "target": "os_io_04"
+      },
+      {
+        "source": "os_io_03",
+        "target": "os_io_04"
+      },
+      {
+        "source": "os_io_04",
+        "target": "os_io_05"
+      },
+      {
+        "source": "os_io_02",
+        "target": "os_io_06"
+      },
+      {
+        "source": "os_io_05",
+        "target": "os_io_06"
+      },
+      {
+        "source": "os_io_06",
+        "target": "os_io_07"
+      },
+      {
+        "source": "os_io_07",
+        "target": "os_io_08"
+      },
+      {
+        "source": "os_io_01",
+        "target": "os_io_09"
+      },
+      {
+        "source": "os_io_04",
+        "target": "os_io_10"
+      },
+      {
+        "source": "os_io_10",
+        "target": "os_io_11"
+      },
+      {
+        "source": "os_io_07",
+        "target": "os_io_12"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_02"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_03"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_04"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_05"
+      },
+      {
+        "source": "os_file_05",
+        "target": "os_file_06"
+      },
+      {
+        "source": "os_file_05",
+        "target": "os_file_07"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_08"
+      },
+      {
+        "source": "os_file_08",
+        "target": "os_file_09"
+      },
+      {
+        "source": "os_file_08",
+        "target": "os_file_10"
+      },
+      {
+        "source": "os_file_05",
+        "target": "os_file_11"
+      },
+      {
+        "source": "os_file_05",
+        "target": "os_file_12"
+      },
+      {
+        "source": "os_file_09",
+        "target": "os_file_12"
+      },
+      {
+        "source": "os_disk_01",
+        "target": "os_disk_02"
+      },
+      {
+        "source": "os_disk_01",
+        "target": "os_disk_03"
+      },
+      {
+        "source": "os_disk_02",
+        "target": "os_disk_03"
+      },
+      {
+        "source": "os_disk_02",
+        "target": "os_disk_05"
+      },
+      {
+        "source": "os_disk_03",
+        "target": "os_disk_06"
+      },
+      {
+        "source": "os_disk_07",
+        "target": "os_disk_08"
+      },
+      {
+        "source": "os_disk_09",
+        "target": "os_disk_10"
+      },
+      {
+        "source": "os_disk_07",
+        "target": "os_disk_13"
+      },
+      {
+        "source": "os_io_10",
+        "target": "os_disk_13"
+      },
+      {
+        "source": "os_io_11",
+        "target": "os_disk_13"
+      }
+    ],
+    "timestamp": "2026-07-14T12:37:05.596637"
+  },
+  "updated_at": "2026-07-14T12:37:05.600742"
+}

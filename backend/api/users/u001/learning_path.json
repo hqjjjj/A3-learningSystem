@@ -1,108 +1,68 @@
 {
   "learning_path": [
-    "进程的定义与特征",
-    "进程同步的基本概念",
-    "信号量机制",
-    "多处理机进程同步——自旋锁",
-    "RCU锁与同步算法",
-    "分页存储管理方式",
-    "地址变换机构与快表",
-    "虚拟存储器的基本概念",
-    "请求分页存储管理方式",
-    "最近最久未使用页面置换算法（LRU）"
+    "虚拟化的基本概念",
+    "虚拟化的实现方法",
+    "虚拟机监视器（VMM）",
+    "CPU虚拟化与内存虚拟化",
+    "多核虚拟化与虚拟机迁移",
+    "云计算"
   ],
   "current_step": "云计算",
   "next_step": "多处理机系统的引入与类型",
   "path_nodes": [
     {
-      "id": "os_process_03",
-      "name": "进程的定义与特征",
+      "id": "os_virt_01",
+      "name": "虚拟化的基本概念",
       "difficulty": "easy",
       "status": "pending",
       "understanding": 0.0,
-      "x": 633.8100677359682,
-      "y": 395.05220339143517
+      "x": 235.36928861206633,
+      "y": 466.99383051874116
     },
     {
-      "id": "os_sync_01",
-      "name": "进程同步的基本概念",
-      "difficulty": "easy",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 119.32364378832895,
-      "y": -71.46266743968289
-    },
-    {
-      "id": "os_sync_04",
-      "name": "信号量机制",
+      "id": "os_virt_03",
+      "name": "虚拟化的实现方法",
       "difficulty": "hard",
       "status": "pending",
       "understanding": 0.0,
-      "x": -50.54710878711796,
-      "y": 439.71685441930083
+      "x": 310.6796784431791,
+      "y": -95.24892758275661
     },
     {
-      "id": "os_mp_05",
-      "name": "多处理机进程同步——自旋锁",
+      "id": "os_virt_04",
+      "name": "虚拟机监视器（VMM）",
       "difficulty": "medium",
       "status": "pending",
       "understanding": 0.0,
-      "x": 458.7637821510864,
-      "y": 459.7702028854045
+      "x": 366.25321262210116,
+      "y": -81.31795758163264
     },
     {
-      "id": "os_mp_06",
-      "name": "RCU锁与同步算法",
+      "id": "os_virt_05",
+      "name": "CPU虚拟化与内存虚拟化",
       "difficulty": "hard",
       "status": "pending",
       "understanding": 0.0,
-      "x": 672.3675674223881,
-      "y": 6.823961616658522
+      "x": 5.239701532303457,
+      "y": 459.03526499859674
     },
     {
-      "id": "os_memory_05",
-      "name": "分页存储管理方式",
+      "id": "os_virt_07",
+      "name": "多核虚拟化与虚拟机迁移",
       "difficulty": "medium",
       "status": "pending",
       "understanding": 0.0,
-      "x": 762.1448262740464,
-      "y": 335.52145588126575
+      "x": 721.8965060068772,
+      "y": 101.61116009258777
     },
     {
-      "id": "os_memory_06",
-      "name": "地址变换机构与快表",
+      "id": "os_virt_08",
+      "name": "云计算",
       "difficulty": "medium",
       "status": "pending",
-      "understanding": 0.0,
-      "x": 612.6345300560321,
-      "y": 173.06338017012678
-    },
-    {
-      "id": "os_virtual_01",
-      "name": "虚拟存储器的基本概念",
-      "difficulty": "easy",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 81.51512912530228,
-      "y": 452.8167229187153
-    },
-    {
-      "id": "os_virtual_02",
-      "name": "请求分页存储管理方式",
-      "difficulty": "medium",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 189.26979668941257,
-      "y": 372.0547456488057
-    },
-    {
-      "id": "os_virtual_05",
-      "name": "最近最久未使用页面置换算法（LRU）",
-      "difficulty": "medium",
-      "status": "pending",
-      "understanding": 0.0,
-      "x": 38.249641427694996,
-      "y": -38.46017058840499
+      "understanding": 0.46,
+      "x": -180.37197079084928,
+      "y": 208.77320881097233
     }
   ],
   "edges": [
@@ -651,5 +611,5 @@
       "target": "os_disk_13"
     }
   ],
-  "timestamp": "2026-07-14T11:50:12.983016"
+  "timestamp": "2026-07-14T12:37:05.596637"
 }

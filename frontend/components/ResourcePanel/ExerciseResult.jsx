@@ -6,15 +6,11 @@ const ExerciseResult = ({ result, onRetry }) => {
   return (
     <div style={{
       textAlign: 'center',
-      padding: '20px'
+      padding: '20px',
+      border: '1px solid #E2E8F0',
+      borderRadius: 10
     }}>
-      <div style={{
-        fontSize: '48px',
-        marginBottom: '12px'
-      }}>
-        {isCorrect ? '🎉' : '😅'}
-      </div>
-      <h4 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>
+      <h4 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: 600, color: '#1E293B' }}>
         {isCorrect ? '回答正确！' : '回答错误'}
       </h4>
       <p style={{ margin: '0 0 16px 0', fontSize: '14px', color: '#6b7280' }}>
@@ -23,11 +19,12 @@ const ExerciseResult = ({ result, onRetry }) => {
       {result.explanation && (
         <div style={{
           textAlign: 'left',
-          background: '#f3f4f6',
+          background: '#f8fafc',
           padding: '12px',
           borderRadius: '8px',
           marginBottom: '16px',
-          fontSize: '13px'
+          fontSize: '13px',
+          border: '1px solid #E2E8F0'
         }}>
           <strong>解析：</strong> {result.explanation}
         </div>
