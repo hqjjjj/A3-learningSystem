@@ -1,5 +1,5 @@
 {
-  "learning_style": "textual",
+  "learning_style": "visual",
   "weak_points": [
     "多处理机死锁",
     "云计算",
@@ -13,10 +13,10 @@
   "error_patterns": [],
   "preference": {
     "resource_type": [
+      "code_example",
+      "explanation",
       "code",
       "exercise",
-      "explanation",
-      "code_example",
       "mindmap"
     ],
     "difficulty": "medium"

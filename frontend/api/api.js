@@ -2,6 +2,7 @@
 const BASE_URL = 'http://127.0.0.1:8080';
 
 // 通用请求异步函数
+// api.js
 async function request(url, options) {
   try {
     const response = await fetch(`${BASE_URL}${url}`, {
@@ -11,20 +12,23 @@ async function request(url, options) {
         ...options.headers,
       },
     });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const json = await response.json();
-
-    // 统一处理后端返回格式：{ status: "success", data: ... }
-    if (json.status === 'success') {
-      return json.data;   // 直接返回业务数据
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `HTTP ${response.status}`);
     }
-    // 如果后端返回其他状态，抛出错误
-    throw new Error(json.message || '请求失败');
+    
+    const json = await response.json();
+    console.log(`API Response [${url}]:`, json); // 添加日志
+    
+    return json; // 直接返回响应数据
+    
   } catch (error) {
     console.error(`API Error [${url}]:`, error);
     throw error;
   }
 }
+
 
 
 

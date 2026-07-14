@@ -1,14 +1,18 @@
+// PathPanel.jsx
 import React from 'react';
 import PathStep from './PathStep';
 
 const PathPanel = ({ learningPath, topic, onTopicChange }) => {
-  // 如果 learningPath 是空数组或不存在，显示暂无路径数据
-  if (!learningPath || learningPath.length === 0) {
+  if (!learningPath) {
+    return <div>加载中...</div>;
+  }
+  
+  if (!learningPath.path_list || learningPath.path_list.length === 0) {
     return <div>暂无路径数据</div>;
   }
 
-  // 找到当前主题在 learningPath 中的索引
-  const currentIndex = learningPath.findIndex(item => item.name === topic);
+  // 找到当前主题在 path_list 中的索引
+  const currentIndex = learningPath.path_list.findIndex(item => item.name === topic);
 
   // 处理点击事件
   const handleClick = (name) => {
@@ -19,15 +23,16 @@ const PathPanel = ({ learningPath, topic, onTopicChange }) => {
 
   return (
     <div>
-      <h3>学习路径</h3>
+      <h3>当前主题: {learningPath.current}</h3>
+      <h3>下一个主题: {learningPath.next}</h3>
       <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: 16 }}>
-        {learningPath.map((item, index) => (
+        {learningPath.path_list.map((item, index) => (
           <PathStep
-            key={item.id || index}  // 使用 item.id 作为 key，如果没有则用 index
-            name={item.name}  // 使用 item.name
+            key={item.id || index}
+            name={item.name}
             status={index === currentIndex ? 'current' : 'pending'}
             isCurrent={index === currentIndex}
-            onClick={() => handleClick(item.name)}  // 传递 item.name
+            onClick={() => handleClick(item.name)}
           />
         ))}
       </div>

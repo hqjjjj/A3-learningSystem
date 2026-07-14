@@ -7,7 +7,7 @@
     "is_review": true
   },
   "teaching_output": {
-    "learning_style": "textual",
+    "learning_style": "visual",
     "weak_points": [
       "多处理机死锁",
       "云计算",
@@ -21,10 +21,10 @@
     "error_patterns": [],
     "preference": {
       "resource_type": [
+        "code_example",
+        "explanation",
         "code",
         "exercise",
-        "explanation",
-        "code_example",
         "mindmap"
       ],
       "difficulty": "medium"
@@ -1870,7 +1870,7 @@
         "target": "os_disk_13"
       }
     ],
-    "timestamp": "2026-07-14T12:23:39.274714"
+    "timestamp": "2026-07-14T14:20:21.251368"
   },
-  "updated_at": "2026-07-14T12:23:39.428771"
+  "updated_at": "2026-07-14T14:20:21.269115"
 }
