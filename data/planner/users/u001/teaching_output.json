@@ -1,12 +1,11 @@
 {
-  "learning_style": "auditory",
+  "learning_style": "textual",
   "weak_points": [
-    "进程的定义与特征",
-    "虚拟化的基本概念"
+    "进程的定义与特征"
   ],
   "cognitive_level": {
     "level": "intermediate",
-    "understanding_avg": 0.45
+    "understanding_avg": 0.55
   },
   "error_patterns": [],
   "preference": {
@@ -15,10 +14,10 @@
     ],
     "difficulty": "easy"
   },
-  "learning_pace": "normal",
+  "learning_pace": "fast",
   "current_topic": {
-    "id": "os_virt_01",
-    "name": "虚拟化的基本概念",
+    "id": "os_mp_01",
+    "name": "多处理机系统的引入与类型",
     "is_review": true
   }
 }

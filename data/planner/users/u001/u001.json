@@ -3,18 +3,17 @@
   "current_topic": {
     "id": "os_virt_01",
     "name": "虚拟化的基本概念",
-    "understanding": 0.45,
-    "is_review": true
+    "understanding": 0.64,
+    "is_review": false
   },
   "teaching_output": {
-    "learning_style": "auditory",
+    "learning_style": "textual",
     "weak_points": [
-      "进程的定义与特征",
-      "虚拟化的基本概念"
+      "进程的定义与特征"
     ],
     "cognitive_level": {
       "level": "intermediate",
-      "understanding_avg": 0.45
+      "understanding_avg": 0.55
     },
     "error_patterns": [],
     "preference": {
@@ -23,45 +22,28 @@
       ],
       "difficulty": "easy"
     },
-    "learning_pace": "normal",
+    "learning_pace": "fast",
     "current_topic": {
       "id": "os_virt_01",
       "name": "虚拟化的基本概念",
-      "understanding": 0.45,
-      "is_review": true
+      "understanding": 0.64,
+      "is_review": false
     }
   },
   "learning_path": {
     "learning_path": [
-      "前趋图",
-      "程序顺序执行与并发执行",
       "进程的定义与特征",
+      "进程的基本状态与转换",
+      "进程控制块（PCB）",
+      "信号量机制",
+      "临界区问题与Peterson算法",
       "虚拟化的基本概念",
       "虚拟化的发展",
-      "虚拟化的实现方法",
-      "I/O虚拟化"
+      "虚拟化的实现方法"
     ],
     "current_step": "虚拟化的基本概念",
-    "next_step": "虚拟化的基本概念",
+    "next_step": "多处理机系统的引入与类型",
     "path_nodes": [
-      {
-        "id": "os_process_01",
-        "name": "前趋图",
-        "difficulty": "easy",
-        "status": "pending",
-        "understanding": 0,
-        "x": 231.65489081394543,
-        "y": -92.14256633430381
-      },
-      {
-        "id": "os_process_02",
-        "name": "程序顺序执行与并发执行",
-        "difficulty": "easy",
-        "status": "pending",
-        "understanding": 0,
-        "x": -83.62202840636206,
-        "y": 49.74731598695408
-      },
       {
         "id": "os_process_03",
         "name": "进程的定义与特征",
@@ -72,11 +54,47 @@
         "y": 395.05220339143517
       },
       {
+        "id": "os_process_04",
+        "name": "进程的基本状态与转换",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0,
+        "x": 785.9957762941262,
+        "y": 202.2640845793854
+      },
+      {
+        "id": "os_process_06",
+        "name": "进程控制块（PCB）",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0,
+        "x": 741.8874796884963,
+        "y": 287.21701212998835
+      },
+      {
+        "id": "os_sync_04",
+        "name": "信号量机制",
+        "difficulty": "hard",
+        "status": "pending",
+        "understanding": 0,
+        "x": -50.54710878711796,
+        "y": 439.71685441930083
+      },
+      {
+        "id": "os_sync_02",
+        "name": "临界区问题与Peterson算法",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0,
+        "x": -152.9021612158029,
+        "y": 140.44874521312164
+      },
+      {
         "id": "os_virt_01",
         "name": "虚拟化的基本概念",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.45,
+        "understanding": 0.64,
         "x": 235.36928861206633,
         "y": 466.99383051874116
       },
@@ -97,15 +115,6 @@
         "understanding": 0,
         "x": 310.6796784431791,
         "y": -95.24892758275661
-      },
-      {
-        "id": "os_virt_06",
-        "name": "I/O虚拟化",
-        "difficulty": "medium",
-        "status": "pending",
-        "understanding": 0,
-        "x": 57.60297703315726,
-        "y": -55.551530187993336
       }
     ],
     "edges": [
@@ -654,7 +663,7 @@
         "target": "os_disk_13"
       }
     ],
-    "timestamp": "2026-07-14T18:25:18.538698"
+    "timestamp": "2026-07-14T20:11:56.706820"
   },
-  "updated_at": "2026-07-14T18:25:18.542706"
+  "updated_at": "2026-07-14T20:11:56.709719"
 }

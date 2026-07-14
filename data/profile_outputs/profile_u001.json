@@ -5,20 +5,19 @@
   "course": "操作系统",
   "knowledge_level": {
     "进程的定义与特征": 0.45,
-    "虚拟化的基本概念": 0.45
+    "虚拟化的基本概念": 0.64
   },
   "weak_points": [
-    "进程的定义与特征",
-    "虚拟化的基本概念"
+    "进程的定义与特征"
   ],
   "error_tags": [],
   "learning_style": "text",
   "cognitive_style": {
-    "visual": 0.33,
-    "textual": 0.33,
-    "auditory": 0.34
+    "visual": 0.2,
+    "textual": 0.6,
+    "auditory": 0.2
   },
-  "learning_pace": "normal",
+  "learning_pace": "fast",
   "resource_type": [
     "explanation"
   ],
@@ -29,7 +28,11 @@
   },
   "learning_goal": null,
   "created_at": "2026-07-14T14:35:19.192999",
-  "updated_at": "2026-07-14T15:08:48.975080",
-  "last_message": "我已经学完了进程的定义与特征，接下来我想学虚拟化的基本概念",
-  "last_behavior": null
+  "updated_at": "2026-07-14T20:10:44.026155",
+  "last_message": "仔细阅读了资源explanation，用时137秒",
+  "last_behavior": {
+    "knowledge_level": {},
+    "resource_type": [],
+    "learning_pace": "fast"
+  }
 }

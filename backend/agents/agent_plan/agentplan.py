@@ -689,7 +689,7 @@ def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
     print(f"✅ 用户 {user_id} 学习路径已更新: {user_file}")
     
     # 返回（保持原有格式不变）
-    return planner, user_profile, next_topic
+    return planner, user_profile, next_topic,learning_path
 
 
 # ==================== 监控启动函数（新增） ====================
