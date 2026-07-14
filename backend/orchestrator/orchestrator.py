@@ -538,23 +538,25 @@ class Orchestrator:
 
             # 2. 获取学习路径
             try:
-                path_data = self.get_learning_path(user_id)
+                # 直接调用 _call_plan_agent 获取原始路径数据
+                profile_dict = profile_obj.model_dump() if profile_obj else {}
+                raw_path_data = self._call_plan_agent(user_id, profile_dict)
+                print(f"【总控】原始路径数据: {raw_path_data}")
             except Exception as e:
                 print(f"【总控】⚠️ 获取学习路径失败: {e}")
-                import traceback
-                traceback.print_exc()
-                path_data = {
+                raw_path_data = {
+                    "next": "",
+                    "current": "",
                     "path_list": [],
-                    "topic_id": "",
                     "current_progress": "learning",
-                    "module": profile_dict.get("course", "")
+                    "topic_id": ""
                 }
 
             # 3. 根据目前的画像和路径，推荐首批资源
             resources = {}
             try:
-                if path_data.get("topic_id"):
-                    resources = self._call_source_agent(profile_dict, path_data)
+                if raw_path_data.get("topic_id"):
+                    resources = self._call_source_agent(profile_dict, raw_path_data)
             except Exception as e:
                 print(f"【总控】⚠️ 生成资源失败: {e}")
                 import traceback
@@ -565,11 +567,16 @@ class Orchestrator:
 
             return {
                 "profile": profile_dict,
-                "learning_path": path_data.get("learning_path", []),
+                "learning_path": {
+                    "current": raw_path_data.get("current", ""),
+                    "next": raw_path_data.get("next", ""),
+                    "path_list": raw_path_data.get("path_list", [])
+                },
                 "recommended_resources": recommended,
                 "topic": profile_dict.get("progress", {}).get("current_topic", ""),
-                "current_progress": path_data.get("current_progress", "learning")
+                "current_progress": raw_path_data.get("current_progress", "learning")
             }
+        
         except Exception as e:
             print(f"【总控】⚠️ 加载用户状态失败: {e}")
             import traceback
