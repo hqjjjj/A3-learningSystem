@@ -1,0 +1,40 @@
+{
+  "type": "code",
+  "title": "分段存储管理地址转换模拟",
+  "language": "python",
+  "code_lines": [
+    "# 模拟段表，记录每段在内存中的起始地址(base)和段长(limit)",
+    "segment_table = {",
+    "    0: {'base': 1000, 'limit': 500},  # 段0：代码段",
+    "    1: {'base': 2000, 'limit': 300},  # 段1：数据段",
+    "    2: {'base': 3000, 'limit': 200}   # 段2：堆栈段",
+    "}",
+    "",
+    "def address_translation(segment_num, offset):",
+    "    # 检查段号是否合法",
+    "    if segment_num not in segment_table:",
+    "        return '错误：段号越界'",
+    "    ",
+    "    segment = segment_table[segment_num]",
+    "    base = segment['base']",
+    "    limit = segment['limit']",
+    "    ",
+    "    # 检查段内偏移是否小于段长",
+    "    if offset >= limit:",
+    "        return '错误：段内地址越界'",
+    "    ",
+    "    # 物理地址 = 段起始地址 + 段内地址",
+    "    physical_address = base + offset",
+    "    return physical_address",
+    "",
+    "# 测试地址转换",
+    "print('逻辑地址(0, 100)的物理地址:', address_translation(0, 100))",
+    "print('逻辑地址(1, 400)的物理地址:', address_translation(1, 400))"
+  ],
+  "description": "本代码模拟了分段存储管理方式中的地址转换过程。段表记录了每段在内存中的起始地址和段长。程序接收由段号和段内地址组成的逻辑地址，首先检查段号是否存在，然后检查段内地址是否超过段长，若均合法则通过'物理地址=起始地址+段内地址'计算出物理地址，否则报越界错误。这体现了分段机制中的内存保护功能。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《存储器管理》分段存储管理方式",
+    "段的逻辑地址由段号和段内地址组成。段表记录每段在内存中的起始地址和段长。"
+  ],
+  "subtype": "code_example"
+}
