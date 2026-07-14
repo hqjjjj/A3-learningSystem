@@ -1,39 +1,33 @@
 {
   "user_id": "u001",
   "current_topic": {
-    "id": "os_virt_08",
-    "name": "云计算",
-    "understanding": 0.46,
+    "id": "os_virt_01",
+    "name": "虚拟化的基本概念",
+    "understanding": 0.45,
     "is_review": true
   },
   "teaching_output": {
-    "learning_style": "visual",
+    "learning_style": "auditory",
     "weak_points": [
-      "多处理机死锁",
-      "云计算",
-      "进程控制原语",
-      "分段存储管理方式"
+      "进程的定义与特征",
+      "虚拟化的基本概念"
     ],
     "cognitive_level": {
-      "level": "beginner",
-      "understanding_avg": 0.01
+      "level": "intermediate",
+      "understanding_avg": 0.45
     },
     "error_patterns": [],
     "preference": {
       "resource_type": [
-        "code_example",
-        "explanation",
-        "code",
-        "exercise",
-        "mindmap"
+        "explanation"
       ],
-      "difficulty": "medium"
+      "difficulty": "easy"
     },
     "learning_pace": "normal",
     "current_topic": {
-      "id": "os_virt_08",
-      "name": "云计算",
-      "understanding": 0.46,
+      "id": "os_virt_01",
+      "name": "虚拟化的基本概念",
+      "understanding": 0.45,
       "is_review": true
     }
   },
@@ -168,15 +162,15 @@
       "假脱机系统（SPOOLing）",
       "设备分配与回收"
     ],
-    "current_step": "云计算",
-    "next_step": "多处理机系统的引入与类型",
+    "current_step": "虚拟化的基本概念",
+    "next_step": "虚拟化的基本概念",
     "path_nodes": [
       {
         "id": "os_mp_01",
         "name": "多处理机系统的引入与类型",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 242.98557437812758,
         "y": 497.406473344903
       },
@@ -185,7 +179,7 @@
         "name": "处理机调度的层次",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 120.12774693341098,
         "y": 265.5918328444241
       },
@@ -194,7 +188,7 @@
         "name": "死锁的基本概念与必要条件",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -108.0573430222733,
         "y": 76.84235111851883
       },
@@ -203,7 +197,7 @@
         "name": "虚拟化的基本概念",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0.45,
         "x": 235.36928861206633,
         "y": 466.99383051874116
       },
@@ -212,7 +206,7 @@
         "name": "安全环境与计算机安全分类",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 30.958742570078755,
         "y": 427.189342101359
       },
@@ -221,7 +215,7 @@
         "name": "数据加密原理",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 20.129579055447437,
         "y": 377.21213812323947
       },
@@ -230,7 +224,7 @@
         "name": "用户验证技术",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 668.0046931286925,
         "y": 421.1853072656237
       },
@@ -239,7 +233,7 @@
         "name": "来自系统内部的攻击",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 340.08187125983613,
         "y": 495.2960714034887
       },
@@ -248,7 +242,7 @@
         "name": "操作系统的目标",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -22.256165993497802,
         "y": 426.97840671342914
       },
@@ -257,7 +251,7 @@
         "name": "前趋图",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 231.65489081394543,
         "y": -92.14256633430381
       },
@@ -266,7 +260,7 @@
         "name": "存储器的层次结构",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 185.53706352851924,
         "y": 494.1311473980644
       },
@@ -275,7 +269,7 @@
         "name": "程序的装入与链接",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 765.4268396591517,
         "y": 79.35031314728893
       },
@@ -284,7 +278,7 @@
         "name": "I/O系统的基本功能与层次结构",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 627.6348077416211,
         "y": 438.88727099649793
       },
@@ -293,7 +287,7 @@
         "name": "文件、记录和数据项",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -165.63099466520345,
         "y": 291.62144193367504
       },
@@ -302,7 +296,7 @@
         "name": "连续组织方式",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 769.5209425291674,
         "y": 219.34026181937026
       },
@@ -311,7 +305,7 @@
         "name": "文件存储空间管理",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 153.82484028830743,
         "y": -88.29980267081959
       },
@@ -320,7 +314,7 @@
         "name": "磁盘高速缓存",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 788.2827474425676,
         "y": 162.74071181622688
       },
@@ -329,7 +323,7 @@
         "name": "廉价磁盘冗余阵列（RAID）",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 299.0751048420903,
         "y": 499.98365409951055
       },
@@ -338,7 +332,7 @@
         "name": "数据一致性控制",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -150.06585508051893,
         "y": 196.44715608900054
       },
@@ -347,7 +341,7 @@
         "name": "存储新技术",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 733.1202515935809,
         "y": 68.130757259076
       },
@@ -356,7 +350,7 @@
         "name": "多处理机系统结构（UMA）",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 674.4981115651195,
         "y": 364.10754764893454
       },
@@ -365,7 +359,7 @@
         "name": "多处理机操作系统的特征与类型",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -147.4817511472786,
         "y": 349.5189752071269
       },
@@ -374,7 +368,7 @@
         "name": "多处理机进程分配与调度",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -90.03923951817654,
         "y": 21.947066157396733
       },
@@ -383,7 +377,7 @@
         "name": "调度算法的评价指标",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 201.79381407540765,
         "y": 473.37866399441185
       },
@@ -392,7 +386,7 @@
         "name": "先来先服务调度算法",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 7.783322987841984,
         "y": -42.98875240469849
       },
@@ -401,7 +395,7 @@
         "name": "短作业优先与优先级调度",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -1.8254832413410895,
         "y": -24.82684118471522
       },
@@ -410,7 +404,7 @@
         "name": "轮转调度算法",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 731.2789975410792,
         "y": 363.36563324347185
       },
@@ -419,7 +413,7 @@
         "name": "多处理机死锁",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.45,
+        "understanding": 0,
         "x": 420.8246497502378,
         "y": -78.71322256604714
       },
@@ -428,7 +422,7 @@
         "name": "死锁的预防与避免",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 513.3869772880537,
         "y": 473.92601083915554
       },
@@ -437,7 +431,7 @@
         "name": "虚拟化的发展",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -162.98561686547106,
         "y": 240.894765767848
       },
@@ -446,7 +440,7 @@
         "name": "虚拟化的实现方法",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 310.6796784431791,
         "y": -95.24892758275661
       },
@@ -455,7 +449,7 @@
         "name": "I/O虚拟化",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 57.60297703315726,
         "y": -55.551530187993336
       },
@@ -464,7 +458,7 @@
         "name": "云计算",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.46,
+        "understanding": 0,
         "x": -180.37197079084928,
         "y": 208.77320881097233
       },
@@ -473,7 +467,7 @@
         "name": "可信系统与安全模型",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 763.0108673186371,
         "y": 124.34198555567406
       },
@@ -482,7 +476,7 @@
         "name": "对称与非对称加密",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 336.7140270066065,
         "y": -80.91871758884389
       },
@@ -491,7 +485,7 @@
         "name": "来自系统外部的攻击",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -122.33325989630777,
         "y": 38.07607220519432
       },
@@ -500,7 +494,7 @@
         "name": "操作系统的作用",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 89.68177637045008,
         "y": 487.164733293331
       },
@@ -509,7 +503,7 @@
         "name": "操作系统的发展过程",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 589.8896709103471,
         "y": -33.75850589696327
       },
@@ -518,7 +512,7 @@
         "name": "操作系统的运行环境",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 595.2099895608003,
         "y": 422.61133139606153
       },
@@ -527,7 +521,7 @@
         "name": "操作系统结构",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 264.63107976866286,
         "y": -86.64868745686476
       },
@@ -536,7 +530,7 @@
         "name": "程序顺序执行与并发执行",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -83.62202840636206,
         "y": 49.74731598695408
       },
@@ -545,7 +539,7 @@
         "name": "对换与覆盖技术",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 402.4148187372761,
         "y": -60.96896585538792
       },
@@ -554,7 +548,7 @@
         "name": "虚拟存储器的基本概念",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 81.51512912530228,
         "y": 452.8167229187153
       },
@@ -563,7 +557,7 @@
         "name": "连续分配存储管理方式",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 86.23948429713005,
         "y": -71.77638344198573
       },
@@ -572,7 +566,7 @@
         "name": "分页存储管理方式",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 762.1448262740464,
         "y": 335.52145588126575
       },
@@ -581,7 +575,7 @@
         "name": "I/O设备和设备控制器",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -76.0798422021744,
         "y": 362.6255566274316
       },
@@ -590,7 +584,7 @@
         "name": "缓冲区管理",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 678.9705800318904,
         "y": 397.3631154136997
       },
@@ -599,7 +593,7 @@
         "name": "文件系统的层次结构",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -155.21348941651854,
         "y": 54.965112155064645
       },
@@ -608,7 +602,7 @@
         "name": "文件操作",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 362.93865880452086,
         "y": 470.6991881026088
       },
@@ -617,7 +611,7 @@
         "name": "文件的逻辑结构",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 627.7645491022997,
         "y": -1.0424873485445403
       },
@@ -626,7 +620,7 @@
         "name": "文件目录",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 683.9778211824182,
         "y": 33.72895600751707
       },
@@ -635,7 +629,7 @@
         "name": "外存组织方式",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 510.801681446747,
         "y": 425.63776037258503
       },
@@ -644,7 +638,7 @@
         "name": "链接组织方式",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 408.4907483178829,
         "y": 350.671560088711
       },
@@ -653,7 +647,7 @@
         "name": "提高磁盘I/O速度的其他方法",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -88.36784261070477,
         "y": 413.87005818634475
       },
@@ -662,7 +656,7 @@
         "name": "磁盘容错技术",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 716.4757600330838,
         "y": 386.51685571153695
       },
@@ -671,7 +665,7 @@
         "name": "非统一内存访问（NUMA）结构",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -42.26854088156813,
         "y": -16.18626552978057
       },
@@ -680,7 +674,7 @@
         "name": "成组调度与自调度",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 158.9542741113355,
         "y": -57.48800900623968
       },
@@ -689,7 +683,7 @@
         "name": "实时调度",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 621.4222422043551,
         "y": -22.776263914393923
       },
@@ -698,7 +692,7 @@
         "name": "Linux进程调度（CFS）",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 784.4618924224802,
         "y": 233.4195715714301
       },
@@ -707,7 +701,7 @@
         "name": "多级反馈队列调度算法",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 386.733225988796,
         "y": 487.7462115410745
       },
@@ -716,7 +710,7 @@
         "name": "虚拟机监视器（VMM）",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 366.25321262210116,
         "y": -81.31795758163264
       },
@@ -725,7 +719,7 @@
         "name": "安全操作系统设计原则",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -118.35969068512827,
         "y": 305.89218700532473
       },
@@ -734,7 +728,7 @@
         "name": "数字签名与数字证明书",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 786.7807759960435,
         "y": 290.7838838096509
       },
@@ -743,7 +737,7 @@
         "name": "病毒的隐藏方式",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -180.42639542414258,
         "y": 122.67581712416039
       },
@@ -752,7 +746,7 @@
         "name": "操作系统的基本特性",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -179.62090549518888,
         "y": 310.24190296255426
       },
@@ -761,7 +755,7 @@
         "name": "系统调用",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 724.9659192987638,
         "y": 340.27878064458287
       },
@@ -770,7 +764,7 @@
         "name": "进程的定义与特征",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0.45,
         "x": 633.8100677359682,
         "y": 395.05220339143517
       },
@@ -779,7 +773,7 @@
         "name": "CPU虚拟化与内存虚拟化",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 5.239701532303457,
         "y": 459.03526499859674
       },
@@ -788,7 +782,7 @@
         "name": "地址变换机构与快表",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 612.6345300560321,
         "y": 173.06338017012678
       },
@@ -797,7 +791,7 @@
         "name": "分段存储管理方式",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.45,
+        "understanding": 0,
         "x": 707.2553529370531,
         "y": 26.736415111891233
       },
@@ -806,7 +800,7 @@
         "name": "反置页表",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 510.7662316768319,
         "y": 455.21758596839186
       },
@@ -815,7 +809,7 @@
         "name": "请求分页存储管理方式",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 189.26979668941257,
         "y": 372.0547456488057
       },
@@ -824,7 +818,7 @@
         "name": "I/O通道技术",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 768.5236319844943,
         "y": 249.059344148915
       },
@@ -833,7 +827,7 @@
         "name": "文件共享",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 130.28723982136924,
         "y": 462.88020792508706
       },
@@ -842,7 +836,7 @@
         "name": "文件保护",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 422.3348399142877,
         "y": 481.6887601682886
       },
@@ -851,7 +845,7 @@
         "name": "目录查询技术",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 800.0,
         "y": 183.31943700443102
       },
@@ -860,7 +854,7 @@
         "name": "索引组织方式",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -180.66896725016966,
         "y": 151.4184184431218
       },
@@ -869,7 +863,7 @@
         "name": "文件存储空间管理",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -53.859556495175696,
         "y": 12.02857138424173
       },
@@ -878,7 +872,7 @@
         "name": "索引组织方式",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -49.21975240287122,
         "y": 399.58746196639424
       },
@@ -887,7 +881,7 @@
         "name": "FAT文件系统详解",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 553.2541847038835,
         "y": -41.58848595771403
       },
@@ -896,7 +890,7 @@
         "name": "多核虚拟化与虚拟机迁移",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 721.8965060068772,
         "y": 101.61116009258777
       },
@@ -905,7 +899,7 @@
         "name": "虚拟机软件实例与授权",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -133.49293305833908,
         "y": 373.62713848508065
       },
@@ -914,7 +908,7 @@
         "name": "病毒检测与预防",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 94.32494054163024,
         "y": -45.84677440165868
       },
@@ -923,7 +917,7 @@
         "name": "操作系统的功能",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 562.2099203510024,
         "y": -56.93087995237164
       },
@@ -932,7 +926,7 @@
         "name": "进程的基本状态与转换",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 785.9957762941262,
         "y": 202.2640845793854
       },
@@ -941,7 +935,7 @@
         "name": "进程通信的类型",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 531.4523782890726,
         "y": -9.483976327446754
       },
@@ -950,7 +944,7 @@
         "name": "线程的概念与引入",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -188.51207265286087,
         "y": 260.8221755125292
       },
@@ -959,7 +953,7 @@
         "name": "进程同步的基本概念",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 119.32364378832895,
         "y": -71.46266743968289
       },
@@ -968,7 +962,7 @@
         "name": "两级页表和多级页表",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -158.79979164976055,
         "y": 81.278348432116
       },
@@ -977,7 +971,7 @@
         "name": "段页式存储管理方式",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -173.64551714835716,
         "y": 171.0537819144308
       },
@@ -986,7 +980,7 @@
         "name": "IA-32/x86-64架构的内存管理",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 743.3162164114017,
         "y": 47.83016584943559
       },
@@ -995,7 +989,7 @@
         "name": "请求分段存储管理方式",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 688.5711651715969,
         "y": 55.84886366162823
       },
@@ -1004,7 +998,7 @@
         "name": "最佳页面置换算法（OPT）",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 690.392308966796,
         "y": 309.891996050119
       },
@@ -1013,7 +1007,7 @@
         "name": "先进先出页面置换算法（FIFO）",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -101.01314669014147,
         "y": 386.6645682934681
       },
@@ -1022,7 +1016,7 @@
         "name": "最近最久未使用页面置换算法（LRU）",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 38.249641427694996,
         "y": -38.46017058840499
       },
@@ -1031,7 +1025,7 @@
         "name": "抖动与工作集",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 291.2176297990549,
         "y": -76.98761447829565
       },
@@ -1040,7 +1034,7 @@
         "name": "I/O控制方式",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 470.2516881670512,
         "y": -54.17913982050959
       },
@@ -1049,7 +1043,7 @@
         "name": "文件系统实例（Linux）",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 756.3979998329689,
         "y": 307.35428377040796
       },
@@ -1058,7 +1052,7 @@
         "name": "UNIX混合索引",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 596.0650843969684,
         "y": 460.9394210585603
       },
@@ -1067,7 +1061,7 @@
         "name": "挂起操作和进程状态转换",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -141.57302382169263,
         "y": 329.26150386700994
       },
@@ -1076,7 +1070,7 @@
         "name": "进程控制块（PCB）",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 741.8874796884963,
         "y": 287.21701212998835
       },
@@ -1085,7 +1079,7 @@
         "name": "消息传递通信的实现",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -88.62333140136735,
         "y": -5.820525892020555
       },
@@ -1094,7 +1088,7 @@
         "name": "用户级线程与内核支持线程",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -99.92736013943141,
         "y": 107.98712580188368
       },
@@ -1103,7 +1097,7 @@
         "name": "临界区问题与Peterson算法",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -152.9021612158029,
         "y": 140.44874521312164
       },
@@ -1112,7 +1106,7 @@
         "name": "信号量机制",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -50.54710878711796,
         "y": 439.71685441930083
       },
@@ -1121,7 +1115,7 @@
         "name": "分段的共享与保护",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 668.9577893816245,
         "y": -13.74885124257392
       },
@@ -1130,7 +1124,7 @@
         "name": "虚拟存储器实现实例",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 187.54122579071912,
         "y": -82.77635804735058
       },
@@ -1139,7 +1133,7 @@
         "name": "Clock页面置换算法",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -193.2060807234629,
         "y": 225.9195941114118
       },
@@ -1148,7 +1142,7 @@
         "name": "中断处理程序",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 52.80283200012943,
         "y": 468.2769641927861
       },
@@ -1157,7 +1151,7 @@
         "name": "磁盘性能与调度算法",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 454.1291340021344,
         "y": -79.34706183173864
       },
@@ -1166,7 +1160,7 @@
         "name": "进程控制原语",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.45,
+        "understanding": 0,
         "x": 761.0814805021805,
         "y": 162.06870997520718
       },
@@ -1175,7 +1169,7 @@
         "name": "多线程模型",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 769.9255261729575,
         "y": 102.96397735548624
       },
@@ -1184,7 +1178,7 @@
         "name": "硬件同步机制",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 560.5612212827973,
         "y": 457.1028821058147
       },
@@ -1193,7 +1187,7 @@
         "name": "多处理机进程同步——自旋锁",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 458.7637821510864,
         "y": 459.7702028854045
       },
@@ -1202,7 +1196,7 @@
         "name": "管程机制",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -198.6291844808494,
         "y": 185.7768055750762
       },
@@ -1211,7 +1205,7 @@
         "name": "读者-写者问题",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -157.86092511816747,
         "y": 103.91742386944517
       },
@@ -1220,7 +1214,7 @@
         "name": "哲学家进餐问题",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 787.5210276042359,
         "y": 135.8556608853783
       },
@@ -1229,7 +1223,7 @@
         "name": "Linux进程同步机制",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 302.89277406175285,
         "y": 473.3842985798502
       },
@@ -1238,7 +1232,7 @@
         "name": "页面缓冲算法（PBA）",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 498.9881164513347,
         "y": -77.30844559949162
       },
@@ -1247,7 +1241,7 @@
         "name": "页面置换算法综合计算",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 514.9771453200352,
         "y": -55.36799509895326
       },
@@ -1256,7 +1250,7 @@
         "name": "设备驱动程序",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 779.1079927447734,
         "y": 266.14150150282114
       },
@@ -1265,7 +1259,7 @@
         "name": "磁盘调度算法综合计算",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 138.51154978164536,
         "y": 484.9027055323737
       },
@@ -1274,7 +1268,7 @@
         "name": "RCU锁与同步算法",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 672.3675674223881,
         "y": 6.823961616658522
       },
@@ -1283,7 +1277,7 @@
         "name": "生产者-消费者问题",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 219.1234120269164,
         "y": -74.41949697213687
       },
@@ -1292,7 +1286,7 @@
         "name": "与设备无关的I/O软件",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -7.138999394281825,
         "y": 1.785401687667104
       },
@@ -1301,7 +1295,7 @@
         "name": "磁盘调度算法综合",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": -159.27158517286324,
         "y": 269.9489693156336
       },
@@ -1310,7 +1304,7 @@
         "name": "假脱机系统（SPOOLing）",
         "difficulty": "hard",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 464.0707883591757,
         "y": 481.8241247192211
       },
@@ -1319,7 +1313,7 @@
         "name": "设备分配与回收",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.0,
+        "understanding": 0,
         "x": 387.62006771217216,
         "y": -95.67635339192361
       }
@@ -1870,7 +1864,7 @@
         "target": "os_disk_13"
       }
     ],
-    "timestamp": "2026-07-14T14:20:21.251368"
+    "timestamp": "2026-07-14T15:10:12.483539"
   },
-  "updated_at": "2026-07-14T14:20:21.269115"
+  "updated_at": "2026-07-14T15:10:12.493030"
 }

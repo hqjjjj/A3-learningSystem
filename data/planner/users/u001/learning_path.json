@@ -9,15 +9,15 @@
     "实时调度",
     "多处理机进程分配与调度"
   ],
-  "current_step": "云计算",
-  "next_step": "多处理机系统的引入与类型",
+  "current_step": "虚拟化的基本概念",
+  "next_step": "虚拟化的基本概念",
   "path_nodes": [
     {
       "id": "os_virt_08",
       "name": "云计算",
       "difficulty": "medium",
       "status": "pending",
-      "understanding": 0.46,
+      "understanding": 0,
       "x": -180.37197079084928,
       "y": 208.77320881097233
     },
@@ -26,7 +26,7 @@
       "name": "虚拟机监视器（VMM）",
       "difficulty": "medium",
       "status": "pending",
-      "understanding": 0.0,
+      "understanding": 0,
       "x": 366.25321262210116,
       "y": -81.31795758163264
     },
@@ -35,7 +35,7 @@
       "name": "CPU虚拟化与内存虚拟化",
       "difficulty": "hard",
       "status": "pending",
-      "understanding": 0.0,
+      "understanding": 0,
       "x": 5.239701532303457,
       "y": 459.03526499859674
     },
@@ -44,7 +44,7 @@
       "name": "IA-32/x86-64架构的内存管理",
       "difficulty": "hard",
       "status": "pending",
-      "understanding": 0.0,
+      "understanding": 0,
       "x": 743.3162164114017,
       "y": 47.83016584943559
     },
@@ -62,7 +62,7 @@
       "name": "页面置换算法综合计算",
       "difficulty": "hard",
       "status": "pending",
-      "understanding": 0.0,
+      "understanding": 0,
       "x": 514.9771453200352,
       "y": -55.36799509895326
     },
