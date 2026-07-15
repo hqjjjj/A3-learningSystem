@@ -2752,6 +2752,7 @@
   {
     "user_id": "u001",
     "event_type": "view_resource",
+<<<<<<< HEAD
     "time": "2026-07-15T14:35:24.300562",
     "topic": null,
     "resource_type": null,
@@ -2773,11 +2774,15 @@
     "user_id": "u001",
     "event_type": "view_resource",
     "time": "2026-07-15T14:43:52.406684",
+=======
+    "time": "2026-07-15T17:55:46.564693",
+>>>>>>> 资源前端显示
     "topic": null,
     "resource_type": null,
     "correct_rate": null,
     "duration": 13,
     "message": null
+<<<<<<< HEAD
   },
   {
     "user_id": "u001",
@@ -2818,5 +2823,7 @@
     "correct_rate": null,
     "duration": null,
     "message": "我想学习前驱图"
+=======
+>>>>>>> 资源前端显示
   }
 ]

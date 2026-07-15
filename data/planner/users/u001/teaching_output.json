@@ -5,7 +5,11 @@
   ],
   "cognitive_level": {
     "level": "intermediate",
+<<<<<<< HEAD
     "understanding_avg": 0.6
+=======
+    "understanding_avg": 0.56
+>>>>>>> 资源前端显示
   },
   "error_patterns": [],
   "preference": {

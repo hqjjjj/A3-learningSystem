@@ -3,7 +3,6 @@ import ResourceCard from './ResourceCard';
 import ResourceGeneratorButton from './ResourceGeneratorButton';
 import ResourceGenerationProgress from './ResourceGenerationProgress';
 
-
 const ResourcePanel = ({
   recommendedResources = [],
   generatedResources = null,
@@ -14,45 +13,47 @@ const ResourcePanel = ({
   userId
 }) => {
   const [activeTab, setActiveTab] = useState('recommended');
-
   const [showProgress, setShowProgress] = useState(false);
   const [generatingType, setGeneratingType] = useState('explanation');
 
-  // 确保是数组
-  const generatedList = Array.isArray(generatedResources) 
-    ? generatedResources 
-    : (generatedResources ? [generatedResources] : []);
+  // ========== 改动8：统一处理 generatedResources 为数组 ==========
+  // 目的：generatedResources 可能是对象或数组，统一转为数组方便遍历
+  // ================================================================
+  const getGeneratedList = () => {
+    if (!generatedResources) return [];
+    if (Array.isArray(generatedResources)) return generatedResources;
+    if (typeof generatedResources === 'object' && generatedResources.type) {
+      return [generatedResources];
+    }
+    return [];
+  };
 
-  // 处理生成资源
+  const generatedList = getGeneratedList();
+
+  // ========== 改动9：生成资源时传入数组格式 ==========
+  // 目的：与后端 API 保持一致，都使用数组格式
+  // =================================================
   const handleGenerate = async (resourceType) => {
     setGeneratingType(resourceType);
     setShowProgress(true);
     
     try {
-      await onGenerateResource(resourceType);
+      await onGenerateResource([resourceType]);  // 传入数组
     } catch (error) {
       console.error('生成失败:', error);
       setShowProgress(false);
     }
   };
 
-  // 进度条完成回调
   const handleProgressComplete = () => {
     setShowProgress(false);
   };
 
-  // 取消生成
   const handleProgressCancel = () => {
     setShowProgress(false);
   };
 
-  const isEmptyGenerated = !generatedResources || 
-                          (typeof generatedResources === 'object' && 
-                           Object.keys(generatedResources).length === 0) ||
-                          !generatedResources.type;
-
-  // ✅ 直接使用真实数据，不再使用 Mock
-  const displayResources = recommendedResources;
+  const displayResources = Array.isArray(recommendedResources) ? recommendedResources : [];
 
   return (
     <div style={{
@@ -70,10 +71,12 @@ const ResourcePanel = ({
         <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>学习资源</h3>
         <p style={{ margin: '8px 0 0 0', fontSize: '13px', color: '#6b7280' }}>
           根据您的学习情况推荐
-        </p>
+        </p >
       </div>
 
-      {/* Tab 切换器 */}
+      {/* ========== 改动10：Tab 显示资源数量 ========== */}
+      {/* 目的：让用户知道每个 Tab 有多少资源 */}
+      {/* ============================================== */}
       <div style={{
         display: 'flex',
         borderBottom: '1px solid #e5e7eb',
@@ -94,7 +97,7 @@ const ResourcePanel = ({
           }}
           onClick={() => setActiveTab('recommended')}
         >
-          推荐资源
+          推荐资源 ({displayResources.length})
         </button>
         <button
           style={{
@@ -109,7 +112,7 @@ const ResourcePanel = ({
           }}
           onClick={() => setActiveTab('generated')}
         >
-          我的生成
+          我的生成 ({generatedList.length})
         </button>
       </div>
 
@@ -123,17 +126,13 @@ const ResourcePanel = ({
         {activeTab === 'recommended' && (
           <>
             {isLoading ? (
-              // ✅ 加载状态（骨架屏）
               <div style={{
                 textAlign: 'center',
                 padding: '60px 20px',
                 color: '#9ca3af'
               }}>
                 <div style={{ fontSize: '48px', marginBottom: '12px' }}>⏳</div>
-                <p style={{ margin: 0, fontSize: '14px' }}>加载推荐资源中...</p>
-                <p style={{ margin: '8px 0 0 0', fontSize: '12px' }}>
-                  请稍候
-                </p>
+                <p style={{ margin: 0, fontSize: '14px' }}>加载推荐资源中...</p >
               </div>
             ) : displayResources.length === 0 ? (
               <div style={{
@@ -142,15 +141,15 @@ const ResourcePanel = ({
                 color: '#9ca3af'
               }}>
                 <div style={{ fontSize: '48px', marginBottom: '12px' }}>✨</div>
-                <p style={{ margin: 0, fontSize: '14px' }}>暂无推荐资源</p>
+                <p style={{ margin: 0, fontSize: '14px' }}>暂无推荐资源</p >
                 <p style={{ margin: '8px 0 0 0', fontSize: '12px' }}>
-                  发送消息后，系统会为您推荐资源
-                </p>
+                  发送消息后，系统会为您推荐丰富的学习资源
+                </p >
               </div>
             ) : (
               displayResources.map((resource, index) => (
                 <ResourceCard
-                  key={index}
+                  key={resource.id || index}
                   resource={resource}
                   onFinishResource={onFinishResource}
                   onSubmitAnswer={onSubmitAnswer}
@@ -166,34 +165,37 @@ const ResourcePanel = ({
           <>
             <div style={{ marginBottom: '16px' }}>
               <ResourceGeneratorButton 
-                onGenerate={onGenerateResource}
+                onGenerate={handleGenerate}
                 isLoading={isLoading}
                 userId={userId}
               />
             </div>
-            {isEmptyGenerated ? (
+            {generatedList.length === 0 ? (
               <div style={{
                 textAlign: 'center',
                 padding: '60px 20px',
                 color: '#9ca3af'
               }}>
-               
-                <p style={{ margin: 0, fontSize: '14px' }}>暂无生成的资源</p>
+                <p style={{ margin: 0, fontSize: '14px' }}>暂无生成的资源</p >
                 <p style={{ margin: '8px 0 0 0', fontSize: '12px' }}>
                   点击上方按钮生成定制资源
-                </p>
+                </p >
               </div>
             ) : (
-              <ResourceCard
-                resource={generatedResources}
-                onFinishResource={onFinishResource}
-                onSubmitAnswer={onSubmitAnswer}
-                userId={userId}
-              />
+              generatedList.map((resource, index) => (
+                <ResourceCard
+                  key={resource.id || index}
+                  resource={resource}
+                  onFinishResource={onFinishResource}
+                  onSubmitAnswer={onSubmitAnswer}
+                  userId={userId}
+                />
+              ))
             )}
           </>
         )}
       </div>
+
       {/* 生成进度条 */}
       <ResourceGenerationProgress
         isVisible={showProgress}

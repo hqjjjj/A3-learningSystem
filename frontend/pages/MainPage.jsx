@@ -98,11 +98,19 @@ const MainPage = ({ appState, setAppState, userId }) => {
     }
   }, [userId, setAppState, mergeAppState]);
 
-  // ===== 资源生成回调函数 =====
-  const handleGenerateResource = useCallback(async (resourceType) => {
+  // ========== 改动1：修改资源生成回调函数 ==========
+  // 目的：ResourcePanel 传入数组 ['animation']，后端API需要字符串 'animation'
+  // 所以取数组的第一个元素传给后端
+  // =================================================
+  const handleGenerateResource = useCallback(async (resourceTypes) => {
     setIsLoading(true);
     try {
+      // ✅ 从数组中取出第一个元素作为 resource_type
+      // 因为后端API接收的是单个字符串
+      const resourceType = Array.isArray(resourceTypes) ? resourceTypes[0] : resourceTypes;
+      
       const data = await api.generateResource(userId, appState.topic, resourceType);
+    // =================================
       mergeAppState({
         generated_resource: data.generated_resource,
         topic: data.topic,
@@ -114,7 +122,7 @@ const MainPage = ({ appState, setAppState, userId }) => {
       setIsLoading(false);
     }
   }, [userId, appState.topic, mergeAppState]);
-
+  
   // ===== 提交答案回调函数 =====
   const handleSubmitAnswer = useCallback(async (correct_rate, duration) => {
     setIsLoading(true);

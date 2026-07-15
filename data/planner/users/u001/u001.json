@@ -1,9 +1,15 @@
 {
   "user_id": "u001",
   "current_topic": {
+<<<<<<< HEAD
     "id": "os_process_02",
     "name": "程序顺序执行与并发执行",
     "understanding": 0.7,
+=======
+    "id": "os_virt_01",
+    "name": "虚拟化的基本概念",
+    "understanding": 0.67,
+>>>>>>> 资源前端显示
     "is_review": false
   },
   "teaching_output": {
@@ -13,7 +19,11 @@
     ],
     "cognitive_level": {
       "level": "intermediate",
+<<<<<<< HEAD
       "understanding_avg": 0.6
+=======
+      "understanding_avg": 0.56
+>>>>>>> 资源前端显示
     },
     "error_patterns": [],
     "preference": {
@@ -25,23 +35,48 @@
     },
     "learning_pace": "fast",
     "current_topic": {
+<<<<<<< HEAD
       "id": "os_process_02",
       "name": "程序顺序执行与并发执行",
       "understanding": 0.7,
+=======
+      "id": "os_virt_01",
+      "name": "虚拟化的基本概念",
+      "understanding": 0.67,
+>>>>>>> 资源前端显示
       "is_review": false
     }
   },
   "learning_path": {
     "learning_path": [
+      "前趋图",
+      "程序顺序执行与并发执行",
       "进程的定义与特征",
       "进程的基本状态与转换",
-      "挂起操作和进程状态转换",
       "进程控制块（PCB）",
       "进程控制原语"
     ],
     "current_step": "程序顺序执行与并发执行",
     "next_step": "多处理机系统的引入与类型",
     "path_nodes": [
+      {
+        "id": "os_process_01",
+        "name": "前趋图",
+        "difficulty": "easy",
+        "status": "pending",
+        "understanding": 0,
+        "x": 231.65489081394543,
+        "y": -92.14256633430381
+      },
+      {
+        "id": "os_process_02",
+        "name": "程序顺序执行与并发执行",
+        "difficulty": "easy",
+        "status": "pending",
+        "understanding": 0,
+        "x": -83.62202840636206,
+        "y": 49.74731598695408
+      },
       {
         "id": "os_process_03",
         "name": "进程的定义与特征",
@@ -59,15 +94,6 @@
         "understanding": 0,
         "x": 785.9957762941262,
         "y": 202.2640845793854
-      },
-      {
-        "id": "os_process_05",
-        "name": "挂起操作和进程状态转换",
-        "difficulty": "medium",
-        "status": "pending",
-        "understanding": 0,
-        "x": -141.57302382169263,
-        "y": 329.26150386700994
       },
       {
         "id": "os_process_06",
@@ -634,7 +660,13 @@
         "target": "os_disk_13"
       }
     ],
+<<<<<<< HEAD
     "timestamp": "2026-07-15T15:14:34.761895"
   },
   "updated_at": "2026-07-15T15:14:34.761895"
+=======
+    "timestamp": "2026-07-15T19:14:01.175405"
+  },
+  "updated_at": "2026-07-15T19:14:01.175405"
+>>>>>>> 资源前端显示
 }
