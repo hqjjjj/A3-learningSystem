@@ -5,12 +5,13 @@
   ],
   "cognitive_level": {
     "level": "intermediate",
-    "understanding_avg": 0.55
+    "understanding_avg": 0.6
   },
   "error_patterns": [],
   "preference": {
     "resource_type": [
-      "explanation"
+      "explanation",
+      "exercise"
     ],
     "difficulty": "easy"
   },

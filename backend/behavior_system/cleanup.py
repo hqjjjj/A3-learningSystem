@@ -20,10 +20,15 @@ def clean_user_events(user_id: str) -> None:
         data = [] 
     
     if len(data) > MAX_EVENTS:
+        old_len = len(data)
         data = data[-MAX_EVENTS:]
         with open(user_file, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
+        print(f"【行为系统】已清理用户 {user_id} 的行为记录（原 {old_len} 条，保留最近 {MAX_EVENTS} 条）")
+    else:
+        pass
 
+    
 async def add_user_event_async(user_id: str, event: Dict[str, Any]) -> None:
     """异步添加用户行为记录，并在添加后自动清理"""
     loop = asyncio.get_event_loop()

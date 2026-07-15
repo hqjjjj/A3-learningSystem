@@ -2748,5 +2748,75 @@
     "correct_rate": null,
     "duration": 137,
     "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-15T14:35:24.300562",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 10,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-15T14:43:52.330704",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想做练习"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-15T14:43:52.406684",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 13,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-15T14:50:35.029846",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想做练习"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-15T14:50:35.061392",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 23,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-15T14:53:56.915293",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 171,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-15T15:14:18.378605",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想学习前驱图"
   }
 ]

@@ -39,6 +39,8 @@ def log_event(event: BehaviorEvent):
         with open(user_file, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
+        # 打印日志
+        print(f"【行为系统】已记录用户 {event.user_id} 的行为事件：{event.event_type}（当前共 {len(data)} 条）")
 
 # =======================================================
 # 🔥 新增：总控对接专用入口

@@ -1,9 +1,9 @@
 {
   "user_id": "u001",
   "current_topic": {
-    "id": "os_virt_01",
-    "name": "虚拟化的基本概念",
-    "understanding": 0.64,
+    "id": "os_process_02",
+    "name": "程序顺序执行与并发执行",
+    "understanding": 0.7,
     "is_review": false
   },
   "teaching_output": {
@@ -13,20 +13,21 @@
     ],
     "cognitive_level": {
       "level": "intermediate",
-      "understanding_avg": 0.55
+      "understanding_avg": 0.6
     },
     "error_patterns": [],
     "preference": {
       "resource_type": [
-        "explanation"
+        "explanation",
+        "exercise"
       ],
       "difficulty": "easy"
     },
     "learning_pace": "fast",
     "current_topic": {
-      "id": "os_virt_01",
-      "name": "虚拟化的基本概念",
-      "understanding": 0.64,
+      "id": "os_process_02",
+      "name": "程序顺序执行与并发执行",
+      "understanding": 0.7,
       "is_review": false
     }
   },
@@ -36,13 +37,9 @@
       "进程的基本状态与转换",
       "挂起操作和进程状态转换",
       "进程控制块（PCB）",
-      "进程控制原语",
-      "临界区问题与Peterson算法",
-      "信号量机制",
-      "管程机制",
-      "生产者-消费者问题"
+      "进程控制原语"
     ],
-    "current_step": "虚拟化的基本概念",
+    "current_step": "程序顺序执行与并发执行",
     "next_step": "多处理机系统的引入与类型",
     "path_nodes": [
       {
@@ -89,42 +86,6 @@
         "understanding": 0,
         "x": 761.0814805021805,
         "y": 162.06870997520718
-      },
-      {
-        "id": "os_sync_02",
-        "name": "临界区问题与Peterson算法",
-        "difficulty": "medium",
-        "status": "pending",
-        "understanding": 0,
-        "x": -152.9021612158029,
-        "y": 140.44874521312164
-      },
-      {
-        "id": "os_sync_04",
-        "name": "信号量机制",
-        "difficulty": "hard",
-        "status": "pending",
-        "understanding": 0,
-        "x": -50.54710878711796,
-        "y": 439.71685441930083
-      },
-      {
-        "id": "os_sync_05",
-        "name": "管程机制",
-        "difficulty": "hard",
-        "status": "pending",
-        "understanding": 0,
-        "x": -198.6291844808494,
-        "y": 185.7768055750762
-      },
-      {
-        "id": "os_sync_06",
-        "name": "生产者-消费者问题",
-        "difficulty": "hard",
-        "status": "pending",
-        "understanding": 0,
-        "x": 219.1234120269164,
-        "y": -74.41949697213687
       }
     ],
     "edges": [
@@ -673,7 +634,7 @@
         "target": "os_disk_13"
       }
     ],
-    "timestamp": "2026-07-15T13:48:44.251466"
+    "timestamp": "2026-07-15T15:14:34.761895"
   },
-  "updated_at": "2026-07-15T13:48:44.265829"
+  "updated_at": "2026-07-15T15:14:34.761895"
 }
