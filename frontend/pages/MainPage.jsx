@@ -152,8 +152,11 @@ const handlePathNodeClick = useCallback(async (newTopic) => {
   try {
     const pathData = await api.fetchPath(userId, newTopic);
     mergeAppState({
+      profile: pathData.profile,
       learning_path: pathData.learning_path,
-      recommended_resources: pathData.recommended_resources || []
+      recommended_resources: pathData.recommended_resources || [],
+      current_progress: pathData.current_progress,
+      topic: pathData.topic, 
     });
   } catch (error) {
     console.error('加载新主题路径失败', error);
