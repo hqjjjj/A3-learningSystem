@@ -116,7 +116,11 @@ class Orchestrator:
         return {
             "reply": reply,
             "profile": profile_dict,
-            "learning_path": raw_path_data.get("path_list", []),
+            "learning_path": {
+                "current": raw_path_data.get("current", ""),
+                "next": raw_path_data.get("next", ""),
+                "path_list": raw_path_data.get("path_list", [])
+            },
             "recommended_resources": recommended,
             "topic": profile_dict.get("progress", {}).get("current_topic", ""),
             "current_progress": raw_path_data.get("current_progress", "")
@@ -161,6 +165,10 @@ class Orchestrator:
                 print(f"【总控】⚠️ 设置默认主题失败: {e}")
 
         if topic and profile_obj:
+            if user_id in self._last_plan_cache:
+                del self._last_plan_cache[user_id]
+                print(f"【总控】清除用户 {user_id} 的路径缓存（主题切换至: {topic}）")
+            
             print(f"【总控】设置用户 {user_id} 的当前主题为: {topic}")
             profile_obj.progress.current_topic = topic
             self.profile_agent._save_profile_to_disk(profile_obj)
@@ -171,7 +179,11 @@ class Orchestrator:
 
         return {
             "profile": profile_dict,
-            "learning_path": path_data.get("path_list", []),
+            "learning_path": {
+                "current": path_data.get("current", ""),
+                "next": path_data.get("next", ""),
+                "path_list": path_data.get("path_list", [])
+            },
             "topic": profile_dict.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
         }
@@ -218,7 +230,11 @@ class Orchestrator:
 
         return {
             "profile": profile,
-            "learning_path": path_data.get("path_list", []),
+            "learning_path": {
+                "current": path_data.get("current", ""),
+                "next": path_data.get("next", ""),
+                "path_list": path_data.get("path_list", [])
+            },
             "recommended_resources": recommended,
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
@@ -251,7 +267,11 @@ class Orchestrator:
 
         return {
             "profile": profile,
-            "learning_path": path_data.get("path_list", []),
+            "learning_path": {
+                "current": path_data.get("current", ""),
+                "next": path_data.get("next", ""),
+                "path_list": path_data.get("path_list", [])
+            },
             "recommended_resources": recommended,
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")

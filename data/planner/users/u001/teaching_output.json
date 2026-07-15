@@ -1,17 +1,18 @@
 {
-  "learning_style": "visual",
+  "learning_style": "textual",
   "weak_points": [
-    "进程的定义与特征"
+    "进程的定义与特征",
+    "进程的基本状态与转换"
   ],
   "cognitive_level": {
     "level": "intermediate",
-    "understanding_avg": 0.57
+    "understanding_avg": 0.54
   },
   "error_patterns": [],
   "preference": {
     "resource_type": [
-      "explanation",
-      "exercise"
+      "exercise",
+      "explanation"
     ],
     "difficulty": "easy"
   },
