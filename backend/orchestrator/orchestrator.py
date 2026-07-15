@@ -539,7 +539,7 @@ class Orchestrator:
             resources = {}
             try:
                 if raw_path_data.get("topic_id"):
-                    resources = self._call_source_agent(profile_dict, raw_path_data,)
+                    resources = self._call_source_agent(profile_dict, raw_path_data, user_id=user_id)
             except Exception as e:
                 print(f"【总控】⚠️ 生成资源失败: {e}")
                 import traceback
