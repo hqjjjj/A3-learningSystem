@@ -418,7 +418,7 @@ class PlannerAgent:
                 max_tokens=2000
             )
             # ✅ 打印完整响应对象，检查是否有错误字段
-            print(f"[LLM] 完整响应对象: {response}")
+            #print(f"[LLM] 完整响应对象: {response}")
             if not response.choices:
                 print("[LLM] 响应中没有 choices")
                 return None
