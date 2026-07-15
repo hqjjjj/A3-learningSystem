@@ -2748,5 +2748,15 @@
     "correct_rate": null,
     "duration": 137,
     "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-15T17:55:46.564693",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 13,
+    "message": null
   }
 ]
