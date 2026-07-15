@@ -183,6 +183,47 @@ const MainPage = ({ appState, setAppState, userId }) => {
       setIsLoading(false);
     }
   }, [userId, mergeAppState, setAppState, setIsLoading]);
+// 完成浏览回调函数
+const handleFinishResource=useCallback(async(resourceType,duration)=>{
+  try{
+    const data=await api.finishResource(userId,resourceType,appState.topic,duration);
+    mergeAppState({
+      profile: data.profile,
+      learning_path: data.learning_path,
+      recommended_resources: data.recommended_resources,
+      topic: data.topic,
+      current_progress: data.current_progress
+    })
+  }catch (error) {
+    console.error('上报资源浏览失败', error);
+  }
+}, [userId, appState.topic, mergeAppState])
+
+//切换主题回调函数
+const handlePathNodeClick = useCallback(async (newTopic) => {
+  // 1. 先乐观更新 topic（让界面立刻响应）
+  setAppState(prev => ({ ...prev, topic: newTopic }));
+
+  // 2. 拉取该主题下的路径和资源
+  setIsLoading(true);
+  try {
+    const pathData = await api.fetchPath(userId, newTopic);
+    mergeAppState({
+      profile: pathData.profile,
+      learning_path: pathData.learning_path,
+      recommended_resources: pathData.recommended_resources || [],
+      current_progress: pathData.current_progress,
+      topic: pathData.topic, 
+    });
+  } catch (error) {
+    console.error('加载新主题路径失败', error);
+  } finally {
+    setIsLoading(false);
+  }
+}, [userId, mergeAppState, setAppState, setIsLoading]);
+
+
+ 
 
   return (
     <div className="main-page">
