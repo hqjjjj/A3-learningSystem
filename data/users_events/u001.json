@@ -2823,7 +2823,45 @@
     "correct_rate": null,
     "duration": null,
     "message": "我想学习前驱图"
-=======
->>>>>>> 资源前端显示
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-15T16:21:25.349764",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 1,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-15T16:21:35.326822",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想做练习"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "message",
+    "time": "2026-07-15T18:55:46.350564",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想做练习"
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-15T18:55:46.384642",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 16,
+    "message": null
   }
 ]

@@ -48,7 +48,14 @@ const MainPage = ({ appState, setAppState, userId }) => {
   }, [setAppState]);
 
   // ===== 初始数据加载 =====
+  // MainPage.jsx - useEffect
   useEffect(() => {
+    // ✅ 如果已有数据且用户ID匹配，跳过加载
+    if (appState.profile && appState.profile.user_id === userId) {
+      console.log('数据已加载，跳过重复请求');
+      return;
+    }
+  
     const loadInitialData = async () => {
       try {
         setIsLoading(true);
@@ -61,9 +68,9 @@ const MainPage = ({ appState, setAppState, userId }) => {
         setIsLoading(false);
       }
     };
-    
+  
     loadInitialData();
-  }, [userId, mergeAppState]);
+  }, [userId, mergeAppState, appState.profile]);
 
   // ===== 聊天模块回调函数 =====
   const handleSendMessage = useCallback(async (message) => {

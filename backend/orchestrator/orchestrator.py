@@ -1,6 +1,5 @@
 # backend/orchestrator/orchestrator.py
 
-# 导入行为系统
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'behavior_system'))
@@ -13,6 +12,7 @@ from typing import Dict, Optional, List
 from datetime import datetime
 from functools import wraps
 import time
+import threading  # ✅ 新增
 
 # 导入画像Agent
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'agents', 'agent_profile'))
@@ -30,24 +30,21 @@ from backend.agents.agent_source.code_agent import agentcode as code_agent_class
 from backend.agents.agent_source.exercise_agent import agentexercise as exercise_agent_class
 from backend.agents.agent_source.main import generate_resources
 
-# 防抖装饰器
+# 防抖装饰器（保留原有）
 def debounce(wait_time):
     def decorator(func):
         last_called = {}
 
         @wraps(func)
         def debounced(*args, **kwargs):
-            user_id = args[0]  # 假设第一个参数是 user_id
+            user_id = args[0]
             now = time.time()
-            
             if user_id in last_called:
                 if now - last_called[user_id] < wait_time:
                     print(f"【防抖】忽略用户 {user_id} 的重复调用，距离上次调用 {now - last_called[user_id]:.2f} 秒")
-                    return {}  # 如果在防抖时间内，直接返回空结果
+                    return {}
             last_called[user_id] = now
-            
             return func(*args, **kwargs)
-        
         return debounced
     return decorator
 
@@ -63,18 +60,24 @@ class Orchestrator:
         self.memory_path = os.path.join(
             os.path.dirname(__file__), '..', '..', 'data', 'knowledge'
         )
+        # ✅ 防抖和缓存
+        self._last_profile_update = {}   # user_id -> timestamp
+        self._last_plan_cache = {}       # user_id -> (timestamp, result)
+        self._plan_locks = {}            # user_id -> threading.Lock
+        self._lock = threading.Lock()    # 保护 _plan_locks 的锁
 
     # ==================== 五个核心函数 ====================
 
     def handle_chat(self, user_id: str, message: str, topic: str = None) -> Dict:
         print(f"【总控】处理用户 {user_id} 的聊天消息: {message}")
         self._log_behavior(user_id, "chat", message)
-        
+
         log_behavior(user_id, action="message", message=message)
         cleanup_events(user_id)
-        
+
+        # 1. 更新画像
         profile_dict = self._update_profile(user_id, message)
-        
+
         if topic:
             print(f"【总控】设置用户 {user_id} 的当前主题为: {topic}")
             profile_obj = self.profile_agent.get_profile(user_id)
@@ -82,32 +85,52 @@ class Orchestrator:
                 profile_obj.progress.current_topic = topic
                 self.profile_agent._save_profile_to_disk(profile_obj)
                 profile_dict = profile_obj.model_dump()
-        
-        path_data = self.get_learning_path(user_id, topic) 
-        resources = self._call_source_agent(profile_dict, path_data, user_id=user_id)
-        reply = self._generate_reply(profile_dict, path_data)
+
+        # 2. 获取原始路径数据（包含 topic_id, module, path_list 等）
+        raw_path_data = self._call_plan_agent(user_id, profile_dict)
+
+        # 3. 意图识别，决定资源类型和回复风格
+        intent = self._detect_intent(message)
+        resource_types = ["explanation"]  # 默认
+
+        if intent == "exercise":
+            resource_types = ["exercise"]
+            reply = f"好的！根据你当前的学习情况，我为你准备了一道关于「{raw_path_data.get('current', '')}」的练习题，请查看右侧资源区。"
+        elif intent == "explain":
+            resource_types = ["explanation", "mindmap"]
+            reply = f"没问题！我来为你详细讲解「{raw_path_data.get('current', '')}」的核心概念，请查看右侧学习资源。"
+        elif intent == "review":
+            resource_types = ["explanation", "mindmap"]
+            reply = f"好的，我们一起来回顾「{raw_path_data.get('current', '')}」的重点，帮助你巩固记忆。"
+        else:
+            reply = self._generate_reply(profile_dict, raw_path_data)
+
+        # 兜底：确保 reply 不为空
+        if not reply or reply.strip() == "":
+            reply = "已收到你的消息，正在为你准备学习内容。"
+
+        # 4. 生成资源（传入原始路径数据和资源类型）
+        resources = self._call_source_agent(profile_dict, raw_path_data, user_id=user_id, resource_types=resource_types)
         recommended = self._extract_recommended(resources)
 
         return {
             "reply": reply,
-            "profile": profile_dict, 
-            "learning_path": path_data.get("learning_path", []),
+            "profile": profile_dict,
+            "learning_path": raw_path_data.get("path_list", []),
             "recommended_resources": recommended,
             "topic": profile_dict.get("progress", {}).get("current_topic", ""),
-            "current_progress": path_data.get("current_progress", "")
+            "current_progress": raw_path_data.get("current_progress", "")
         }
 
     def get_learning_path(self, user_id: str, topic: str = None) -> Dict:
         print(f"【总控】获取用户 {user_id} 的学习路径")
         profile_obj = self.profile_agent.get_profile(user_id)
-    
         if not profile_obj:
             print(f"【总控】从磁盘加载用户 {user_id} 的画像")
             profile_obj = self.profile_agent.load_profile_from_disk(user_id)
             if profile_obj:
                 self.profile_agent.profiles[user_id] = profile_obj
-    
-        # 如果profile_obj仍然为空，创建一个新的
+
         if not profile_obj:
             print(f"【总控】为用户 {user_id} 创建新画像")
             from profile_agent import StudentProfile
@@ -120,8 +143,7 @@ class Orchestrator:
             )
             self.profile_agent._save_profile_to_disk(profile_obj)
             self.profile_agent.profiles[user_id] = profile_obj
-        
-         # ✅ 新增：如果用户没有 current_topic，设置一个默认值
+
         if profile_obj and not profile_obj.progress.current_topic:
             print(f"【总控】用户没有当前主题，从知识库获取默认主题")
             try:
@@ -137,7 +159,7 @@ class Orchestrator:
                         print(f"【总控】设置默认主题为: {profile_obj.progress.current_topic}")
             except Exception as e:
                 print(f"【总控】⚠️ 设置默认主题失败: {e}")
-    
+
         if topic and profile_obj:
             print(f"【总控】设置用户 {user_id} 的当前主题为: {topic}")
             profile_obj.progress.current_topic = topic
@@ -146,7 +168,7 @@ class Orchestrator:
 
         profile_dict = profile_obj.model_dump() if profile_obj else {}
         path_data = self._call_plan_agent(user_id, profile_dict)
-    
+
         return {
             "profile": profile_dict,
             "learning_path": path_data.get("path_list", []),
@@ -167,14 +189,14 @@ class Orchestrator:
             "current_progress": profile.get("progress", {}).get("current_topic", "")
         }
 
-    @debounce(30)  # 添加防抖，30秒内只执行一次
+    @debounce(30)
     def finish_view_resource(self, user_id: str, resource_id: str, duration: int) -> Dict:
         print(f"【总控】用户 {user_id} 完成查看资源 {resource_id}，用时 {duration} 秒")
         self._log_behavior(user_id, "view_resource", f"resource:{resource_id}", duration)
-        
+
         log_behavior(user_id, action="view_resource", resource_id=resource_id, duration=duration)
         cleanup_events(user_id)
-        
+
         if duration >= 30:
             try:
                 analyzed_data = analyze_behavior(user_id)
@@ -182,55 +204,54 @@ class Orchestrator:
             except Exception as e:
                 print(f"【总控】⚠️ analyzer分析失败: {e}, 使用兜底数据")
                 analyzed_data = {}
-                
             profile = self._update_profile(
-                user_id, 
-                f"仔细阅读了资源{resource_id}，用时{duration}秒", 
+                user_id,
+                f"仔细阅读了资源{resource_id}，用时{duration}秒",
                 behavior=analyzed_data
             )
         else:
             profile = self._update_profile(user_id, f"浏览了资源{resource_id}，用时{duration}秒")
-            
+
         path_data = self._call_plan_agent(user_id, profile)
         resources = self._call_source_agent(profile, path_data, user_id=user_id)
         recommended = self._extract_recommended(resources)
 
         return {
             "profile": profile,
-            "learning_path": path_data.get("learning_path", []),
+            "learning_path": path_data.get("path_list", []),
             "recommended_resources": recommended,
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
         }
 
-    @debounce(30)  # 添加防抖，30秒内只执行一次
+    @debounce(30)
     def submit_answer_result(self, user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
         print(f"【总控】用户 {user_id} 提交 {topic} 的答题结果，正确率: {correct_rate}，用时: {duration} 秒")
         self._log_behavior(user_id, "submit_answer", topic, duration, correct_rate)
-        
+
         log_behavior(user_id, action="exercise", correct_rate=correct_rate, duration=duration)
         cleanup_events(user_id)
-        
+
         try:
             analyzed_data = analyze_behavior(user_id)
             print(f"【总控】分析用户 {user_id} 的答题行为数据")
         except Exception as e:
             print(f"【总控】⚠️ analyzer分析失败: {e}, 使用兜底数据")
             analyzed_data = {"correct_rate": correct_rate}
-        
+
         profile = self._update_profile(
-            user_id, 
+            user_id,
             f"做了{topic}的题目，正确率{correct_rate}，用时{duration}秒",
             behavior=analyzed_data
         )
-        
+
         path_data = self._call_plan_agent(user_id, profile)
         resources = self._call_source_agent(profile, path_data)
         recommended = self._extract_recommended(resources)
 
         return {
             "profile": profile,
-            "learning_path": path_data.get("learning_path", []),
+            "learning_path": path_data.get("path_list", []),
             "recommended_resources": recommended,
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
@@ -239,36 +260,36 @@ class Orchestrator:
     # ==================== 内部方法 ====================
 
     def _update_profile(self, user_id: str, message: str, behavior: Dict = None) -> Dict:
+        # ✅ 防抖：5秒内重复调用则跳过
+        now = time.time()
+        if user_id in self._last_profile_update:
+            if now - self._last_profile_update[user_id] < 5:
+                print(f"【防抖】用户 {user_id} 画像更新过于频繁（间隔 {now - self._last_profile_update[user_id]:.1f}秒），跳过本次更新")
+                return self._get_profile_dict(user_id)
+        self._last_profile_update[user_id] = now
+
         print(f"【总控】开始更新用户 {user_id} 的画像")
-        
-        # 先获取当前画像
+
         current_profile = self._get_profile_dict(user_id)
-        
-        # 如果 message 和 behavior 都没有变化，直接返回当前画像
-        if (current_profile.get("last_message") == message and 
+        if (current_profile.get("last_message") == message and
             current_profile.get("last_behavior") == behavior):
             print(f"【总控】用户 {user_id} 的画像无变化，跳过更新")
             return current_profile
-        
+
         try:
             resp = self.profile_agent.build_profile(user_id=user_id, user_input=message, behavior=behavior)
             if resp and resp.profile:
                 print(f"【总控】成功生成用户 {user_id} 的新画像")
-            
-                # 确保用户基本信息存在
                 if resp.profile.major is None:
                     resp.profile.major = "软件工程"
                 if resp.profile.grade is None:
                     resp.profile.grade = "大二"
                 if resp.profile.course is None:
                     resp.profile.course = "操作系统"
-            
-                # 更新时间戳和最后信息
                 resp.profile.updated_at = datetime.now()
                 resp.profile.last_message = message
                 resp.profile.last_behavior = behavior
-            
-                # 保存到磁盘
+
                 try:
                     self.profile_agent._save_profile_to_disk(resp.profile)
                     print(f"【总控】成功保存用户 {user_id} 的画像到磁盘")
@@ -298,112 +319,124 @@ class Orchestrator:
         return profile.model_dump() if profile else {}
 
     def _call_plan_agent(self, user_id: str, profile: Dict) -> Dict:
-        print(f"【总控】调用路径规划器，用户 {user_id}")
-        try:
-            # 1. 构造正确的知识库路径
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            project_root = os.path.dirname(os.path.dirname(current_dir))
-            knowledge_dir = os.path.join(project_root, "data", "knowledge")
-            KNOWLEDGE_DIR = knowledge_dir
+        print(f"【调试】_call_plan_agent 被调用，user_id={user_id}")  # ✅ 添加这行
+        # ✅ 获取或创建该用户的锁
+        with self._lock:
+            if user_id not in self._plan_locks:
+                self._plan_locks[user_id] = threading.Lock()
+            user_lock = self._plan_locks[user_id]
 
-            print(f"【总控】知识库路径: {knowledge_dir}")
+        # ✅ 使用锁保护路径规划
+        with user_lock:
+            # 双重检查：获取锁后再次检查缓存
+            now = time.time()
+            if user_id in self._last_plan_cache:
+                cached_time, cached_result = self._last_plan_cache[user_id]
+                if now - cached_time < 60:
+                    print(f"【总控】路径规划缓存命中 (user={user_id})，间隔 {now - cached_time:.1f}秒")
+                    return cached_result
 
-            # 2. 获取用户当前的主题
-            current_topic_name = profile.get("progress", {}).get("current_topic", "")
-            print(f"【总控】用户当前主题: {current_topic_name}")
+            print(f"【总控】调用路径规划器，用户 {user_id}")
+            try:
+                current_dir = os.path.dirname(os.path.abspath(__file__))
+                project_root = os.path.dirname(os.path.dirname(current_dir))
+                knowledge_dir = os.path.join(project_root, "data", "knowledge")
+                KNOWLEDGE_DIR = knowledge_dir
 
-            # 3. 如果用户没有当前主题，设置一个默认主题
-            if not current_topic_name:
-                print(f"【总控】用户没有当前主题，设置默认主题")
-                sys.path.insert(0, os.path.join(current_dir, '..', '..', 'data', 'knowledge'))
-                from KnowledgeBaseManager import KnowledgeBaseManager
-                kb_manager = KnowledgeBaseManager()
+                print(f"【总控】知识库路径: {knowledge_dir}")
 
-                if len(kb_manager.topics_index) > 0:
-                    first_id = list(kb_manager.topics_index.keys())[0]
-                    first_topic = kb_manager.get_topic_by_id(first_id)
-                    if first_topic:
-                        current_topic_name = first_topic.get("name", "")
-                        profile["progress"]["current_topic"] = current_topic_name
-                        print(f"【总控】设置默认主题为: {current_topic_name}")
+                current_topic_name = profile.get("progress", {}).get("current_topic", "")
+                print(f"【总控】用户当前主题: {current_topic_name}")
 
-            # 4. 调用路径规划器
-            planner, updated_profile, next_topic, full_learning_path  = run_planner(
-                KNOWLEDGE_DIR=KNOWLEDGE_DIR,  
-                user_profile=profile,
-                output_dir=os.path.join(project_root, "data", "planner")
-            )
+                if not current_topic_name:
+                    print(f"【总控】用户没有当前主题，设置默认主题")
+                    sys.path.insert(0, os.path.join(current_dir, '..', '..', 'data', 'knowledge'))
+                    from KnowledgeBaseManager import KnowledgeBaseManager
+                    kb_manager = KnowledgeBaseManager()
+                    if len(kb_manager.topics_index) > 0:
+                        first_id = list(kb_manager.topics_index.keys())[0]
+                        first_topic = kb_manager.get_topic_by_id(first_id)
+                        if first_topic:
+                            current_topic_name = first_topic.get("name", "")
+                            profile["progress"]["current_topic"] = current_topic_name
+                            print(f"【总控】设置默认主题为: {current_topic_name}")
 
-            # 5. 智能处理规划结果
-            current_topic_name = profile.get("progress", {}).get("current_topic", "")
-            current_topic_id = planner.kg.name_to_id.get(current_topic_name)
-            
-            # 从 full_learning_path 中提取 path_list
-            # full_learning_path 的结构: {"learning_path": [...], "path_nodes": [...], ...}
-            if full_learning_path and "learning_path" in full_learning_path:
-                llm_path_names = full_learning_path.get("learning_path", [])
-                path_list = []
-                for name in llm_path_names:
-                    topic_id = planner.kg.name_to_id.get(name)
-                    if topic_id:
-                        path_list.append({"name": name, "id": topic_id})
-            
-                # 确保当前主题在路径中
-                if path_list and current_topic_name:
-                    # 如果当前主题不在路径中，插入到开头
-                    current_in_path = any(p["name"] == current_topic_name for p in path_list)
-                    if not current_in_path and current_topic_id:
-                        path_list.insert(0, {"name": current_topic_name, "id": current_topic_id})
-            
-                # 获取下一个主题（从路径中找当前主题的下一个）
-                next_topic_name = ""
-                for i, item in enumerate(path_list):
-                    if item["name"] == current_topic_name and i + 1 < len(path_list):
-                        next_topic_name = path_list[i + 1]["name"]
-                        break
-                if not next_topic_name and path_list:
-                    next_topic_name = path_list[0]["name"]
-                
+                planner, updated_profile, next_topic, full_learning_path = run_planner(
+                    KNOWLEDGE_DIR=KNOWLEDGE_DIR,
+                    user_profile=profile,
+                    output_dir=os.path.join(project_root, "data", "planner")
+                )
 
-                # 在 result 构建之前，限制 path_list 长度
-                MAX_PATH_LENGTH = 10
-                if len(path_list) > MAX_PATH_LENGTH:
-                    # 保留前 MAX_PATH_LENGTH 个节点
-                    path_list = path_list[:MAX_PATH_LENGTH]
-                    print(f"【总控】路径过长，截断为 {MAX_PATH_LENGTH} 个节点")
+                current_topic_name = profile.get("progress", {}).get("current_topic", "")
+                current_topic_id = planner.kg.name_to_id.get(current_topic_name)
 
+                if full_learning_path and "learning_path" in full_learning_path:
+                    llm_path_names = full_learning_path.get("learning_path", [])
+                    path_list = []
+                    for name in llm_path_names:
+                        topic_id = planner.kg.name_to_id.get(name)
+                        if topic_id:
+                            path_list.append({"name": name, "id": topic_id})
+
+                    if path_list and current_topic_name:
+                        current_in_path = any(p["name"] == current_topic_name for p in path_list)
+                        if not current_in_path and current_topic_id:
+                            path_list.insert(0, {"name": current_topic_name, "id": current_topic_id})
+
+                    next_topic_name = ""
+                    for i, item in enumerate(path_list):
+                        if item["name"] == current_topic_name and i + 1 < len(path_list):
+                            next_topic_name = path_list[i + 1]["name"]
+                            break
+                    if not next_topic_name and path_list:
+                        next_topic_name = path_list[0]["name"]
+
+                    MAX_PATH_LENGTH = 10
+                    if len(path_list) > MAX_PATH_LENGTH:
+                        path_list = path_list[:MAX_PATH_LENGTH]
+                        print(f"【总控】路径过长，截断为 {MAX_PATH_LENGTH} 个节点")
+
+                    result = {
+                        "next": next_topic_name,
+                        "current": current_topic_name,
+                        "current_progress": "review" if current_topic_name in profile.get("weak_points", []) else "learning",
+                        "topic_id": current_topic_id or (path_list[0]["id"] if path_list else ""),
+                        "path_list": path_list,
+                        "module": profile.get("course", "")
+                    }
+
+                    print(f"【总控】LLM 路径规划结果: {result}")
+                    print(f"【总控】最终 path_list 长度: {len(path_list)}")
+                    print(f"【总控】最终 path_list 内容: {path_list}")
+
+                    self._last_plan_cache[user_id] = (now, result)
+                    return result
+                else:
+                    print("【总控】LLM 路径为空，使用规则兜底")
+                    result = {
+                        "next": "",
+                        "current": current_topic_name,
+                        "current_progress": "learning",
+                        "topic_id": "",
+                        "path_list": [],
+                        "module": profile.get("course", "")
+                    }
+                    self._last_plan_cache[user_id] = (now, result)
+                    return result
+
+            except Exception as e:
+                print(f"【总控】⚠️ 路径规划失败: {e}")
+                import traceback
+                traceback.print_exc()
                 result = {
-                    "next": next_topic_name,
-                    "current": current_topic_name,
-                    "current_progress": "review" if current_topic_name in profile.get("weak_points", []) else "learning",
-                    "topic_id": current_topic_id or (path_list[0]["id"] if path_list else ""),
-                    "path_list": path_list,
+                    "next": "",
+                    "current": profile.get("progress", {}).get("current_topic", ""),
+                    "current_progress": "learning",
+                    "topic_id": "",
+                    "path_list": [],
                     "module": profile.get("course", "")
                 }
-                
-                print(f"【总控】LLM 路径规划结果: {result}")
-                print(f"【总控】最终 path_list 长度: {len(path_list)}")
-                print(f"【总控】最终 path_list 内容: {path_list}")
                 return result
-            else:
-                # 兜底：使用规则
-                print("【总控】LLM 路径为空，使用规则兜底")
-                # ... 原来的兜底逻辑 ...
-                
-        except Exception as e:
-            print(f"【总控】⚠️ 路径规划失败: {e}")
-            import traceback
-            traceback.print_exc()
-            return {
-                "next": "",
-                "current": profile.get("progress", {}).get("current_topic", ""),
-                "current_progress": "learning",
-                "topic_id": "",
-                "path_list": [],
-                "module": profile.get("course", "")
-            }
-
-
 
     def _process_plan_result(self, plan_data: Dict, profile: Dict) -> Dict:
         result = {
@@ -416,8 +449,8 @@ class Orchestrator:
         }
         return result
 
-    def _call_source_agent(self, profile: Dict, path_data: Dict, user_id: str = None) -> List[Dict]:
-        resource_input = self._build_resource_input(profile, path_data)
+    def _call_source_agent(self, profile: Dict, path_data: Dict, user_id: str = None, resource_types: List[str] = None) -> List[Dict]:
+        resource_input = self._build_resource_input(profile, path_data, resource_types)
         if user_id:
             resource_input["user_id"] = user_id
         return self._call_source_agent_raw(resource_input)
@@ -430,7 +463,9 @@ class Orchestrator:
             print(f"【总控】⚠️ 资源生成失败: {e}")
             return {"resources": []}
 
-    def _build_resource_input(self, profile: Dict, path_data: Optional[Dict]) -> Dict:
+    def _build_resource_input(self, profile: Dict, path_data: Optional[Dict], resource_types: List[str] = None) -> Dict:
+        if resource_types is None:
+            resource_types = ["explanation"]
         return {
             "topic_id": path_data.get("topic_id", "") if path_data else "",
             "module": path_data.get("module", profile.get("course", "")) if path_data else profile.get("course", ""),
@@ -439,13 +474,24 @@ class Orchestrator:
             "weak_points": profile.get("weak_points", []),
             "understanding": self._get_current_understanding(profile),
             "current_progress": path_data.get("current_progress", "learning") if path_data else "learning",
-            "resource_type": ["explanation"],
+            "resource_type": resource_types,
         }
 
     def _get_current_understanding(self, profile: Dict) -> float:
         current_topic = profile.get("progress", {}).get("current_topic", "")
         return profile.get("knowledge_level", {}).get(current_topic, 0.0)
-    
+
+    def _detect_intent(self, message: str) -> str:
+        msg = message.lower()
+        if any(k in msg for k in ["练习", "题目", "做题", "刷题", "习题", "测验", "测试", "考考"]):
+            return "exercise"
+        elif any(k in msg for k in ["讲解", "解释", "什么是", "概念", "讲一下", "介绍一下"]):
+            return "explain"
+        elif any(k in msg for k in ["复习", "回顾", "总结", "梳理", "巩固"]):
+            return "review"
+        else:
+            return "general"
+
     def _generate_reply(self, profile: Dict, path_data: Dict) -> str:
         weak = profile.get("weak_points", [])
         current_topic = profile.get("progress", {}).get("current_topic", "")
@@ -475,15 +521,10 @@ class Orchestrator:
             "timestamp": datetime.now().isoformat()
         })
 
-    # ==================== 新增：用户登录/刷新加载方法 ====================
+    # ==================== 用户登录/刷新加载方法 ====================
     def load_user_state(self, user_id: str) -> Dict:
-        """
-        用户登录/页面刷新时调用，加载完整状态。
-        返回的字典结构必须匹配前端期望的 data 对象。
-        """
         print(f"【总控】加载用户 {user_id} 的状态")
         try:
-            # 1. 获取用户画像
             profile_obj = self.profile_agent.get_profile(user_id)
             if not profile_obj:
                 print(f"【总控】从磁盘加载用户 {user_id} 的画像")
@@ -501,27 +542,22 @@ class Orchestrator:
                     course="操作系统",
                     created_at=datetime.now()
                 )
-                # 确保保存到磁盘
                 self.profile_agent._save_profile_to_disk(profile_obj)
                 self.profile_agent.profiles[user_id] = profile_obj
             else:
-                # 如果用户已存在但基本信息为空，更新它们
                 if profile_obj.major is None:
                     profile_obj.major = "软件工程"
                 if profile_obj.grade is None:
                     profile_obj.grade = "大二"
                 if profile_obj.course is None:
                     profile_obj.course = "操作系统"
-                # 保存更新后的信息
                 self.profile_agent._save_profile_to_disk(profile_obj)
                 self.profile_agent.profiles[user_id] = profile_obj
 
             profile_dict = profile_obj.model_dump()
             print(f"【总控】用户 {user_id} 的画像: {profile_dict}")
 
-            # 2. 获取学习路径
             try:
-                # 直接调用 _call_plan_agent 获取原始路径数据
                 profile_dict = profile_obj.model_dump() if profile_obj else {}
                 raw_path_data = self._call_plan_agent(user_id, profile_dict)
                 print(f"【总控】原始路径数据: {raw_path_data}")
@@ -535,7 +571,6 @@ class Orchestrator:
                     "topic_id": ""
                 }
 
-            # 3. 根据目前的画像和路径，推荐首批资源
             resources = {}
             try:
                 if raw_path_data.get("topic_id"):
@@ -559,7 +594,7 @@ class Orchestrator:
                 "topic": profile_dict.get("progress", {}).get("current_topic", ""),
                 "current_progress": raw_path_data.get("current_progress", "learning")
             }
-        
+
         except Exception as e:
             print(f"【总控】⚠️ 加载用户状态失败: {e}")
             import traceback
@@ -590,7 +625,6 @@ class Orchestrator:
             }
 
 
-
 # ============= 全局函数导出入口 =============
 _orchestrator = None
 
@@ -599,7 +633,6 @@ def get_orchestrator() -> Orchestrator:
     if _orchestrator is None:
         _orchestrator = Orchestrator()
     return _orchestrator
-
 
 def handle_chat(user_id: str, message: str, topic: str = None) -> Dict:
     return get_orchestrator().handle_chat(user_id, message, topic)

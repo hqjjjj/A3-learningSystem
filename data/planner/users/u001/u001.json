@@ -4,26 +4,17 @@
 <<<<<<< HEAD
     "id": "os_process_02",
     "name": "程序顺序执行与并发执行",
-    "understanding": 0.7,
-=======
-    "id": "os_virt_01",
-    "name": "虚拟化的基本概念",
-    "understanding": 0.67,
->>>>>>> 资源前端显示
+    "understanding": 0.62,
     "is_review": false
   },
   "teaching_output": {
-    "learning_style": "textual",
+    "learning_style": "visual",
     "weak_points": [
       "进程的定义与特征"
     ],
     "cognitive_level": {
       "level": "intermediate",
-<<<<<<< HEAD
-      "understanding_avg": 0.6
-=======
-      "understanding_avg": 0.56
->>>>>>> 资源前端显示
+      "understanding_avg": 0.57
     },
     "error_patterns": [],
     "preference": {
@@ -33,17 +24,12 @@
       ],
       "difficulty": "easy"
     },
-    "learning_pace": "fast",
+    "learning_pace": "normal",
     "current_topic": {
 <<<<<<< HEAD
       "id": "os_process_02",
       "name": "程序顺序执行与并发执行",
-      "understanding": 0.7,
-=======
-      "id": "os_virt_01",
-      "name": "虚拟化的基本概念",
-      "understanding": 0.67,
->>>>>>> 资源前端显示
+      "understanding": 0.62,
       "is_review": false
     }
   },
@@ -660,13 +646,7 @@
         "target": "os_disk_13"
       }
     ],
-<<<<<<< HEAD
-    "timestamp": "2026-07-15T15:14:34.761895"
+    "timestamp": "2026-07-15T19:51:02.374103"
   },
-  "updated_at": "2026-07-15T15:14:34.761895"
-=======
-    "timestamp": "2026-07-15T19:14:01.175405"
-  },
-  "updated_at": "2026-07-15T19:14:01.175405"
->>>>>>> 资源前端显示
+  "updated_at": "2026-07-15T19:51:02.376025"
 }
