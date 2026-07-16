@@ -13,4 +13,7 @@ class UserStateRequest(BaseModel):
 def load_state(req: UserStateRequest):
     orchestrator = get_orchestrator()
     result = orchestrator.load_user_state(req.user_id)
-    return result  # 直接返回业务数据，不包装
+    return {
+        "status": "success",
+        "data": result
+    }

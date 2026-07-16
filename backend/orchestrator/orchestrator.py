@@ -191,12 +191,32 @@ class Orchestrator:
     def generate_single_resource(self, user_id: str, topic: str, resource_type: str) -> Dict:
         print(f"【总控】为用户 {user_id} 生成 {topic} 的 {resource_type} 资源")
         profile = self._get_profile_dict(user_id)
+
+                # ===== 转换 topic 名称为 topic_id =====
+        from data.knowledge.KnowledgeBaseManager import KnowledgeBaseManager
+        kb = KnowledgeBaseManager()
+        topic_id = None
+        
+        # 1. 先检查是否直接是 ID
+        if topic in kb.topics_index:
+            topic_id = topic
+        else:
+            # 2. 按名称查找
+            topic_id = kb.get_topic_id_by_name(topic)  # 使用上面新增的方法
+        
+        if not topic_id:
+            print(f"【总控】警告：未找到知识点 '{topic}'，将尝试用原始值作为 topic_id")
+        
+
         resource_input = self._build_resource_input(profile, None)
-        resource_input["topic_id"] = topic
+        resource_input["topic_id"] = topic_id
         resource_input["resource_type"] = [resource_type]
-        resources = self._call_source_agent_raw(resource_input)
+        resource_input["user_id"] = user_id  
+        result = self._call_source_agent_raw(resource_input) 
+        resource_list = result.get("resources", []) if isinstance(result, dict) else []
+        generated = resource_list[0] if resource_list else {}
         return {
-            "generated_resource": resources[0] if resources else {},
+            "generated_resource": generated,
             "topic": topic,
             "current_progress": profile.get("progress", {}).get("current_topic", "")
         }

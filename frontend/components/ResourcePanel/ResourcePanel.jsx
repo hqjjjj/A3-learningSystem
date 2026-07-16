@@ -30,15 +30,12 @@ const ResourcePanel = ({
 
   const generatedList = getGeneratedList();
 
-  // ========== 改动9：生成资源时传入数组格式 ==========
-  // 目的：与后端 API 保持一致，都使用数组格式
-  // =================================================
   const handleGenerate = async (resourceType) => {
     setGeneratingType(resourceType);
     setShowProgress(true);
     
     try {
-      await onGenerateResource([resourceType]);  // 传入数组
+      await onGenerateResource(resourceType); 
     } catch (error) {
       console.error('生成失败:', error);
       setShowProgress(false);

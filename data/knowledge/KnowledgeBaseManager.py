@@ -138,3 +138,10 @@ class KnowledgeBaseManager:
         """刷新索引（简化版，无操作）"""
         # 由于没有向量索引，不需要刷新
         pass
+
+    def get_topic_id_by_name(self, name: str) -> Optional[str]:
+        """根据知识点名称查找对应的ID"""
+        for tid, data in self.topics_index.items():
+            if data.get('name') == name:
+                return tid
+        return None

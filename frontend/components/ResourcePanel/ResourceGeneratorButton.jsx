@@ -13,11 +13,9 @@ const ResourceGeneratorButton = ({ onGenerate, isLoading, userId }) => {
     { value: 'animation', label: '🎬 动画演示' }
   ];
 
-  // ========== 改动11：传入数组格式 ==========
-  // 目的：与后端 API 保持一致，统一使用数组
-  // ==========================================
+
   const handleGenerate = () => {
-    onGenerate([selectedType]);  // 传入数组
+    onGenerate(selectedType);  // 传入字符串
     setShowOptions(false);
   };
 

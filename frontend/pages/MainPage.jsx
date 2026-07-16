@@ -110,25 +110,20 @@ const MainPage = ({ appState, setAppState, userId }) => {
   // 所以取数组的第一个元素传给后端
   // =================================================
   const handleGenerateResource = useCallback(async (resourceTypes) => {
-    setIsLoading(true);
-    try {
-      // ✅ 从数组中取出第一个元素作为 resource_type
-      // 因为后端API接收的是单个字符串
-      const resourceType = Array.isArray(resourceTypes) ? resourceTypes[0] : resourceTypes;
-      
-      const data = await api.generateResource(userId, appState.topic, resourceType);
-    // =================================
-      mergeAppState({
-        generated_resource: data.generated_resource,
-        topic: data.topic,
-        current_progress: data.current_progress
-      });
-    } catch (error) {
-      console.error('生成资源失败', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [userId, appState.topic, mergeAppState]);
+  setIsLoading(true);
+  try {
+    const { generated_resource, topic, current_progress } = await api.generateResource(userId, appState.topic, resourceTypes);
+    mergeAppState({
+      generated_resource,
+      topic,
+      current_progress
+    });
+  } catch (error) {
+    console.error('生成资源失败', error);
+  } finally {
+    setIsLoading(false);
+  }
+}, [userId, appState.topic, mergeAppState]);
   
   // ===== 提交答案回调函数 =====
   const handleSubmitAnswer = useCallback(async (correct_rate, duration) => {
@@ -150,39 +145,7 @@ const MainPage = ({ appState, setAppState, userId }) => {
     }
   }, [userId, appState.topic, mergeAppState]);
 
-  // ===== 完成浏览回调函数 =====
-  const handleFinishResource = useCallback(async (resourceType, duration) => {
-    try {
-      const data = await api.finishResource(userId, resourceType, appState.topic, duration);
-      mergeAppState({
-        profile: data.profile,
-        learning_path: data.learning_path,
-        recommended_resources: data.recommended_resources,
-        topic: data.topic,
-        current_progress: data.current_progress
-      });
-    } catch (error) {
-      console.error('上报资源浏览失败', error);
-    }
-  }, [userId, appState.topic, mergeAppState]);
 
-  // ===== 切换主题回调函数 =====
-  const handlePathNodeClick = useCallback(async (newTopic) => {
-    setAppState(prev => ({ ...prev, topic: newTopic }));
-
-    setIsLoading(true);
-    try {
-      const pathData = await api.fetchPath(userId, newTopic);
-      mergeAppState({
-        learning_path: pathData.learning_path,
-        recommended_resources: pathData.recommended_resources || []
-      });
-    } catch (error) {
-      console.error('加载新主题路径失败', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [userId, mergeAppState, setAppState, setIsLoading]);
 // 完成浏览回调函数
 const handleFinishResource=useCallback(async(resourceType,duration)=>{
   try{
