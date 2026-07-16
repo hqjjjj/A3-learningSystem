@@ -1,20 +1,19 @@
 {
   "user_id": "u001",
   "current_topic": {
-    "id": "os_process_08",
-    "name": "进程通信的类型",
-    "understanding": 0.0,
-    "is_review": false
+    "id": "os_process_04",
+    "name": "进程的基本状态与转换",
+    "understanding": 0.58,
+    "is_review": true
   },
   "teaching_output": {
-    "learning_style": "textual",
+    "learning_style": "auditory",
     "weak_points": [
-      "进程的定义与特征",
       "进程的基本状态与转换"
     ],
     "cognitive_level": {
       "level": "intermediate",
-      "understanding_avg": 0.54
+      "understanding_avg": 0.62
     },
     "error_patterns": [],
     "preference": {
@@ -22,54 +21,34 @@
         "exercise",
         "explanation"
       ],
-      "difficulty": "easy"
+      "difficulty": "medium"
     },
-    "learning_pace": "normal",
+    "learning_pace": "fast",
     "current_topic": {
-      "id": "os_process_08",
-      "name": "进程通信的类型",
-      "understanding": 0.0,
-      "is_review": false
+      "id": "os_process_04",
+      "name": "进程的基本状态与转换",
+      "understanding": 0.58,
+      "is_review": true
     }
   },
   "learning_path": {
     "learning_path": [
-      "进程的定义与特征",
       "进程的基本状态与转换",
-      "进程通信的类型",
       "挂起操作和进程状态转换",
       "进程控制块（PCB）",
       "进程控制原语"
     ],
-    "current_step": "进程通信的类型",
+    "current_step": "进程的基本状态与转换",
     "next_step": "多处理机系统的引入与类型",
     "path_nodes": [
-      {
-        "id": "os_process_03",
-        "name": "进程的定义与特征",
-        "difficulty": "easy",
-        "status": "pending",
-        "understanding": 0.45,
-        "x": 633.8100677359682,
-        "y": 395.05220339143517
-      },
       {
         "id": "os_process_04",
         "name": "进程的基本状态与转换",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0.45,
+        "understanding": 0.58,
         "x": 785.9957762941262,
         "y": 202.2640845793854
-      },
-      {
-        "id": "os_process_08",
-        "name": "进程通信的类型",
-        "difficulty": "medium",
-        "status": "pending",
-        "understanding": 0,
-        "x": 531.4523782890726,
-        "y": -9.483976327446754
       },
       {
         "id": "os_process_05",
@@ -645,7 +624,7 @@
         "target": "os_disk_13"
       }
     ],
-    "timestamp": "2026-07-15T23:16:34.646717"
+    "timestamp": "2026-07-16T15:00:22.901921"
   },
-  "updated_at": "2026-07-15T23:16:34.649769"
+  "updated_at": "2026-07-16T15:00:22.905668"
 }

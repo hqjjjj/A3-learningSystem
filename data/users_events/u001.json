@@ -48,5 +48,165 @@
     "correct_rate": null,
     "duration": 1,
     "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:02:34.279484",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 17,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:24:30.077504",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": 22,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "exercise",
+    "time": "2026-07-16T14:36:34.286538",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": 1.0,
+    "duration": 32,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:40:38.561096",
+    "topic": "进程的定义与特征",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 17,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "exercise",
+    "time": "2026-07-16T14:41:24.474537",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": 0.0,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:41:24.497030",
+    "topic": "进程的定义与特征",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:47:35.288114",
+    "topic": "进程的定义与特征",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 13,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:48:33.705245",
+    "topic": "进程的定义与特征",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 52,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:50:58.418297",
+    "topic": "进程的定义与特征",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 63,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "exercise",
+    "time": "2026-07-16T14:51:47.558583",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": 0.0,
+    "duration": 15,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:51:47.567657",
+    "topic": "进程的定义与特征",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 15,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:54:53.996937",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 16,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "exercise",
+    "time": "2026-07-16T14:56:47.080830",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": 1.0,
+    "duration": 5,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "exercise",
+    "time": "2026-07-16T14:57:35.028691",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": 0.0,
+    "duration": 28,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T14:57:35.043231",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 28,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-16T15:00:06.396337",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
   }
 ]

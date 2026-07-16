@@ -21,7 +21,7 @@ async function request(url, options) {
     const json = await response.json();
     console.log(`API Response [${url}]:`, json); // 添加日志
     
-    return json; // 直接返回响应数据
+    return json.data !== undefined ? json.data : json; // 直接返回响应数据
     
   } catch (error) {
     console.error(`API Error [${url}]:`, error);

@@ -105,19 +105,12 @@ const MainPage = ({ appState, setAppState, userId }) => {
     }
   }, [userId, setAppState, mergeAppState]);
 
-  // ========== 改动1：修改资源生成回调函数 ==========
-  // 目的：ResourcePanel 传入数组 ['animation']，后端API需要字符串 'animation'
-  // 所以取数组的第一个元素传给后端
-  // =================================================
-  const handleGenerateResource = useCallback(async (resourceTypes) => {
+const handleGenerateResource = useCallback(async (resourceTypes) => {
   setIsLoading(true);
   try {
+    // 现在 api.generateResource 返回的是业务数据，直接解构
     const { generated_resource, topic, current_progress } = await api.generateResource(userId, appState.topic, resourceTypes);
-    mergeAppState({
-      generated_resource,
-      topic,
-      current_progress
-    });
+    mergeAppState({ generated_resource, topic, current_progress });
   } catch (error) {
     console.error('生成资源失败', error);
   } finally {

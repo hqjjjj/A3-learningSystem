@@ -65,6 +65,8 @@ class Orchestrator:
         self._last_plan_cache = {}       # user_id -> (timestamp, result)
         self._plan_locks = {}            # user_id -> threading.Lock
         self._lock = threading.Lock()    # 保护 _plan_locks 的锁
+        # ✅ 新增：全局状态缓存，用于快速返回完整状态（含推荐资源）
+        self._state_cache = {}           # user_id -> 完整状态字典
 
     # ==================== 五个核心函数 ====================
 
@@ -113,7 +115,7 @@ class Orchestrator:
         resources = self._call_source_agent(profile_dict, raw_path_data, user_id=user_id, resource_types=resource_types)
         recommended = self._extract_recommended(resources)
 
-        return {
+        result = {
             "reply": reply,
             "profile": profile_dict,
             "learning_path": {
@@ -125,6 +127,9 @@ class Orchestrator:
             "topic": profile_dict.get("progress", {}).get("current_topic", ""),
             "current_progress": raw_path_data.get("current_progress", "")
         }
+        # ✅ 缓存本次完整状态，供后续快速浏览使用
+        self._state_cache[user_id] = result
+        return result
 
     def get_learning_path(self, user_id: str, topic: str = None) -> Dict:
         print(f"【总控】获取用户 {user_id} 的学习路径")
@@ -222,11 +227,25 @@ class Orchestrator:
         }
 
     @debounce(30)
-    def finish_view_resource(self, user_id: str, resource_id: str, duration: int) -> Dict:
+    def finish_view_resource(self, user_id: str, resource_id: str, duration: int, topic: str = None) -> Dict:
+        # ✅ 修改：小于10秒直接返回缓存中的完整状态（包含推荐资源），不触发任何更新
+        if duration < 10:
+            print(f"【总控】用户 {user_id} 浏览资源 {resource_id} 时长 {duration} 秒，小于10秒，忽略")
+            cached = self._state_cache.get(user_id)
+            if cached:
+                return cached
+            # 若缓存不存在（例如从未调用过任何接口），则加载当前状态并缓存
+            state = self.load_user_state(user_id)
+            self._state_cache[user_id] = state
+            return state
+
+        # 原有逻辑保持不变（仅当 duration >= 10 时执行）
         print(f"【总控】用户 {user_id} 完成查看资源 {resource_id}，用时 {duration} 秒")
         self._log_behavior(user_id, "view_resource", f"resource:{resource_id}", duration)
 
-        log_behavior(user_id, action="view_resource", resource_id=resource_id, duration=duration)
+        log_behavior(user_id, action="view_resource", 
+             resource_id=resource_id, duration=duration,
+             topic=topic, resource_type=resource_id)   # resource_id 实际是资源类型
         cleanup_events(user_id)
 
         if duration >= 30:
@@ -248,7 +267,7 @@ class Orchestrator:
         resources = self._call_source_agent(profile, path_data, user_id=user_id)
         recommended = self._extract_recommended(resources)
 
-        return {
+        result = {
             "profile": profile,
             "learning_path": {
                 "current": path_data.get("current", ""),
@@ -259,6 +278,9 @@ class Orchestrator:
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
         }
+        # ✅ 缓存本次完整状态
+        self._state_cache[user_id] = result
+        return result
 
     @debounce(30)
     def submit_answer_result(self, user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
@@ -282,10 +304,10 @@ class Orchestrator:
         )
 
         path_data = self._call_plan_agent(user_id, profile)
-        resources = self._call_source_agent(profile, path_data)
+        resources = self._call_source_agent(profile, path_data, user_id=user_id)
         recommended = self._extract_recommended(resources)
 
-        return {
+        result = {
             "profile": profile,
             "learning_path": {
                 "current": path_data.get("current", ""),
@@ -296,6 +318,9 @@ class Orchestrator:
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
         }
+        # ✅ 缓存本次完整状态
+        self._state_cache[user_id] = result
+        return result
 
     # ==================== 内部方法 ====================
 
@@ -505,7 +530,7 @@ class Orchestrator:
 
     def _build_resource_input(self, profile: Dict, path_data: Optional[Dict], resource_types: List[str] = None) -> Dict:
         if resource_types is None:
-            resource_types = ["explanation"]
+            resource_types = profile.get("resource_type", ["explanation"])
         return {
             "topic_id": path_data.get("topic_id", "") if path_data else "",
             "module": path_data.get("module", profile.get("course", "")) if path_data else profile.get("course", ""),
@@ -623,7 +648,7 @@ class Orchestrator:
 
             recommended = self._extract_recommended(resources)
 
-            return {
+            result = {
                 "profile": profile_dict,
                 "learning_path": {
                     "current": raw_path_data.get("current", ""),
@@ -634,6 +659,9 @@ class Orchestrator:
                 "topic": profile_dict.get("progress", {}).get("current_topic", ""),
                 "current_progress": raw_path_data.get("current_progress", "learning")
             }
+            # ✅ 缓存完整状态
+            self._state_cache[user_id] = result
+            return result
 
         except Exception as e:
             print(f"【总控】⚠️ 加载用户状态失败: {e}")
@@ -683,8 +711,8 @@ def get_learning_path(user_id: str, topic: str = None) -> Dict:
 def generate_single_resource(user_id: str, topic: str, resource_type: str) -> Dict:
     return get_orchestrator().generate_single_resource(user_id, topic, resource_type)
 
-def finish_view_resource(user_id: str, resource_id: str, duration: int) -> Dict:
-    return get_orchestrator().finish_view_resource(user_id, resource_id, duration)
+def finish_view_resource(user_id: str, resource_id: str, duration: int, topic: str = None) -> Dict:
+    return get_orchestrator().finish_view_resource(user_id, resource_id, duration, topic)
 
 def submit_answer_result(user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
     return get_orchestrator().submit_answer_result(user_id, topic, correct_rate, duration)

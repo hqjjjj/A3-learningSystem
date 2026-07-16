@@ -42,7 +42,8 @@ def finish_view(req: FinishViewRequest):
     result = finish_view_resource(
         user_id=req.user_id,
         resource_id=req.resource_type,
-        duration=req.duration
+        duration=req.duration,
+        topic=req.topic  
     )
     
     # 👇 2. 关键修复：将 user_id 手动补进返回数据中 (针对总控里调用 generate_resources 时的缺失)
