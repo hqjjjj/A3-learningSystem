@@ -30,21 +30,34 @@ from backend.agents.agent_source.code_agent import agentcode as code_agent_class
 from backend.agents.agent_source.exercise_agent import agentexercise as exercise_agent_class
 from backend.agents.agent_source.main import generate_resources
 
-# 防抖装饰器（保留原有）
+# 防抖装饰器
 def debounce(wait_time):
     def decorator(func):
         last_called = {}
 
         @wraps(func)
         def debounced(*args, **kwargs):
-            user_id = args[0]
+            # 提取 user_id 和 resource_id（或 topic 作为辅助标识）
+            # 假设第一个参数是 self，第二个是 user_id，第三个是 resource_id
+            if len(args) >= 3:
+                user_id = args[1]
+                resource_id = args[2] if len(args) > 2 else kwargs.get("resource_id", "default")
+            else:
+                # 防御性处理
+                user_id = args[0] if args else kwargs.get("user_id", "unknown")
+                resource_id = kwargs.get("resource_id", "default")
+
+            key = f"{user_id}_{resource_id}"  # ✅ 组合键
             now = time.time()
-            if user_id in last_called:
-                if now - last_called[user_id] < wait_time:
-                    print(f"【防抖】忽略用户 {user_id} 的重复调用，距离上次调用 {now - last_called[user_id]:.2f} 秒")
-                    return {}
-            last_called[user_id] = now
+
+            if key in last_called:
+                if now - last_called[key] < wait_time:
+                    print(f"【防抖】忽略用户 {user_id} 资源 {resource_id} 的重复调用，距离上次调用 {now - last_called[key]:.2f} 秒")
+                    return {}  # 防抖拦截时返回空字典（或根据函数预期返回）
+
+            last_called[key] = now
             return func(*args, **kwargs)
+
         return debounced
     return decorator
 
@@ -227,43 +240,62 @@ class Orchestrator:
         }
 
     @debounce(30)
+
     def finish_view_resource(self, user_id: str, resource_id: str, duration: int, topic: str = None) -> Dict:
-        # ✅ 修改：小于10秒直接返回缓存中的完整状态（包含推荐资源），不触发任何更新
+        """
+        用户完成资源浏览时调用，记录行为并更新画像，同时刷新推荐资源。
+        - duration < 10 秒：视为快速浏览，不触发画像更新，直接返回缓存状态。
+        - duration >= 10 秒：记录行为，更新画像，并重新生成推荐资源。
+        - 每个资源独立防抖，互不干扰。
+        """
+        # ✅ 快速浏览直接返回缓存，不触发任何更新
         if duration < 10:
             print(f"【总控】用户 {user_id} 浏览资源 {resource_id} 时长 {duration} 秒，小于10秒，忽略")
             cached = self._state_cache.get(user_id)
             if cached:
                 return cached
-            # 若缓存不存在（例如从未调用过任何接口），则加载当前状态并缓存
             state = self.load_user_state(user_id)
             self._state_cache[user_id] = state
             return state
 
-        # 原有逻辑保持不变（仅当 duration >= 10 时执行）
+        # 原有逻辑（仅当 duration >= 10 时执行）
         print(f"【总控】用户 {user_id} 完成查看资源 {resource_id}，用时 {duration} 秒")
         self._log_behavior(user_id, "view_resource", f"resource:{resource_id}", duration)
 
-        log_behavior(user_id, action="view_resource", 
-             resource_id=resource_id, duration=duration,
-             topic=topic, resource_type=resource_id)   # resource_id 实际是资源类型
+        # ✅ 行为记录中明确包含 topic 和 resource_type，便于后续分析
+        behavior_data = {
+            "topic": topic or "unknown",
+            "resource_type": resource_id,   # resource_id 实际是资源类型名
+            "duration": duration
+        }
+
+        # 记录到行为系统
+        log_behavior(user_id, action="view_resource",
+                     resource_id=resource_id, duration=duration,
+                     topic=topic, resource_type=resource_id)
         cleanup_events(user_id)
 
+        # ✅ 根据浏览时长决定是否进行深度分析
         if duration >= 30:
             try:
                 analyzed_data = analyze_behavior(user_id)
                 print(f"【总控】分析用户 {user_id} 的行为数据")
+                if analyzed_data:
+                    behavior_data.update(analyzed_data)
             except Exception as e:
                 print(f"【总控】⚠️ analyzer分析失败: {e}, 使用兜底数据")
-                analyzed_data = {}
-            profile = self._update_profile(
-                user_id,
-                f"仔细阅读了资源{resource_id}，用时{duration}秒",
-                behavior=analyzed_data
-            )
-        else:
-            profile = self._update_profile(user_id, f"浏览了资源{resource_id}，用时{duration}秒")
+                behavior_data["correct_rate"] = None  # 无数据
 
+        # ✅ 生成差异化的 message，使每次画像更新都能被识别
+        message = f"浏览了资源 {resource_id}，用时 {duration} 秒，主题：{topic or '未知'}"
+
+        # 更新画像（传入详细行为数据）
+        profile = self._update_profile(user_id, message, behavior=behavior_data)
+
+        # 重新规划路径（可能因画像变化而调整）
         path_data = self._call_plan_agent(user_id, profile)
+
+        # 重新生成推荐资源（使用画像中的资源类型偏好）
         resources = self._call_source_agent(profile, path_data, user_id=user_id)
         recommended = self._extract_recommended(resources)
 
@@ -278,7 +310,8 @@ class Orchestrator:
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
         }
-        # ✅ 缓存本次完整状态
+
+        # ✅ 缓存本次完整状态，供后续快速浏览使用
         self._state_cache[user_id] = result
         return result
 
@@ -531,6 +564,17 @@ class Orchestrator:
     def _build_resource_input(self, profile: Dict, path_data: Optional[Dict], resource_types: List[str] = None) -> Dict:
         if resource_types is None:
             resource_types = profile.get("resource_type", ["explanation"])
+         # ✅ 防御：确保每个元素都是字符串，若出现嵌套则展平
+        if isinstance(resource_types, list):
+            flat = []
+            for item in resource_types:
+                if isinstance(item, list):
+                    flat.extend(item)
+                elif isinstance(item, str):
+                    flat.append(item)
+            resource_types = flat
+        # 去重
+        resource_types = list(dict.fromkeys(resource_types))
         return {
             "topic_id": path_data.get("topic_id", "") if path_data else "",
             "module": path_data.get("module", profile.get("course", "")) if path_data else profile.get("course", ""),
@@ -577,7 +621,7 @@ class Orchestrator:
             resources = resources.get("resources", [])
         if not resources:
             return []
-        return resources[:2]
+        return resources
 
     def _log_behavior(self, user_id: str, action: str, detail: str = "", duration: int = 0, correct_rate: float = None):
         self.behavior_log.append({

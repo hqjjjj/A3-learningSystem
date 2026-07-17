@@ -229,11 +229,32 @@ class ProfileAgent:
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    profile = StudentProfile.model_validate(data)
-                    self._ensure_basic_info(profile)
-                    return profile
+
+                # ✅ 修复 resource_type 字段：确保它是字符串列表，扁平化并去重
+                if "resource_type" in data and isinstance(data["resource_type"], list):
+                    flat = []
+                    for item in data["resource_type"]:
+                        if isinstance(item, list):
+                            flat.extend(item)   # 展平嵌套列表
+                        elif isinstance(item, str):
+                            flat.append(item)
+                    # 去重并保持顺序
+                    data["resource_type"] = list(dict.fromkeys(flat))
+                    # 确保至少包含三种基础类型（可选，但推荐）
+                    required = ["explanation", "mindmap", "exercise"]
+                    for r in required:
+                        if r not in data["resource_type"]:
+                            data["resource_type"].append(r)
+                    # 限制数量（可选）
+                    if len(data["resource_type"]) > 5:
+                        data["resource_type"] = data["resource_type"][:5]
+
+                profile = StudentProfile.model_validate(data)
+                self._ensure_basic_info(profile)
+                return profile
             except Exception as e:
                 print(f"【画像Agent】⚠️ 读取用户 {user_id} 历史画像失败: {e}")
+                # 还可以尝试用更激进的修复方式（如删除 resource_type 字段），但上述修复已足够
         return None
 
     def _ensure_basic_info(self, profile: StudentProfile):
@@ -245,41 +266,51 @@ class ProfileAgent:
             profile.course = "操作系统"
 
     def build_profile(self, user_id: str, user_input: str,
-                      history: List[dict] = None,
-                      behavior: dict = None) -> ProfileResponse:
+                    history: List[dict] = None,
+                    behavior: dict = None) -> ProfileResponse:
         print(f"【画像Agent】开始构建用户 {user_id} 的画像")
         old_profile = self.profiles.get(user_id)
         
+        # 规范化 resource_type（处理历史遗留的嵌套列表问题）
+        if old_profile and hasattr(old_profile, 'resource_type'):
+            normalized = []
+            for item in old_profile.resource_type:
+                if isinstance(item, list):
+                    normalized.extend(item)   # 展平
+                elif isinstance(item, str):
+                    normalized.append(item)
+            # 去重并保持顺序
+            old_profile.resource_type = list(dict.fromkeys(normalized))
+            # 确保至少包含三个基础类型
+            for required in ["explanation", "mindmap", "exercise"]:
+                if required not in old_profile.resource_type:
+                    old_profile.resource_type.append(required)
+                
         if not old_profile:
             old_profile = self.load_profile_from_disk(user_id)
             if old_profile:
                 self.profiles[user_id] = old_profile
 
-        # ✅ 优化：只发送相关知识点，而不是整个知识图谱
-        relevant_topics = set() # 使用集合去重
-        
-        # 1. 从旧画像中获取当前主题
+        # 筛选相关知识点以减轻 LLM 负担
+        relevant_topics = set()
+
         if old_profile and old_profile.progress.current_topic:
             current_topic = old_profile.progress.current_topic
             if current_topic in KNOWLEDGE_GRAPH:
                 relevant_topics.add(current_topic)
-        
-        # 2. 从用户输入中匹配主题
+
         matched_topic = self._match_topic_locally(user_input)
         if matched_topic:
             relevant_topics.add(matched_topic)
-            
-        # 3. 从行为数据中获取主题（如果有）
+
         if behavior and "topic" in behavior:
             topic_name = behavior["topic"]
             if topic_name in KNOWLEDGE_GRAPH:
                 relevant_topics.add(topic_name)
-        
-        # 4. 兜底：如果筛选不到，取前5个
+
         if not relevant_topics:
             relevant_topics = set(list(KNOWLEDGE_GRAPH.keys())[:5])
 
-        # 生成 topics_str
         topics_list = []
         for tname in relevant_topics:
             tdata = KNOWLEDGE_GRAPH[tname]
@@ -287,27 +318,27 @@ class ProfileAgent:
         topics_str = "\n".join(topics_list)
 
         sys_prompt = f"""你是一个学习画像构建助手。分析学生的对话与行为数据，输出标准JSON。
+    
+    ## 可选知识点（名称必须完全一致）
+    {topics_str}
 
-## 可选知识点（名称必须完全一致）
-{topics_str}
+    ## 提取规则
+    1. major: 专业名称（如"计算机"），无法推断填null
+    2. grade: 年级（如"大三"），无法推断填null
+    3. course: 课程名称（如"操作系统"），无法推断填null
+    4. progress.current_topic: 学生当前正在学习或询问的知识点名称，必须从上面选
+    5. cognitive_style: {{"visual": 0.0, "textual": 0.0, "auditory": 0.0}}，三者和为1
+       - 说"看视频/动画"→visual高0.6-0.7，其他各0.15-0.2
+       - 说"看文档/看书"→textual高0.6-0.7，其他各0.15-0.2
+       - 无明确偏好→三者均匀分配
+    6. learning_pace: "normal"/"slow"/"fast"，默认值为 "normal"。如果有明确证据表明学生学得很快（如"我学得很快"、"我提前学完了"）才改为 "fast"，有明确证据表明严重阻碍才改为 "slow"。
+    7. resource_type: 资源类型列表，从["explanation", "mindmap", "exercise", "code_example"]中选择。根据学生偏好和行为动态推断，如喜欢看视频→["explanation", "mindmap"]，做题正确率低→["explanation", "exercise"]。**建议至少包含3种类型。**
+    8. difficulty: "easy"/"medium"/"hard"
+    9. learning_goal: 无法推断填null
 
-## 提取规则
-1. major: 专业名称（如"计算机"），无法推断填null
-2. grade: 年级（如"大三"），无法推断填null
-3. course: 课程名称（如"操作系统"），无法推断填null
-4. progress.current_topic: 学生当前正在学习或询问的知识点名称，必须从上面选
-5. cognitive_style: {{"visual": 0.0, "textual": 0.0, "auditory": 0.0}}，三者和为1
-   - 说"看视频/动画"→visual高0.6-0.7，其他各0.15-0.2
-   - 说"看文档/看书"→textual高0.6-0.7，其他各0.15-0.2
-   - 无明确偏好→三者均匀分配
-6. learning_pace: "normal"/"slow"/"fast"，默认值为 "normal"。如果有明确证据表明学生学得很快（如"我学得很快"、"我提前学完了"）才改为 "fast"，有明确证据表明严重阻碍才改为 "slow"。
-7. resource_type: 资源类型列表，从["explanation", "mindmap", "exercise", "code_example"]中选择。根据学生偏好和行为动态推断，如喜欢看视频→["explanation", "mindmap"]，做题正确率低→["explanation", "exercise"]
-8. difficulty: "easy"/"medium"/"hard"
-9. learning_goal: 无法推断填null
+    ## 输出要求
+    必须是合法JSON，无说明文字，无markdown代码块包裹，直接输出纯JSON。"""
 
-## 输出要求
-必须是合法JSON，无说明文字，无markdown代码块包裹，直接输出纯JSON。"""
-        
         user_message = f"学生输入：{user_input}\n行为数据：{json.dumps(behavior or {}, ensure_ascii=False)}\n旧画像：{old_profile.model_dump() if old_profile else '无'}"
 
         try:
@@ -334,6 +365,7 @@ class ProfileAgent:
                 profile = old_profile
                 update_type = "update"
 
+            # 基本字段更新
             if extraction.get("major"):
                 profile.major = extraction["major"]
             if extraction.get("grade"):
@@ -341,6 +373,7 @@ class ProfileAgent:
             if extraction.get("course"):
                 profile.course = extraction["course"]
 
+            # 认知风格
             if "cognitive_style" in extraction:
                 cs = extraction["cognitive_style"]
                 total = cs.get("visual", 0) + cs.get("textual", 0) + cs.get("auditory", 0)
@@ -352,14 +385,50 @@ class ProfileAgent:
                     )
             profile.learning_style = "diagram" if profile.cognitive_style.visual >= 0.5 else "text"
 
+            # 学习节奏
             if extraction.get("learning_pace"):
                 profile.learning_pace = extraction["learning_pace"]
 
+            # ✅ 增强：根据行为自动补充 resource_type
+            if behavior:
+                # 从行为中提取资源类型（若有）
+                if "resource_type" in behavior:
+                    resource_type_from_behavior = behavior["resource_type"]
+                    if resource_type_from_behavior and resource_type_from_behavior not in profile.resource_type:
+                        profile.resource_type.append(resource_type_from_behavior)
+                # 根据行为类型补充默认类型
+                if "view_resource" in str(behavior) or "explanation" in str(behavior):
+                    if "explanation" not in profile.resource_type:
+                        profile.resource_type.append("explanation")
+                if "exercise" in str(behavior) or "submit_answer" in str(behavior):
+                    if "exercise" not in profile.resource_type:
+                        profile.resource_type.append("exercise")
+                if "code" in str(behavior):
+                    if "code_example" not in profile.resource_type:
+                        profile.resource_type.append("code_example")
+                if "mindmap" in str(behavior) or "diagram" in str(behavior):
+                    if "mindmap" not in profile.resource_type:
+                        profile.resource_type.append("mindmap")
+
+            # 从 LLM 更新 resource_type（合并而非覆盖）
             if "resource_type" in extraction and isinstance(extraction["resource_type"], list):
-                profile.resource_type = list(set(profile.resource_type + extraction["resource_type"]))
+                for rt in extraction["resource_type"]:
+                    if rt not in profile.resource_type:
+                        profile.resource_type.append(rt)
+
+            # ✅ 确保至少包含三种资源类型
+            min_types = ["explanation", "mindmap", "exercise"]
+            for required in min_types:
+                if required not in profile.resource_type:
+                    profile.resource_type.append(required)
+            # 可选：限制最多5种，避免过多
+            if len(profile.resource_type) > 5:
+                profile.resource_type = profile.resource_type[:5]
+
             if "difficulty" in extraction:
                 profile.difficulty = extraction["difficulty"]
 
+            # 当前主题匹配
             matched_topic = None
             if "progress" in extraction and extraction["progress"].get("current_topic"):
                 topic_name = extraction["progress"]["current_topic"]
@@ -378,6 +447,7 @@ class ProfileAgent:
             if matched_topic:
                 profile.progress.current_topic = matched_topic["name"]
 
+            # 更新知识点掌握度
             current_topic = profile.progress.current_topic
             correct_rate = behavior.get("correct_rate", None) if behavior else None
 
@@ -395,6 +465,7 @@ class ProfileAgent:
                     base_score = max(base_score, 0.7)
                 profile.knowledge_level[current_topic] = base_score if old_score == 0.0 else round(old_score * 0.7 + base_score * 0.3, 2)
 
+            # 更新薄弱点和错误标签
             profile.weak_points = [name for name, score in profile.knowledge_level.items() if 0.0 < score < 0.6]
             profile.error_tags = [name for name, score in profile.knowledge_level.items() if 0.0 < score < 0.4]
 
@@ -416,14 +487,14 @@ class ProfileAgent:
 
         self._ensure_basic_info(profile)
         profile.updated_at = datetime.datetime.now()
-        
-        # ✅ 更新 last_message 和 last_behavior 用于防抖
+
+        # 记录最新消息和行为（用于防抖判断）
         profile.last_message = user_input
         profile.last_behavior = behavior
-        
+
         self.profiles[user_id] = profile
         self._save_profile_to_disk(profile)
-        
+
         print(f"【画像Agent】成功更新用户 {user_id} 的画像")
         return ProfileResponse(profile=profile, update_type=update_type, confidence=0.85)
 

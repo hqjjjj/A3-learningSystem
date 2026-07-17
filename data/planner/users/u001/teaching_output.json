@@ -1,17 +1,17 @@
 {
   "learning_style": "auditory",
-  "weak_points": [
-    "进程的基本状态与转换"
-  ],
+  "weak_points": [],
   "cognitive_level": {
     "level": "intermediate",
-    "understanding_avg": 0.62
+    "understanding_avg": 0.65
   },
   "error_patterns": [],
   "preference": {
     "resource_type": [
       "exercise",
-      "explanation"
+      "explanation",
+      "mindmap",
+      "materials"
     ],
     "difficulty": "medium"
   },

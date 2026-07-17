@@ -1,0 +1,10 @@
+{
+  "type": "html",
+  "title": "操作系统 - 动画生成提示",
+  "html_content": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>动画生成提示</title>\n    <style>\n        body {\n            font-family: \"Microsoft YaHei\", sans-serif;\n            background: #f0f2f5;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            height: 100vh;\n            margin: 0;\n        }\n        .card {\n            background: white;\n            padding: 40px 60px;\n            border-radius: 16px;\n            box-shadow: 0 8px 30px rgba(0,0,0,0.12);\n            text-align: center;\n            max-width: 500px;\n        }\n        .icon {\n            font-size: 48px;\n            margin-bottom: 16px;\n        }\n        h2 {\n            color: #2c3e50;\n            margin: 0 0 12px 0;\n        }\n        p {\n            color: #7f8c8d;\n            line-height: 1.6;\n            margin: 8px 0;\n        }\n        .footnote {\n            margin-top: 20px;\n            font-size: 13px;\n            color: #95a5a6;\n            border-top: 1px solid #ecf0f1;\n            padding-top: 16px;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"card\">\n        <div class=\"icon\">🔄</div>\n        <h2>动画生成暂时不可用</h2>\n        <p>很抱歉，当前无法生成该知识点的交互式动画。</p>\n        <p>可能原因：生成内容过长或网络波动，请稍后重试。</p>\n        <div class=\"footnote\">\n            📚 知识点：《操作系统》- 进程的基本状态与转换\n        </div>\n    </div>\n</body>\n</html>",
+  "description": "动画生成失败，请重试。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《操作系统》进程的基本状态与转换"
+  ],
+  "subtype": "animation"
+}

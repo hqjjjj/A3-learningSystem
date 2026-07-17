@@ -208,5 +208,195 @@
     "correct_rate": null,
     "duration": 11,
     "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T12:46:03.957429",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 218,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T12:50:29.455483",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 261,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T13:56:09.462360",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 82,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T13:56:09.463326",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 82,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "exercise",
+    "time": "2026-07-17T14:50:52.054298",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": 1.0,
+    "duration": 29,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T14:50:52.061851",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 29,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T14:50:52.063952",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 29,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "exercise",
+    "time": "2026-07-17T14:52:04.532810",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": 1.0,
+    "duration": 52,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T14:52:04.555417",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 52,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T14:52:04.557469",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 52,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T14:53:05.984629",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 50,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T14:53:05.986622",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 50,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T14:54:59.577539",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 110,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T14:57:33.968646",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "materials",
+    "correct_rate": null,
+    "duration": 117,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T14:59:07.477907",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 87,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T15:19:04.673872",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 230,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T15:19:04.675383",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 230,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T15:19:04.677385",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 230,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-17T15:19:04.679243",
+    "topic": "进程的基本状态与转换",
+    "resource_type": "materials",
+    "correct_rate": null,
+    "duration": 230,
+    "message": null
   }
 ]

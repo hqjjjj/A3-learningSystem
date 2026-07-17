@@ -3,7 +3,11 @@
     "进程的基本状态与转换",
     "挂起操作和进程状态转换",
     "进程控制块（PCB）",
-    "进程控制原语"
+    "进程控制原语",
+    "进程通信的类型",
+    "消息传递通信的实现",
+    "线程的概念与引入",
+    "用户级线程与内核支持线程"
   ],
   "current_step": "进程的基本状态与转换",
   "next_step": "多处理机系统的引入与类型",
@@ -13,7 +17,7 @@
       "name": "进程的基本状态与转换",
       "difficulty": "medium",
       "status": "pending",
-      "understanding": 0.58,
+      "understanding": 0.68,
       "x": 785.9957762941262,
       "y": 202.2640845793854
     },
@@ -43,6 +47,42 @@
       "understanding": 0,
       "x": 761.0814805021805,
       "y": 162.06870997520718
+    },
+    {
+      "id": "os_process_08",
+      "name": "进程通信的类型",
+      "difficulty": "medium",
+      "status": "pending",
+      "understanding": 0,
+      "x": 531.4523782890726,
+      "y": -9.483976327446754
+    },
+    {
+      "id": "os_process_09",
+      "name": "消息传递通信的实现",
+      "difficulty": "medium",
+      "status": "pending",
+      "understanding": 0,
+      "x": -88.62333140136735,
+      "y": -5.820525892020555
+    },
+    {
+      "id": "os_process_10",
+      "name": "线程的概念与引入",
+      "difficulty": "medium",
+      "status": "pending",
+      "understanding": 0,
+      "x": -188.51207265286087,
+      "y": 260.8221755125292
+    },
+    {
+      "id": "os_process_11",
+      "name": "用户级线程与内核支持线程",
+      "difficulty": "hard",
+      "status": "pending",
+      "understanding": 0,
+      "x": -99.92736013943141,
+      "y": 107.98712580188368
     }
   ],
   "edges": [
@@ -591,5 +631,5 @@
       "target": "os_disk_13"
     }
   ],
-  "timestamp": "2026-07-16T15:00:22.901921"
+  "timestamp": "2026-07-17T15:19:14.443371"
 }
