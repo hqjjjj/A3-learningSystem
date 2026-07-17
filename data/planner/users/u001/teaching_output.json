@@ -1,21 +1,22 @@
 {
-  "learning_style": "auditory",
+  "learning_style": "textual",
   "weak_points": [
     "进程的基本状态与转换"
   ],
   "cognitive_level": {
     "level": "intermediate",
-    "understanding_avg": 0.62
+    "understanding_avg": 0.6
   },
   "error_patterns": [],
   "preference": {
     "resource_type": [
       "exercise",
-      "explanation"
+      "explanation",
+      "mindmap"
     ],
     "difficulty": "medium"
   },
-  "learning_pace": "fast",
+  "learning_pace": "normal",
   "current_topic": {
     "id": "os_mp_01",
     "name": "多处理机系统的引入与类型",

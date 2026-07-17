@@ -5,17 +5,22 @@ const ResourceGeneratorButton = ({ onGenerate, isLoading, userId }) => {
   const [selectedType, setSelectedType] = useState('exercise');
 
   const resourceTypes = [
-    { value: 'explanation', label: '📖 知识点讲解' },
-    { value: 'exercise', label: '✏️ 练习题' },
-    { value: 'code', label: '💻 代码示例' },
-    { value: 'mindmap', label: '🧠 思维导图' },
-    { value: 'materials', label: '📚 扩展材料' },
-    { value: 'animation', label: '🎬 动画演示' }
+    { value: 'explanation', label: '知识点讲解' },
+    { value: 'exercise', label: '练习题' },
+    { value: 'code', label: '代码示例' },
+    { value: 'mindmap', label: '思维导图' },
+    { value: 'materials', label: '扩展材料' },
+    { value: 'animation', label: '动画演示' }
   ];
 
 
-  const handleGenerate = () => {
-    onGenerate(selectedType);  // 传入字符串
+  const handleGenerate = (typeValue) => {
+    console.log('用户选择的类型：', typeValue);
+    const label = resourceTypes.find(t => t.value === typeValue)?.label;
+    console.log('对应的标签：', label);
+
+    console.log('发送给onGenerate的参数：', [typeValue]);
+    onGenerate(typeValue);  // 传入字符串
     setShowOptions(false);
   };
 
@@ -36,7 +41,7 @@ const ResourceGeneratorButton = ({ onGenerate, isLoading, userId }) => {
         onClick={() => setShowOptions(!showOptions)}
         disabled={isLoading}
       >
-        {isLoading ? '生成中...' : '✨ 生成更多资源'}
+        {isLoading ? '生成中...' : ' 生成更多资源'}
       </button>
 
       {showOptions && (
@@ -73,7 +78,7 @@ const ResourceGeneratorButton = ({ onGenerate, isLoading, userId }) => {
               onMouseLeave={(e) => e.target.style.background = 'none'}
               onClick={() => {
                 setSelectedType(type.value);
-                handleGenerate();
+                handleGenerate(type.value);
               }}
             >
               {type.label}
