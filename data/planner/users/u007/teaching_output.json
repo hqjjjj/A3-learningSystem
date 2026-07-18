@@ -1,0 +1,27 @@
+{
+  "learning_style": "auditory",
+  "weak_points": [
+    "文件操作",
+    "存储器的层次结构",
+    "文件目录"
+  ],
+  "cognitive_level": {
+    "level": "intermediate",
+    "understanding_avg": 0.45
+  },
+  "error_patterns": [],
+  "preference": {
+    "resource_type": [
+      "explanation",
+      "mindmap",
+      "exercise"
+    ],
+    "difficulty": "medium"
+  },
+  "learning_pace": "normal",
+  "current_topic": {
+    "id": "os_memory_01",
+    "name": "存储器的层次结构",
+    "is_review": true
+  }
+}

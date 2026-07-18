@@ -1,0 +1,33 @@
+{
+  "type": "code",
+  "title": "多处理机系统类型对比示例",
+  "language": "python",
+  "code_lines": [
+    "class SymmetricMultiProcessor:",
+    "    def __init__(self, num_cpus):",
+    "        self.num_cpus = num_cpus",
+    "        self.shared_memory = True",
+    "    def access_method(self):",
+    "        return '总线/交叉开关互连' if self.shared_memory else '通道/通信线路'",
+    "",
+    "class AsymmetricMultiProcessor:",
+    "    def __init__(self, master_cpus=1, slave_cpus=0):",
+    "        self.master_cpus = master_cpus",
+    "        self.slave_cpus = slave_cpus",
+    "        self.independent_os = False",
+    "    def task_allocation(self):",
+    "        return f'主处理机运行OS({self.master_cpus}个)，从处理机执行任务({self.slave_cpus}个)'",
+    "",
+    "# 示例演示",
+    "smp = SymmetricMultiProcessor(4)",
+    "asmp = AsymmetricMultiProcessor(2, 3)",
+    "print('SMP系统特性:', smp.access_method())",
+    "print('ASMP系统特性:', asmp.task_allocation())"
+  ],
+  "description": "通过类比展示SMP（对称多处理机）和ASMP（非对称多处理机）的核心区别：SMP所有CPU对等共享内存，ASMP存在主从处理机分工",
+  "knowledge_base_quote": [
+    "源于教材知识库：《操作系统》多处理机系统的引入与类型",
+    "SMP系统中所有CPU对等访问共享内存，运行OS的一个副本；ASMP系统中只有主处理机运行OS，从处理机只执行分配的任务"
+  ],
+  "subtype": "code_example"
+}

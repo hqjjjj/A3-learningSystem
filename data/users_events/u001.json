@@ -578,5 +578,57 @@
     "correct_rate": null,
     "duration": 12,
     "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:58:38.394721",
+    "topic": "多处理机操作系统的特征与类型",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 35,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:58:38.396017",
+    "topic": "多处理机操作系统的特征与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 35,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:58:38.397022",
+    "topic": "多处理机操作系统的特征与类型",
+    "resource_type": "materials",
+    "correct_rate": null,
+    "duration": 35,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:58:38.397022",
+    "topic": "多处理机操作系统的特征与类型",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 35,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:58:38.398016",
+    "topic": "多处理机操作系统的特征与类型",
+    "resource_type": "code_example",
+    "correct_rate": null,
+    "duration": 35,
+    "message": null
   }
 ]
+
+

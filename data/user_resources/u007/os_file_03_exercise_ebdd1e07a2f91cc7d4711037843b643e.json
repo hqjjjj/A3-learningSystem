@@ -1,0 +1,19 @@
+{
+  "type": "choice",
+  "title": "文件操作流程判断",
+  "question": "当用户需要多次读写同一个文件时，正确的操作顺序应该是？",
+  "options": [
+    "create() → read() → write() → close()",
+    "open() → read() → write() → close()",
+    "read() → open() → write() → close()",
+    "write() → open() → read() → close()"
+  ],
+  "answer": "open() → read() → write() → close()",
+  "analysis": "根据文件操作规范，应先用open()建立连接并获取文件描述符，后续通过该描述符进行读写操作，最后用close()释放资源。create()用于新建文件而非已存在文件的操作。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《操作系统》文件操作",
+    "打开文件时系统将文件属性从外存复制到内存的打开文件表中，返回文件描述符",
+    "引入文件“打开”(open)和“关闭”(close)操作是为了避免多次重复检索目录，提高文件访问效率"
+  ],
+  "subtype": "exercise"
+}

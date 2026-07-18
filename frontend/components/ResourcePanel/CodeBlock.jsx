@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+
+
 const CodeBlock = ({ code, language = 'javascript' }) => {
   const [copied, setCopied] = useState(false);
 
@@ -9,36 +11,15 @@ const CodeBlock = ({ code, language = 'javascript' }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // 添加语法高亮功能 
-  
+  // ========== 最简版本 - 只做转义 ==========
   const highlightCode = (code, lang) => {
-    let highlighted = code;
+    if (!code) return '';
     
-    // JavaScript/Python 关键词
-    const keywords = {
-      javascript: ['const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'class', 'import', 'export', 'from', 'new', 'this', 'async', 'await', 'try', 'catch', 'throw', 'switch', 'case', 'break', 'continue'],
-      python: ['def', 'class', 'import', 'from', 'return', 'if', 'elif', 'else', 'for', 'while', 'True', 'False', 'None', 'with', 'as', 'try', 'except', 'finally', 'raise', 'break', 'continue', 'pass', 'lambda', 'yield']
-    };
     
-    const langKeywords = keywords[lang] || keywords.javascript;
-    
-    // 关键词高亮（蓝色）
-    langKeywords.forEach(keyword => {
-      const regex = new RegExp(`\\b${keyword}\\b`, 'g');
-      highlighted = highlighted.replace(regex, `<span style="color:#d73a49;font-weight:600;">${keyword}</span>`);
-    });
-    
-    // 字符串高亮（绿色）
-    highlighted = highlighted.replace(/(['"])(.*?)\1/g, '<span style="color:#032f62;">$1$2$1</span>');
-    
-    // 注释高亮（灰色）
-    highlighted = highlighted.replace(/\/\/.*/g, '<span style="color:#6a737d;">$&</span>');
-    highlighted = highlighted.replace(/#.*/g, '<span style="color:#6a737d;">$&</span>');
-    
-    // 数字高亮（红色）
-    highlighted = highlighted.replace(/\b(\d+)\b/g, '<span style="color:#005cc5;">$1</span>');
-    
-    return highlighted;
+    return code
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   };
 
   return (
@@ -76,7 +57,7 @@ const CodeBlock = ({ code, language = 'javascript' }) => {
           }}
           onClick={handleCopy}
         >
-          {copied ? ' 已复制' : ' 复制'}
+          {copied ? '已复制' : '复制'}
         </button>
       </div>
       <pre style={{
@@ -89,14 +70,14 @@ const CodeBlock = ({ code, language = 'javascript' }) => {
         color: '#1E293B',
         background: '#f6f8fa'
       }}>
-        <code 
-          dangerouslySetInnerHTML={{ 
-            __html: highlightCode(code, language) 
-          }} 
-        />
+        <code>{highlightCode(code, language)}</code>
       </pre>
     </div>
   );
 };
+
+
+
+
 
 export default CodeBlock;

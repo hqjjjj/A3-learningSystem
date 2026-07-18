@@ -1,7 +1,9 @@
+
 {
   "learning_style": "auditory",
   "weak_points": [
-    "多处理机系统的引入与类型"
+    "多处理机系统的引入与类型",
+    "多处理机操作系统的特征与类型"
   ],
   "cognitive_level": {
     "level": "intermediate",
@@ -16,7 +18,7 @@
       "materials",
       "code_example"
     ],
-    "difficulty": "easy"
+    "difficulty": "medium"
   },
   "learning_pace": "normal",
   "current_topic": {

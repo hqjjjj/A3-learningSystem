@@ -34,7 +34,7 @@ class StudentProfile(BaseModel):
     weak_points: List[str] = Field(default_factory=list, description="薄弱知识点列表")
     error_tags: List[str] = Field(default_factory=list, description="高频错误标签")
     
-    # 【关键修改】learning_style 简化为 text 或 diagram
+    # learning_style 简化为 text 或 diagram
     learning_style: Optional[str] = Field(default=None, description="学习风格: text(文本型) 或 diagram(图解型)")
     
     # 内部量化分析 (保留但不作为主要输出维度)
@@ -51,7 +51,7 @@ class StudentProfile(BaseModel):
     updated_at: Optional[datetime] = None
 
 class ProfileResponse(BaseModel):
-    """Agent返回给外部的标准响应（对齐团队文档）"""
+    """Agent返回给外部的标准响应"""
     profile: StudentProfile
     update_type: str = Field(description="init 或 update")
     confidence: float = Field(default=0.85, ge=0, le=1)

@@ -4,3 +4,4 @@ requests
 openai
 pydantic
 python-multipart
+json-repair
