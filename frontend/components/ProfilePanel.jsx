@@ -11,11 +11,11 @@ const COGNITIVE_LABELS = {
 
 // 资源类型映射
 const RESOURCE_TYPE_LABELS = {
-  explanation: '📖 讲解文档',
-  mindmap: '🧠 思维导图',
-  exercise: '📝 练习题',
-  code_example: '💻 代码案例',
-  animation: '🎬 教学动画'
+  explanation: ' 讲解文档',
+  mindmap: ' 思维导图',
+  exercise: ' 练习题',
+  code_example: ' 代码案例',
+  animation: ' 教学动画'
 };
 
 const ProfilePanel = ({ profile }) => {
@@ -29,7 +29,7 @@ const ProfilePanel = ({ profile }) => {
         fontSize: 14,
         textAlign: 'center'
       }}>
-        📭 暂无画像数据
+         暂无画像数据
       </div>
     );
   }
@@ -63,7 +63,7 @@ const ProfilePanel = ({ profile }) => {
         borderBottom: '2px solid #3b82f6',
         paddingBottom: 8
       }}>
-        👤 用户画像
+         用户画像
       </h3>
 
       {/* ===== 第一行：基础信息（4列网格） ===== */}
@@ -86,8 +86,8 @@ const ProfilePanel = ({ profile }) => {
             color: profile.difficulty === 'easy' ? '#16a34a' : 
                    profile.difficulty === 'hard' ? '#dc2626' : '#f59e0b'
           }}>
-            {profile.difficulty === 'easy' ? '🟢 简单' : 
-             profile.difficulty === 'hard' ? '🔴 困难' : '🟡 中等'}
+            {profile.difficulty === 'easy' ? ' 简单' : 
+             profile.difficulty === 'hard' ? ' 困难' : ' 中等'}
           </span>
         </span>
       </div>
@@ -132,8 +132,8 @@ const ProfilePanel = ({ profile }) => {
             color: profile.learning_pace === 'fast' ? '#16a34a' : 
                    profile.learning_pace === 'slow' ? '#dc2626' : '#6b7280'
           }}>
-            {profile.learning_pace === 'fast' ? '🚀 快速' : 
-             profile.learning_pace === 'slow' ? '🐢 缓慢' : '⚖️ 正常'}
+            {profile.learning_pace === 'fast' ? ' 快速' : 
+             profile.learning_pace === 'slow' ? ' 缓慢' : '正常'}
           </div>
         </div>
       </div>
@@ -154,7 +154,7 @@ const ProfilePanel = ({ profile }) => {
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
-          <span>🧠 认知风格</span>
+          <span> 认知风格</span>
           <span style={{ 
             fontSize: 11, 
             fontWeight: 400, 
@@ -205,7 +205,7 @@ const ProfilePanel = ({ profile }) => {
         padding: '8px 12px'
       }}>
         <div style={{ fontSize: 12, fontWeight: 600, color: '#1E293B', marginBottom: 4 }}>
-          📂 资源偏好
+           资源偏好
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           {resourceTypes.length > 0 ? (
@@ -234,7 +234,7 @@ const ProfilePanel = ({ profile }) => {
         padding: '8px 12px'
       }}>
         <div style={{ fontSize: 12, fontWeight: 600, color: '#1E293B', marginBottom: 2 }}>
-          📍 学习进度
+           学习进度
         </div>
         <div style={{ fontSize: 13 }}>
           <strong>当前主题：</strong>
