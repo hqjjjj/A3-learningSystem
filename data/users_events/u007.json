@@ -1,0 +1,82 @@
+[
+  {
+    "user_id": "u007",
+    "event_type": "message",
+    "time": "2026-07-18T17:31:17.972531",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我是软件工程大三学生，我想学文件操作"
+  },
+  {
+    "user_id": "u007",
+    "event_type": "message",
+    "time": "2026-07-18T17:35:27.658468",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我已经学完了文件操作，我想学文件的逻辑结构"
+  },
+  {
+    "user_id": "u007",
+    "event_type": "message",
+    "time": "2026-07-18T17:39:43.184757",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我完全掌握了文件操作，我想学连续组织方式"
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T17:47:30.149364",
+    "topic": "文件操作",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 109,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T17:50:38.049314",
+    "topic": "文件操作",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 185,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T17:51:58.779776",
+    "topic": "文件操作",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 80,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T17:51:58.790483",
+    "topic": "文件操作",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 80,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T17:51:58.799481",
+    "topic": "文件操作",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 80,
+    "message": null
+  }
+]
