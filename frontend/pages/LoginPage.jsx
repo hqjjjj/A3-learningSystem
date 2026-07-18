@@ -187,7 +187,7 @@ const LoginPage = ({ onLogin, isLoading }) => {
         </div>
       </div>
 
-      {/* 加载弹窗 - 纯文字跳动，由父组件控制 */}
+      {/* 加载弹窗  */}
       {isLoading && (
         <div style={{
           position: 'fixed',

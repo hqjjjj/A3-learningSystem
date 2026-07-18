@@ -3,7 +3,7 @@ import React from 'react';
 const MarkdownResource = ({ content, title }) => {
   // ========== 改动5：添加 Markdown 转 HTML 渲染 ==========
   // 目的：思维导图内容以结构化格式显示（标题层级、列表等）
-  // ========================================================
+ 
   const renderMarkdown = (text) => {
     if (!text) return '';
     

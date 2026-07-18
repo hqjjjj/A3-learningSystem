@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';  // ← 新增导入
+import ReactMarkdown from 'react-markdown'; 
 
 const MessageBubble = ({ role, content, isLoading = false }) => {
   const isUser = role === 'user';
@@ -46,7 +46,7 @@ const MessageBubble = ({ role, content, isLoading = false }) => {
         ) : isUser ? (
           content
         ) : (
-        <ReactMarkdown>{content}</ReactMarkdown>  // ← 助手消息支持 Markdown
+        <ReactMarkdown>{content}</ReactMarkdown>  
         )}
       </div>
 

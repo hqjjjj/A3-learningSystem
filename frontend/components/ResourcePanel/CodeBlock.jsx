@@ -11,7 +11,7 @@ const CodeBlock = ({ code, language = 'javascript' }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // ========== 最简版本 - 只做转义 ==========
+  // 最简版本 - 只做转义
   const highlightCode = (code, lang) => {
     if (!code) return '';
     

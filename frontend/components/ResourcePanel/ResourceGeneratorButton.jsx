@@ -20,7 +20,7 @@ const ResourceGeneratorButton = ({ onGenerate, isLoading, userId }) => {
     console.log('对应的标签：', label);
 
     console.log('发送给onGenerate的参数：', [typeValue]);
-    onGenerate(typeValue);  // 传入字符串
+    onGenerate(typeValue); 
     setShowOptions(false);
   };
 

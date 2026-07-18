@@ -68,9 +68,6 @@ const ResourcePanel = ({
         </p >
       </div>
 
-      {/* ========== 改动10：Tab 显示资源数量 ========== */}
-      {/* 目的：让用户知道每个 Tab 有多少资源 */}
-      {/* ============================================== */}
       <div style={{
         display: 'flex',
         borderBottom: '1px solid #e5e7eb',
@@ -191,8 +188,6 @@ const ResourcePanel = ({
           </>
         )}
       </div>
-
-      {/* 生成进度条 */}
       <ResourceGenerationProgress
         isVisible={showProgress}
         onComplete={handleProgressComplete}

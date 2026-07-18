@@ -9,16 +9,16 @@ import time
 import threading
 import hashlib
 
-# ==================== 配置 ====================
+# 配置 
 
 # 获取项目根目录
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(current_dir, "../../.."))
 
-# 监听目录（别人放用户画像的地方）
+# 监听目录
 WATCH_DIR = os.path.join(project_root, "data", "profile_outputs")
 
-# 输出目录（你的输出）
+# 输出目录
 OUTPUT_DIR = os.path.join(project_root, "data", "planner")
 
 # 知识库目录
@@ -29,7 +29,7 @@ IFLYTEK_APPID = "c878671b"
 IFLYTEK_API_KEY = "hfRZXNDgWSLsRNKeryAU:pSoMCpyYXYvhQVgbWvnl"
 IFLYTEK_API_SECRET = "NTNiZjA0NGRlZmMyOWExY2Y1NGI2OWQw"
 
-# ==================== 知识图谱构建 ====================
+# 知识图谱构建
 
 @dataclass
 class KnowledgeNode:
@@ -150,7 +150,7 @@ class KnowledgeGraph:
         
         return {"nodes": nodes, "edges": edges}
 
-# ==================== 路径规划器 ====================
+# 路径规划器
 
 class PlannerAgent:
     def __init__(self, kg: KnowledgeGraph):
@@ -417,7 +417,7 @@ class PlannerAgent:
                 temperature=0.7,
                 max_tokens=2000
             )
-            # ✅ 打印完整响应对象，检查是否有错误字段
+            # 打印完整响应对象，检查是否有错误字段
             #print(f"[LLM] 完整响应对象: {response}")
             if not response.choices:
                 print("[LLM] 响应中没有 choices")
@@ -440,7 +440,7 @@ class PlannerAgent:
             print(f"[LLM] 调用失败: {e}")
             return None
 
-# ==================== 文件监控器 ====================
+#文件监控器
 
 class UserProfileMonitor:
     """监控用户画像文件变化，自动重新生成学习路径"""
@@ -475,8 +475,8 @@ class UserProfileMonitor:
             
             filename = os.path.basename(filepath)
             print(f"\n{'='*60}")
-            print(f"[监控] 📁 检测到用户画像变化: {filename}")
-            print(f"[监控] 🕐 时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"[监控] 检测到用户画像变化: {filename}")
+            print(f"[监控] 时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             
             # 获取用户ID
             user_id = user_profile.get('user_id', os.path.splitext(filename)[0])
@@ -484,31 +484,26 @@ class UserProfileMonitor:
             # 重新生成学习路径（使用LLM）
             learning_path = self.planner.get_learning_path(user_profile)
             
-            # ✅ 修改：保存到 users/{user_id}/ 目录
             user_output_dir = os.path.join(self.output_dir, "users", user_id)
             os.makedirs(user_output_dir, exist_ok=True)
             
-            # ✅ 保存学习路径（覆盖）
             output_path = os.path.join(user_output_dir, "learning_path.json")
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(learning_path, f, indent=2, ensure_ascii=False)
             
-            print(f"[监控] ✅ 学习路径已更新: {output_path}")
+            print(f"[监控] 学习路径已更新: {output_path}")
+        
             
-            # ❌ 删除：不再保存历史版本
-            # timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            # history_path = os.path.join(user_output_dir, f"learning_path_{timestamp}.json")
-            
-            # ✅ 保存教学输出（覆盖）
+            # 保存教学输出
             next_topic = self.planner.get_next_topic(user_profile)
             teaching_output = self.planner.get_teaching_output(user_profile, next_topic)
             teaching_path = os.path.join(user_output_dir, "teaching_output.json")
             with open(teaching_path, 'w', encoding='utf-8') as f:
                 json.dump(teaching_output, f, indent=2, ensure_ascii=False)
             
-            print(f"[监控] ✅ 教学输出已更新: {teaching_path}")
-            print(f"[监控] 📊 路径长度: {len(learning_path.get('learning_path', []))} 个知识点")
-            print(f"[监控] ➡️  下一步: {learning_path.get('next_step', '无')}")
+            print(f"[监控] 教学输出已更新: {teaching_path}")
+            print(f"[监控] 路径长度: {len(learning_path.get('learning_path', []))} 个知识点")
+            print(f"[监控] 下一步: {learning_path.get('next_step', '无')}")
             print(f"{'='*60}\n")
             
             # 更新哈希
@@ -524,7 +519,7 @@ class UserProfileMonitor:
             return learning_path
             
         except Exception as e:
-            print(f"[监控] ❌ 处理 {filepath} 失败: {e}")
+            print(f"[监控] 处理 {filepath} 失败: {e}")
             return None
     
     def _check_and_process(self):
@@ -545,9 +540,9 @@ class UserProfileMonitor:
     
     def _monitor_loop(self):
         """监控循环"""
-        print(f"[监控] 🔍 开始监控目录: {self.watch_dir}")
-        print(f"[监控] ⏱️  检查间隔: {self.check_interval} 秒")
-        print(f"[监控] 📁 输出目录: {self.output_dir}")
+        print(f"[监控] 开始监控目录: {self.watch_dir}")
+        print(f"[监控] 检查间隔: {self.check_interval} 秒")
+        print(f"[监控] 输出目录: {self.output_dir}")
         print(f"[监控] 按 Ctrl+C 停止监控\n")
         
         # 首次立即执行
@@ -564,7 +559,7 @@ class UserProfileMonitor:
             return
         
         if not os.path.exists(self.watch_dir):
-            print(f"[监控] ⚠️  监控目录不存在，将创建: {self.watch_dir}")
+            print(f"[监控] 监控目录不存在，将创建: {self.watch_dir}")
             os.makedirs(self.watch_dir, exist_ok=True)
         
         self.running = True
@@ -582,7 +577,7 @@ class UserProfileMonitor:
         """添加回调函数，在路径更新时调用"""
         self.callbacks.append(callback)
 
-# ==================== 工具函数 ====================
+# 工具函数
 
 def load_user_profile(filepath: str) -> Dict:
     """从文件加载用户画像"""
@@ -593,9 +588,9 @@ def save_json(data: Dict, filepath: str):
     """保存 JSON 文件"""
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
-    print(f"✅ 已输出: {filepath}")
+    print(f"已输出: {filepath}")
 
-# ==================== 主函数（输入输出完全不变） ====================
+# 主函数（输入输出完全不变）
 
 def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
     """
@@ -634,20 +629,19 @@ def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
     
     # 4. 生成学习路径（使用LLM规划）
     learning_path = planner.get_learning_path(user_profile)
-    
-    # ============ 修改：输出到 users/{user_id}/ 目录，覆盖更新 ============
+
     user_id = user_profile.get("user_id", "unknown")
     
     # 创建用户专属目录
     user_dir = os.path.join(output_dir, "users", user_id)
     os.makedirs(user_dir, exist_ok=True)
     
-    # 保存 learning_path.json（覆盖）
+    # 保存 learning_path.json
     learning_path_file = os.path.join(user_dir, "learning_path.json")
     with open(learning_path_file, 'w', encoding='utf-8') as f:
         json.dump(learning_path, f, indent=2, ensure_ascii=False)
     
-    # 保存 teaching_output.json（覆盖）
+    # 保存 teaching_output.json
     teaching_file = os.path.join(user_dir, "teaching_output.json")
     with open(teaching_file, 'w', encoding='utf-8') as f:
         json.dump(teaching_output, f, indent=2, ensure_ascii=False)
@@ -672,7 +666,7 @@ def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
             "is_review": next_topic.get("is_review", False)
         }
     
-    # 保存 {user_id}.json（覆盖）
+    # 保存 {user_id}.json
     teaching_output_with_current = teaching_output.copy()
     teaching_output_with_current["current_topic"] = current_topic_output
     
@@ -686,13 +680,12 @@ def run_planner(KNOWLEDGE_DIR: str, user_profile: Dict, output_dir: str = "."):
             "updated_at": datetime.now().isoformat()
         }, f, indent=2, ensure_ascii=False)
     
-    print(f"✅ 用户 {user_id} 学习路径已更新: {user_file}")
-    
-    # 返回（保持原有格式不变）
+    print(f"用户 {user_id} 学习路径已更新: {user_file}")
+
     return planner, user_profile, next_topic,learning_path
 
 
-# ==================== 监控启动函数（新增） ====================
+# 监控启动函数
 
 def start_monitor():
     """
@@ -700,7 +693,7 @@ def start_monitor():
     监控 WATCH_DIR 目录，自动处理新的用户画像文件
     """
     print("="*60)
-    print("🚀 启动监控服务")
+    print("启动监控服务")
     print("="*60)
     
     # 初始化知识图谱
@@ -715,7 +708,7 @@ def start_monitor():
     
     # 添加回调
     def on_path_update(user_profile, learning_path, user_id):
-        print(f"[回调] 📢 用户 {user_id} 的学习路径已更新（使用LLM规划）")
+        print(f"[回调] 用户 {user_id} 的学习路径已更新（使用LLM规划）")
         print(f"[回调] 下一步知识点: {learning_path.get('next_step', '无')}")
     
     monitor.add_callback(on_path_update)
@@ -724,25 +717,18 @@ def start_monitor():
     return monitor
 
 
-# ==================== 主程序 ====================
+# 主程序
 
 if __name__ == "__main__":
-    # 原有用法（完全不变）
-    # planner, user_profile, next_topic = run_planner(
-    #     KNOWLEDGE_DIR="./knowledge",
-    #     user_profile={"user_id": "test", "knowledge_level": {}},
-    #     output_dir="./output"
-    # )
-    
-    # 新增：启动监控服务
+
     print("\n启动监控模式...")
     monitor = start_monitor()
     
     print("\n" + "="*60)
-    print("✅ 监控服务已启动")
-    print(f"📝 监控目录: {WATCH_DIR}")
-    print(f"📂 输出目录: {OUTPUT_DIR}")
-    print("💡 将用户画像 JSON 文件放入监控目录即可自动生成学习路径")
+    print("监控服务已启动")
+    print(f"监控目录: {WATCH_DIR}")
+    print(f"输出目录: {OUTPUT_DIR}")
+    print("将用户画像 JSON 文件放入监控目录即可自动生成学习路径")
     print("按 Ctrl+C 停止服务")
     print("="*60)
     

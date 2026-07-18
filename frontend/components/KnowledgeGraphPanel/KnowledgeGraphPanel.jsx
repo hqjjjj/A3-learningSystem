@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-// ========== 后端 API 基础 URL ==========
+
 const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:8080' : '';
 
-// ========== 所有子组件保持不变 ==========
 const LeafNode = ({ icon, label, onClick, customStyle }) => {
   return (
     <li className="tree-node leaf-node" style={{ paddingLeft: '28px' }}>
@@ -210,7 +209,7 @@ const TopicNode = ({ topic }) => {
   );
 };
 
-// ========== ChapterNode ==========
+// ChapterNode 
 const ChapterNode = ({ chapter, chapterCache }) => {
   const [expanded, setExpanded] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -228,7 +227,7 @@ const ChapterNode = ({ chapter, chapterCache }) => {
         let data = chapterCache.current[chapter.id];
         if (!data) {
           console.log(`📚 加载章节: ${chapter.file}`);
-          // ========== 使用完整 URL ==========
+          // 使用完整 URL 
           const response = await fetch(`${API_BASE_URL}/api/knowledge/chapter/${chapter.file}`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -267,14 +266,14 @@ const ChapterNode = ({ chapter, chapterCache }) => {
   );
 };
 
-// ========== KnowledgeGraphPanel 主组件 ==========
+// KnowledgeGraphPanel 主组件
 const KnowledgeGraphPanel = () => {
   const [chapters, setChapters] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [rootExpanded, setRootExpanded] = useState(false);
   const chapterCache = useRef({});
 
-  // ========== 加载索引 - 使用完整 URL ==========
+  // 加载索引 - 使用完整 URL
   useEffect(() => {
     const loadIndex = async () => {
       try {
