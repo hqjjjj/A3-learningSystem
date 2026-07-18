@@ -26,12 +26,7 @@ class KnowledgeBaseManager:
         self.topics_index = {}
         self._load_all_topics()
         
-        # ===== 向量检索相关 ===== (这些变量现在不需要了)
-        # self._embedding_model = None
-        # self.topic_ids = []
-        # self.topic_vectors = None
-        # self._vector_index_ready = False
-        
+
         # 标记为已初始化
         KnowledgeBaseManager._initialized = True
     
@@ -100,7 +95,7 @@ class KnowledgeBaseManager:
                             best_match = tid
         
         if best_match:
-            print(f"🔍 关键词匹配: [{best_match}] {self.topics_index[best_match].get('name', '')}")
+            print(f" 关键词匹配: [{best_match}] {self.topics_index[best_match].get('name', '')}")
             return best_match
         
         return None
@@ -111,7 +106,7 @@ class KnowledgeBaseManager:
         if not user_input or not user_input.strip():
             return None
     
-        print(f"\n🔎 正在匹配: \"{user_input}\"")
+        print(f"\n 正在匹配: \"{user_input}\"")
     
         # 直接使用关键词匹配
         result = self._keyword_match(user_input)

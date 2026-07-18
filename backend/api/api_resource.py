@@ -46,9 +46,7 @@ def finish_view(req: FinishViewRequest):
         topic=req.topic  
     )
     
-    # 👇 2. 关键修复：将 user_id 手动补进返回数据中 (针对总控里调用 generate_resources 时的缺失)
-    # 因为总控层在返回资源时，有时候不会把 user_id 保留在 output 中。
-    # 我们在 API 层做个补丁。
+    # 将 user_id 手动补进返回数据中
     if "data" in result and result["data"] is not None:
         if isinstance(result["data"], dict) and "user_id" not in result["data"]:
             result["data"]["user_id"] = req.user_id

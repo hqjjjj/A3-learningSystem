@@ -42,37 +42,32 @@ def log_event(event: BehaviorEvent):
         # 打印日志
         print(f"【行为系统】已记录用户 {event.user_id} 的行为事件：{event.event_type}（当前共 {len(data)} 条）")
 
-# =======================================================
-# 🔥 新增：总控对接专用入口
-# 这样 orchestrator 里的 from logger import log_behavior 就能完美工作了
-# =======================================================
+
+#总控对接入口
+
 def log_behavior(user_id: str, action: str, **kwargs):
     """
     兼容总控 (Orchestrator) 调用的包装函数。
     将常规参数自动转换为 BehaviorEvent 模型。
     """
-        # ===== 过滤：查看资源时长小于 10 秒则不记录 =====
     if action == "view_resource":
         duration = kwargs.get("duration")
         if duration is not None and duration < 10:
             print(f" [行为系统Logger] 忽略时长 {duration}s 的浏览记录（小于10秒）")
             return
-    # ================================================
     # 构造符合 BehaviorEvent 模型的参数字典
     event_data = {
         "user_id": user_id,
-        "event_type": action,  # 注意：这里将总控传的 action 映射为 event_type
+        "event_type": action,  
         "time": datetime.now()
     }
     
-    # 将剩余的参数（如 correct_rate, message, duration 等）合并进去
+    # 将剩余的参数合并
     event_data.update(kwargs)
     
     # 实例化 Pydantic 模型
     try:
         event = BehaviorEvent(**event_data)
-        # 调用你原本写好的逻辑进行保存
         log_event(event)
     except Exception as e:
         print(f"⚠️ [Logger] 行为记录失败: {e}")
-# =======================================================

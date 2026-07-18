@@ -91,22 +91,22 @@ def validate_input(data):
     ]
 
     for field in required_fields:
-        # 1. 检查字段是否存在
+        #检查字段是否存在
         if field not in data:
             raise ValueError(f"【资源生成agent】缺少必要字段: {field}")
 
         value = data[field]
 
-        # 2. 检查字段值是否为 None
+        #检查字段值是否为 None
         if value is None:
             raise ValueError(f"【资源生成agent】字段 '{field}' 的值不能为 None")
 
-        # 3. 如果是字符串类型，检查是否为空或仅包含空白字符
+        #如果是字符串类型，检查是否为空或仅包含空白字符
         if isinstance(value, str):
             if value.strip() == "":
                 raise ValueError(f"【资源生成agent】字段 '{field}' 不能为空字符串")
 
-        # 4. 针对 resource_type 的特殊校验：必须是非空列表，且元素有效
+        #针对 resource_type 的特殊校验：必须是非空列表，且元素有效
         if field == "resource_type":
             if not isinstance(value, list):
                 raise ValueError(f"【资源生成agent】字段 'resource_type' 必须为列表类型，当前类型为 {type(value).__name__}")
@@ -114,7 +114,7 @@ def validate_input(data):
             if len(value) == 0:
                 raise ValueError(f"【资源生成agent】字段 'resource_type' 不能为空列表，请至少指定一种资源类型")
             
-            # 校验列表中的每个元素
+            #校验列表中的每个元素
             for idx, item in enumerate(value):
                 if not isinstance(item, str):
                     raise ValueError(f"【资源生成agent】resource_type 列表中第 {idx+1} 个元素必须为字符串，当前为 {type(item).__name__}")
@@ -139,7 +139,6 @@ def normalize_input(data):
     return data   
 class agentCore:
 
-    # system和user 双层结构
     #需要从知识库传递一整个topic内容
     def run(self,input_data:dict):
         self.finaloutput = {}
@@ -190,7 +189,6 @@ class agentCore:
                     self.finaloutput[f"【资源生成agent】error_{str(e)}"] = {"error": str(e)}
 
 
-        # 格式化输出
         resources = []
         for key, resource_obj in self.finaloutput.items():
             if key == "error" or not isinstance(resource_obj, dict):

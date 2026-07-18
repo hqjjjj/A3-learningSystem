@@ -23,7 +23,7 @@ def analyze_behavior(user_id: str):
         return {}
 
 
-    # 1. 正确率分析
+    #正确率分析
 
     topic_scores = {}
     for e in user_events:
@@ -44,7 +44,7 @@ def analyze_behavior(user_id: str):
         )
 
 
-    # 2. 资源偏好分析
+    #资源偏好分析
 
     resource_type=[]
     resources=[
@@ -56,7 +56,9 @@ def analyze_behavior(user_id: str):
         item[0]
         for item in Counter(resources).most_common(3)
     ]
-    # 3. 学习节奏分析
+
+
+    #学习节奏分析
 
 
     durations = [

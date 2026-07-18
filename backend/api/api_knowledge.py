@@ -9,7 +9,7 @@ import os
 
 router = APIRouter()
 
-# ========== 请求/响应模型 ==========
+#  请求/响应模型 
 
 
 
@@ -44,13 +44,13 @@ class KnowledgeChatResponse(BaseModel):
     topic_content: Optional[Dict] = None
     related_topics: Optional[List[Dict]] = None
 
-# ========== 辅助函数：获取 kb_manager ==========
+#  辅助函数：获取 kb_manager 
 
 def get_kb_manager(request: Request):
     """从 app.state 获取知识库管理器"""
     return request.app.state.kb_manager
 
-# ========== API 路由 ==========
+#  API 路由 
 
 @router.get("/chapters")
 async def get_chapters():

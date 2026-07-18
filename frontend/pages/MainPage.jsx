@@ -11,23 +11,23 @@ import profileIcon from '../imgs/1779594816401.png';
 import * as api from '../api/api';
 
 const MainPage = ({ appState, setAppState, userId }) => {
-  // ===== 左侧折叠状态 =====
+  //  左侧折叠状态 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  // ===== 右侧主 Tab =====
+  // 右侧主 Tab 
   const [activeMainTab, setActiveMainTab] = useState('path');
 
-  // ===== 路径区子 Tab =====
+  //路径区子 Tab
   const [activePathTab, setActivePathTab] = useState('learningPath');
 
-  // ===== 加载状态 =====
+  //  加载状态 
   const [isLoading, setIsLoading] = useState(false);
 
-  // ===== 辅助函数：合并后端返回更新 =====
+  //  辅助函数：合并后端返回更新 
   const mergeAppState = useCallback((updates) => {
     setAppState(prev => {
       const processedUpdates = typeof updates === 'function' ? updates(prev) : updates;
@@ -47,10 +47,10 @@ const MainPage = ({ appState, setAppState, userId }) => {
     });
   }, [setAppState]);
 
-  // ===== 初始数据加载 =====
+  //  初始数据加载 
   // MainPage.jsx - useEffect
   useEffect(() => {
-    // ✅ 如果已有数据且用户ID匹配，跳过加载
+    //如果已有数据且用户ID匹配，跳过加载
     if (appState.profile && appState.profile.user_id === userId) {
       console.log('数据已加载，跳过重复请求');
       return;
@@ -72,7 +72,7 @@ const MainPage = ({ appState, setAppState, userId }) => {
     loadInitialData();
   }, [userId, mergeAppState, appState.profile]);
 
-  // ===== 聊天模块回调函数 =====
+  //  聊天模块回调函数 
   const handleSendMessage = useCallback(async (message) => {
     const userMsg = { role: 'user', content: message };
     setAppState(prev => ({
@@ -118,7 +118,7 @@ const handleGenerateResource = useCallback(async (resourceTypes) => {
   }
 }, [userId, appState.topic, mergeAppState]);
   
-  // ===== 提交答案回调函数 =====
+  //  提交答案回调函数 
   const handleSubmitAnswer = useCallback(async (correct_rate, duration) => {
     setIsLoading(true);
     try {
@@ -157,7 +157,7 @@ const handleFinishResource=useCallback(async(resourceType,duration)=>{
 
 //切换主题回调函数
 const handlePathNodeClick = useCallback(async (newTopic) => {
-  // 1. 先乐观更新 topic（让界面立刻响应）
+  // 1. 先乐观更新 topic
   setAppState(prev => ({ ...prev, topic: newTopic }));
 
   // 2. 拉取该主题下的路径和资源
