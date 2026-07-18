@@ -1,0 +1,12 @@
+{
+  "type": "html",
+  "title": "文件操作流程可视化",
+  "html_content": "<!DOCTYPE html><html><head><style>body{font-family:Arial;margin:20px}canvas{border:1px solid #ccc}.controls{margin:10px 0}button{padding:5px 10px}#info{margin-top:10px}</style></head><body><h2>文件操作流程图解</h2><canvas id='canvas' width='600' height='400'></canvas><div class='controls'><button onclick='createFile()'>创建文件</button><button onclick='deleteFile()'>删除文件</button><button onclick='readFile()'>读取文件</button><button onclick='writeFile()'>写入文件</button><button onclick='openClose()'>打开/关闭</button></div><div id='info'></div><script>const canvas=document.getElementById('canvas');const ctx=canvas.getContext('2d');let files=[];let selectedFile=-1;function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);//内存区域ctx.strokeStyle='#333';ctx.fillStyle='#f0f0f0';ctx.fillRect(50,50,500,150);ctx.fillText('内存(Open File Table)',70,70);files.forEach((f,i)=>{if(i==selectedFile){ctx.fillStyle='#ff9900';ctx.fillRect(60+i*80,60,70,80);}else{ctx.fillStyle='#ddd';ctx.fillRect(60+i*80,60,70,80);}ctx.fillText(`FD${i}`,70+i*80,100);});//磁盘区域ctx.strokeStyle='#333';ctx.fillStyle='#eee';ctx.fillRect(50,250,500,100);ctx.fillText('磁盘存储区',60,270);files.forEach((f,i)=>{if(f.exists&&i==selectedFile){ctx.fillStyle='#00aa00';ctx.fillRect(60+i*80,260,70,60);}else if(f.exists){ctx.fillStyle='#aaa';ctx.fillRect(60+i*80,260,70,60);}})}function createFile(){if(files.length<5){files.push({name:'file'+files.length,size:Math.floor(Math.random()*100)+10});draw();updateInfo();}}function deleteFile(){if(selectedFile>=0){files[selectedFile].exists=false;selectedFile=-1;draw();updateInfo();}}function readFile(){if(selectedFile>=0){alert(`读取文件 ${files[selectedFile].name},大小:${files[selectedFile].size}KB`);}}function writeFile(){if(selectedFile>=0){alert(`写入数据到 ${files[selectedFile].name}`);}}function openClose(){if(selectedFile>=0){alert(`打开文件 ${files[selectedFile].name},获得FD:${selectedFile}`);}}function updateInfo(){const info=document.getElementById('info');info.innerHTML=`当前操作: ${['','创建','删除','读取','写入','打开'][selectedFile]} | 文件列表: ${files.map(f=>f.name).join(', ')}`;}draw();updateInfo();</script></body></html>",
+  "description": "通过Canvas动画演示文件操作的核心流程：创建文件时分配FD并在内存建立条目；删除文件时标记为无效；读写操作需先打开获取FD；打开操作将文件属性从磁盘复制到内存的打开文件表。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《操作系统》文件操作",
+    "\"打开文件时系统将文件属性从外存复制到内存的打开文件表中，返回文件描述符\"",
+    "\"引入文件'打开'和'关闭'操作是为了避免多次重复检索目录，提高文件访问效率\""
+  ],
+  "subtype": "animation"
+}

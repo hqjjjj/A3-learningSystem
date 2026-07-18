@@ -298,5 +298,125 @@
     "correct_rate": null,
     "duration": 76,
     "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:31:50.068837",
+    "topic": "文件操作",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 3180,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:31:50.069084",
+    "topic": "文件操作",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 3180,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:31:50.069817",
+    "topic": "文件操作",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 3180,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:35:47.771961",
+    "topic": "文件操作",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 233,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "message",
+    "time": "2026-07-18T20:40:37.064521",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想学存储器的层次结构"
+  },
+  {
+    "user_id": "u007",
+    "event_type": "message",
+    "time": "2026-07-18T20:49:15.982588",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想学文件操作"
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:55:10.481545",
+    "topic": "文件操作",
+    "resource_type": "animation",
+    "correct_rate": null,
+    "duration": 279,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "exercise",
+    "time": "2026-07-18T20:56:13.856454",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": 0.0,
+    "duration": 13,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:56:43.101803",
+    "topic": "文件操作",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 42,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:57:31.892528",
+    "topic": "文件操作",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 19,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:57:31.893585",
+    "topic": "文件操作",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 19,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T20:57:31.894251",
+    "topic": "文件操作",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 19,
+    "message": null
   }
 ]

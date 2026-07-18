@@ -1,19 +1,20 @@
 {
   "user_id": "u007",
   "current_topic": {
-    "id": "os_file_03",
-    "name": "文件操作",
-    "understanding": 0.54,
-    "is_review": true
+    "id": "os_file_05",
+    "name": "文件目录",
+    "understanding": 0.0,
+    "is_review": false
   },
   "teaching_output": {
     "learning_style": "auditory",
     "weak_points": [
-      "文件操作"
+      "文件操作",
+      "存储器的层次结构"
     ],
     "cognitive_level": {
       "level": "intermediate",
-      "understanding_avg": 0.54
+      "understanding_avg": 0.45
     },
     "error_patterns": [],
     "preference": {
@@ -26,23 +27,32 @@
     },
     "learning_pace": "normal",
     "current_topic": {
-      "id": "os_file_03",
-      "name": "文件操作",
-      "understanding": 0.54,
-      "is_review": true
+      "id": "os_file_05",
+      "name": "文件目录",
+      "understanding": 0.0,
+      "is_review": false
     }
   },
   "learning_path": {
     "learning_path": [
+      "存储器的层次结构",
       "文件、记录和数据项",
       "文件操作",
       "文件目录",
-      "文件共享",
-      "文件保护"
+      "文件系统的层次结构"
     ],
-    "current_step": "文件操作",
-    "next_step": "多处理机系统的引入与类型",
+    "current_step": "文件目录",
+    "next_step": "存储器的层次结构",
     "path_nodes": [
+      {
+        "id": "os_memory_01",
+        "name": "存储器的层次结构",
+        "difficulty": "easy",
+        "status": "pending",
+        "understanding": 0.45,
+        "x": 185.53706352851924,
+        "y": 494.1311473980644
+      },
       {
         "id": "os_file_01",
         "name": "文件、记录和数据项",
@@ -57,7 +67,7 @@
         "name": "文件操作",
         "difficulty": "easy",
         "status": "pending",
-        "understanding": 0.54,
+        "understanding": 0.44,
         "x": 362.93865880452086,
         "y": 470.6991881026088
       },
@@ -71,22 +81,13 @@
         "y": 33.72895600751707
       },
       {
-        "id": "os_file_06",
-        "name": "文件共享",
-        "difficulty": "medium",
+        "id": "os_file_02",
+        "name": "文件系统的层次结构",
+        "difficulty": "easy",
         "status": "pending",
         "understanding": 0,
-        "x": 130.28723982136924,
-        "y": 462.88020792508706
-      },
-      {
-        "id": "os_file_07",
-        "name": "文件保护",
-        "difficulty": "medium",
-        "status": "pending",
-        "understanding": 0,
-        "x": 422.3348399142877,
-        "y": 481.6887601682886
+        "x": -155.21348941651854,
+        "y": 54.965112155064645
       }
     ],
     "edges": [
@@ -635,7 +636,7 @@
         "target": "os_disk_13"
       }
     ],
-    "timestamp": "2026-07-18T19:38:40.778271"
+    "timestamp": "2026-07-18T20:58:05.563547"
   },
-  "updated_at": "2026-07-18T19:38:40.795963"
+  "updated_at": "2026-07-18T20:58:05.567637"
 }

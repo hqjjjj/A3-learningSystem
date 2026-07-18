@@ -4,9 +4,13 @@
   "grade": "大三",
   "course": "操作系统",
   "knowledge_level": {
-    "文件操作": 0.6
+    "文件操作": 0.44,
+    "存储器的层次结构": 0.45
   },
-  "weak_points": [],
+  "weak_points": [
+    "文件操作",
+    "存储器的层次结构"
+  ],
   "error_tags": [],
   "learning_style": "text",
   "cognitive_style": {
@@ -18,30 +22,20 @@
   "resource_type": [
     "explanation",
     "mindmap",
-    "exercise",
-    [
-      "explanation",
-      "exercise",
-      "mindmap"
-    ]
+    "exercise"
   ],
   "difficulty": "easy",
   "progress": {
-    "current_topic": "文件操作",
+    "current_topic": "文件目录",
     "completed_topics": []
   },
   "learning_goal": null,
   "created_at": "2026-07-18T18:47:51.812793",
-  "updated_at": "2026-07-18T19:38:40.780591",
-  "last_message": "做了文件操作的题目，正确率1.0，用时76秒",
+  "updated_at": "2026-07-18T20:57:42.616875",
+  "last_message": "浏览了资源 explanation，用时 19 秒，主题：文件操作",
   "last_behavior": {
-    "knowledge_level": {},
-    "resource_type": [
-      "explanation",
-      "exercise",
-      "mindmap"
-    ],
-    "learning_pace": "normal",
-    "correct_rate": 1.0
+    "topic": "文件操作",
+    "resource_type": "explanation",
+    "duration": 19
   }
 }

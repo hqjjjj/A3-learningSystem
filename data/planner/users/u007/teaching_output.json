@@ -1,11 +1,12 @@
 {
   "learning_style": "auditory",
   "weak_points": [
-    "文件操作"
+    "文件操作",
+    "存储器的层次结构"
   ],
   "cognitive_level": {
     "level": "intermediate",
-    "understanding_avg": 0.54
+    "understanding_avg": 0.45
   },
   "error_patterns": [],
   "preference": {
@@ -18,8 +19,8 @@
   },
   "learning_pace": "normal",
   "current_topic": {
-    "id": "os_mp_01",
-    "name": "多处理机系统的引入与类型",
+    "id": "os_memory_01",
+    "name": "存储器的层次结构",
     "is_review": true
   }
 }
