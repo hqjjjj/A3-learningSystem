@@ -1,0 +1,43 @@
+{
+  "type": "code",
+  "title": "NUMA系统内存访问模拟",
+  "language": "python",
+  "code_lines": [
+    "class Node:",
+    "    def __init__(self, node_id):",
+    "        self.node_id = node_id",
+    "        self.local_memory = []",
+    "        self.remote_access_delay = 0.5  # 秒",
+    "",
+    "class MemoryRegion:",
+    "    def __init__(self, address, size, is_local=True):",
+    "        self.address = address",
+    "        self.size = size",
+    "        self.is_local = is_local",
+    "",
+    "class NUMASystem:",
+    "    def __init__(self, nodes):",
+    "        self.nodes = nodes",
+    "        self.memory_regions = []",
+    "",
+    "    def add_memory(self, address, size, is_local=True):",
+    "        region = MemoryRegion(address, size, is_local)",
+    "        self.memory_regions.append(region)",
+    "",
+    "    def access_memory(self, memory_addr):",
+    "        for region in self.memory_regions:",
+    "            if region.address <= memory_addr < region.address + region.size:",
+    "                if region.is_local:",
+    "                    return f\"Local Access ({region.address}-{region.address+region.size})\", 0.1",
+    "                else:",
+    "                    return f\"Remote Access ({region.address}-{region.address+region.size})\", region.remote_access_delay",
+    "        return \"Invalid Address\", 0"
+  ],
+  "description": "模拟NUMA系统的内存访问机制，展示本地/远程访问时间差异。包含节点初始化、内存区域定义和访问逻辑。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《操作系统》非统一内存访问（NUMA）结构",
+    "每个节点有多个CPU、本地存储器和群内共享存储器，节点间通过互连模块连接",
+    "CPU访问本地存储器速度比远程快得多"
+  ],
+  "subtype": "code_example"
+}
