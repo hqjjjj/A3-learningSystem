@@ -26,7 +26,7 @@ KNOWLEDGE_DIR = os.path.join(project_root, "data", "knowledge")
 
 # 讯飞星火 API 配置
 IFLYTEK_APPID = "c878671b"
-IFLYTEK_API_KEY = "DakrisXotjLWfGiORfpN:xTQNcYCprdxJnQEyCOdp"
+IFLYTEK_API_KEY = "hfRZXNDgWSLsRNKeryAU:pSoMCpyYXYvhQVgbWvnl"
 IFLYTEK_API_SECRET = "NTNiZjA0NGRlZmMyOWExY2Y1NGI2OWQw"
 
 # ==================== 知识图谱构建 ====================
