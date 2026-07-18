@@ -1,0 +1,21 @@
+{
+  "type": "code",
+  "title": "Python文件打开/关闭操作示例",
+  "language": "python",
+  "code_lines": [
+    "# 打开文件进行读写操作(自动关闭)",
+    "with open('test.txt', 'r+') as f:",
+    "    content = f.read()          # 读取全部内容",
+    "    print(f'当前文件内容:\\n{content}')",
+    "    pos = f.tell()              # 获取当前读取位置",
+    "    f.seek(0, 2)               # 移动到文件末尾",
+    "    f.write('\\n追加的内容')     # 追加写入新内容"
+  ],
+  "description": "演示文件打开/关闭机制：1) with语句自动管理文件句柄 2) read()读取内容 3) seek()定位指针 4) write()写入数据。系统通过fd实现内存与外存的数据交换。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《文件管理》文件操作",
+    "打开文件时系统将文件属性从外存复制到内存的打开文件表中，返回文件描述符",
+    "关闭操作可释放文件表项，减少目录检索开销"
+  ],
+  "subtype": "code_example"
+}

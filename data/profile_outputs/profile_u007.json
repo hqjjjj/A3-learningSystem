@@ -5,11 +5,13 @@
   "course": "操作系统",
   "knowledge_level": {
     "文件操作": 0.44,
-    "存储器的层次结构": 0.45
+    "存储器的层次结构": 0.45,
+    "文件目录": 0.45
   },
   "weak_points": [
     "文件操作",
-    "存储器的层次结构"
+    "存储器的层次结构",
+    "文件目录"
   ],
   "error_tags": [],
   "learning_style": "text",
@@ -24,18 +26,18 @@
     "mindmap",
     "exercise"
   ],
-  "difficulty": "easy",
+  "difficulty": "medium",
   "progress": {
     "current_topic": "文件目录",
     "completed_topics": []
   },
   "learning_goal": null,
   "created_at": "2026-07-18T18:47:51.812793",
-  "updated_at": "2026-07-18T20:57:42.616875",
-  "last_message": "浏览了资源 explanation，用时 19 秒，主题：文件操作",
+  "updated_at": "2026-07-18T23:43:12.004137",
+  "last_message": "浏览了资源 explanation，用时 24 秒，主题：文件目录",
   "last_behavior": {
-    "topic": "文件操作",
+    "topic": "文件目录",
     "resource_type": "explanation",
-    "duration": 19
+    "duration": 24
   }
 }

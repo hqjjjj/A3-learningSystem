@@ -3,14 +3,15 @@
   "current_topic": {
     "id": "os_file_05",
     "name": "文件目录",
-    "understanding": 0.0,
-    "is_review": false
+    "understanding": 0.45,
+    "is_review": true
   },
   "teaching_output": {
     "learning_style": "auditory",
     "weak_points": [
       "文件操作",
-      "存储器的层次结构"
+      "存储器的层次结构",
+      "文件目录"
     ],
     "cognitive_level": {
       "level": "intermediate",
@@ -23,14 +24,14 @@
         "mindmap",
         "exercise"
       ],
-      "difficulty": "easy"
+      "difficulty": "medium"
     },
     "learning_pace": "normal",
     "current_topic": {
       "id": "os_file_05",
       "name": "文件目录",
-      "understanding": 0.0,
-      "is_review": false
+      "understanding": 0.45,
+      "is_review": true
     }
   },
   "learning_path": {
@@ -39,7 +40,8 @@
       "文件、记录和数据项",
       "文件操作",
       "文件目录",
-      "文件系统的层次结构"
+      "文件系统的层次结构",
+      "文件共享"
     ],
     "current_step": "文件目录",
     "next_step": "存储器的层次结构",
@@ -76,7 +78,7 @@
         "name": "文件目录",
         "difficulty": "medium",
         "status": "pending",
-        "understanding": 0,
+        "understanding": 0.45,
         "x": 683.9778211824182,
         "y": 33.72895600751707
       },
@@ -88,6 +90,15 @@
         "understanding": 0,
         "x": -155.21348941651854,
         "y": 54.965112155064645
+      },
+      {
+        "id": "os_file_06",
+        "name": "文件共享",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0,
+        "x": 130.28723982136924,
+        "y": 462.88020792508706
       }
     ],
     "edges": [
@@ -636,7 +647,7 @@
         "target": "os_disk_13"
       }
     ],
-    "timestamp": "2026-07-18T20:58:05.563547"
+    "timestamp": "2026-07-18T23:44:31.433389"
   },
-  "updated_at": "2026-07-18T20:58:05.567637"
+  "updated_at": "2026-07-18T23:44:31.435181"
 }

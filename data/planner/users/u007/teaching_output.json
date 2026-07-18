@@ -2,7 +2,8 @@
   "learning_style": "auditory",
   "weak_points": [
     "文件操作",
-    "存储器的层次结构"
+    "存储器的层次结构",
+    "文件目录"
   ],
   "cognitive_level": {
     "level": "intermediate",
@@ -15,7 +16,7 @@
       "mindmap",
       "exercise"
     ],
-    "difficulty": "easy"
+    "difficulty": "medium"
   },
   "learning_pace": "normal",
   "current_topic": {

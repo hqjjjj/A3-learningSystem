@@ -418,5 +418,65 @@
     "correct_rate": null,
     "duration": 19,
     "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "message",
+    "time": "2026-07-18T23:31:52.994846",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "我想学文件系统的彩虹表优化"
+  },
+  {
+    "user_id": "u007",
+    "event_type": "message",
+    "time": "2026-07-18T23:36:22.750566",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": null,
+    "duration": null,
+    "message": "你好"
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T23:40:34.328932",
+    "topic": "文件目录",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 111,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T23:42:50.608857",
+    "topic": "文件目录",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 24,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T23:42:50.612406",
+    "topic": "文件目录",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 24,
+    "message": null
+  },
+  {
+    "user_id": "u007",
+    "event_type": "view_resource",
+    "time": "2026-07-18T23:42:50.613640",
+    "topic": "文件目录",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 24,
+    "message": null
   }
 ]
