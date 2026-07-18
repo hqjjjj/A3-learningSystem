@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 
 /**
-
  * 功能：
  * - 登录：输入 user_id，跳转 MainPage
  * - 注册：输入新的 user_id，跳转 MainPage
-
+ * - 加载弹窗：纯文字跳动动画
  */
 
 const LoginPage = ({ onLogin }) => {
-  const [isLogin, setIsLogin] = useState(true);  // true: 登录, false: 注册
+  const [isLogin, setIsLogin] = useState(true);
   const [userId, setUserId] = useState('');
   const [error, setError] = useState('');
+  const [showLoading, setShowLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!userId.trim()) {
@@ -21,15 +21,52 @@ const LoginPage = ({ onLogin }) => {
       return;
     }
     
-    // 清除错误，调用父组件回调
     setError('');
-    onLogin(userId.trim());
+    setShowLoading(true);
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setShowLoading(false);
+      onLogin(userId.trim());
+    } catch (error) {
+      setError('登录失败，请重试');
+      setShowLoading(false);
+    }
   };
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setError('');
     setUserId('');
+  };
+
+  // 跳动文字组件
+  const BouncingText = ({ text }) => {
+    return (
+      <div style={{
+        display: 'flex',
+        gap: '2px',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        {text.split('').map((char, index) => (
+          <span
+            key={index}
+            style={{
+              display: 'inline-block',
+              fontSize: '36px',
+              fontWeight: 600,
+              color: '#ffffff',
+              textShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              animation: 'bounceText 0.6s ease-in-out infinite',
+              animationDelay: `${index * 0.08}s`
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </span>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -50,12 +87,10 @@ const LoginPage = ({ onLogin }) => {
         maxWidth: '400px',
         padding: '32px'
       }}>
-        {/* 头部图标 */}
         <div style={{
           textAlign: 'center',
           marginBottom: '24px'
         }}>
-        
           <h1 style={{
             margin: 0,
             fontSize: '28px',
@@ -70,13 +105,11 @@ const LoginPage = ({ onLogin }) => {
             color: '#6b7280'
           }}>
             {isLogin ? '登录继续学习' : '创建新账号'}
-          </p >
+          </p>
         </div>
 
-        {/* 表单 */}
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '20px' }}>
-           
             <input
               type="text"
               value={userId}
@@ -104,7 +137,7 @@ const LoginPage = ({ onLogin }) => {
                 color: '#ef4444'
               }}>
                 {error}
-              </p >
+              </p>
             )}
           </div>
 
@@ -129,7 +162,6 @@ const LoginPage = ({ onLogin }) => {
           </button>
         </form>
 
-        {/* 切换模式 */}
         <div style={{
           textAlign: 'center',
           marginTop: '20px',
@@ -153,6 +185,39 @@ const LoginPage = ({ onLogin }) => {
           </button>
         </div>
       </div>
+
+      {/* 加载弹窗 - 纯文字跳动 */}
+      {showLoading && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(88, 85, 85, 0.6)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          backdropFilter: 'blur(6px)'
+        }}>
+          <BouncingText text={isLogin ? '登录中...' : '注册中...'} />
+        </div>
+      )}
+
+      {/* 全局动画样式 */}
+      <style>{`
+        @keyframes bounceText {
+          0%, 100% {
+            transform: translateY(0);
+            opacity: 0.5;
+          }
+          50% {
+            transform: translateY(-15px);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   );
 };
