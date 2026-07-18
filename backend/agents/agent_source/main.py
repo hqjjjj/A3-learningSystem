@@ -160,7 +160,7 @@ class agentCore:
         if "animation" in resource_types:
             tasks.append(lambda: agentanimation().run(input_data, topic))
 
-        if "code_example" in resource_types:
+        if "code" in resource_types or "code_example" in resource_types:
             tasks.append(lambda: agentcode().run(input_data, topic))
 
         if "exercise" in resource_types:
