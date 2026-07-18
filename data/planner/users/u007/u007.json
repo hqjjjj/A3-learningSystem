@@ -1,0 +1,641 @@
+{
+  "user_id": "u007",
+  "current_topic": {
+    "id": "os_file_03",
+    "name": "文件操作",
+    "understanding": 0.54,
+    "is_review": true
+  },
+  "teaching_output": {
+    "learning_style": "auditory",
+    "weak_points": [
+      "文件操作"
+    ],
+    "cognitive_level": {
+      "level": "intermediate",
+      "understanding_avg": 0.54
+    },
+    "error_patterns": [],
+    "preference": {
+      "resource_type": [
+        "explanation",
+        "mindmap",
+        "exercise"
+      ],
+      "difficulty": "easy"
+    },
+    "learning_pace": "normal",
+    "current_topic": {
+      "id": "os_file_03",
+      "name": "文件操作",
+      "understanding": 0.54,
+      "is_review": true
+    }
+  },
+  "learning_path": {
+    "learning_path": [
+      "文件、记录和数据项",
+      "文件操作",
+      "文件目录",
+      "文件共享",
+      "文件保护"
+    ],
+    "current_step": "文件操作",
+    "next_step": "多处理机系统的引入与类型",
+    "path_nodes": [
+      {
+        "id": "os_file_01",
+        "name": "文件、记录和数据项",
+        "difficulty": "easy",
+        "status": "pending",
+        "understanding": 0,
+        "x": -165.63099466520345,
+        "y": 291.62144193367504
+      },
+      {
+        "id": "os_file_03",
+        "name": "文件操作",
+        "difficulty": "easy",
+        "status": "pending",
+        "understanding": 0.54,
+        "x": 362.93865880452086,
+        "y": 470.6991881026088
+      },
+      {
+        "id": "os_file_05",
+        "name": "文件目录",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0,
+        "x": 683.9778211824182,
+        "y": 33.72895600751707
+      },
+      {
+        "id": "os_file_06",
+        "name": "文件共享",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0,
+        "x": 130.28723982136924,
+        "y": 462.88020792508706
+      },
+      {
+        "id": "os_file_07",
+        "name": "文件保护",
+        "difficulty": "medium",
+        "status": "pending",
+        "understanding": 0,
+        "x": 422.3348399142877,
+        "y": 481.6887601682886
+      }
+    ],
+    "edges": [
+      {
+        "source": "os_mp_01",
+        "target": "os_mp_02"
+      },
+      {
+        "source": "os_mp_02",
+        "target": "os_mp_03"
+      },
+      {
+        "source": "os_mp_01",
+        "target": "os_mp_04"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_mp_05"
+      },
+      {
+        "source": "os_mp_05",
+        "target": "os_mp_06"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_mp_07"
+      },
+      {
+        "source": "os_mp_07",
+        "target": "os_mp_08"
+      },
+      {
+        "source": "os_schedule_09",
+        "target": "os_mp_09"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_02"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_03"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_04"
+      },
+      {
+        "source": "os_virt_03",
+        "target": "os_virt_04"
+      },
+      {
+        "source": "os_virt_03",
+        "target": "os_virt_05"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_virt_05"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_06"
+      },
+      {
+        "source": "os_virt_04",
+        "target": "os_virt_07"
+      },
+      {
+        "source": "os_virt_01",
+        "target": "os_virt_08"
+      },
+      {
+        "source": "os_virt_04",
+        "target": "os_virt_09"
+      },
+      {
+        "source": "os_security_02",
+        "target": "os_security_03"
+      },
+      {
+        "source": "os_security_03",
+        "target": "os_security_04"
+      },
+      {
+        "source": "os_security_06",
+        "target": "os_security_07"
+      },
+      {
+        "source": "os_security_07",
+        "target": "os_security_08"
+      },
+      {
+        "source": "os_security_07",
+        "target": "os_security_09"
+      },
+      {
+        "source": "os_security_08",
+        "target": "os_security_09"
+      },
+      {
+        "source": "os_security_01",
+        "target": "os_security_10"
+      },
+      {
+        "source": "os_security_01",
+        "target": "os_security_11"
+      },
+      {
+        "source": "os_security_10",
+        "target": "os_security_11"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_02"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_03"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_04"
+      },
+      {
+        "source": "os_intro_03",
+        "target": "os_intro_04"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_05"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_06"
+      },
+      {
+        "source": "os_intro_04",
+        "target": "os_intro_06"
+      },
+      {
+        "source": "os_intro_01",
+        "target": "os_intro_07"
+      },
+      {
+        "source": "os_intro_05",
+        "target": "os_intro_08"
+      },
+      {
+        "source": "os_process_01",
+        "target": "os_process_02"
+      },
+      {
+        "source": "os_process_02",
+        "target": "os_process_03"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_process_04"
+      },
+      {
+        "source": "os_process_04",
+        "target": "os_process_05"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_process_06"
+      },
+      {
+        "source": "os_process_04",
+        "target": "os_process_06"
+      },
+      {
+        "source": "os_process_04",
+        "target": "os_process_07"
+      },
+      {
+        "source": "os_process_05",
+        "target": "os_process_07"
+      },
+      {
+        "source": "os_process_06",
+        "target": "os_process_07"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_process_08"
+      },
+      {
+        "source": "os_process_08",
+        "target": "os_process_09"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_process_10"
+      },
+      {
+        "source": "os_process_10",
+        "target": "os_process_11"
+      },
+      {
+        "source": "os_process_11",
+        "target": "os_process_12"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_02"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_03"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_04"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_05"
+      },
+      {
+        "source": "os_schedule_04",
+        "target": "os_schedule_06"
+      },
+      {
+        "source": "os_schedule_05",
+        "target": "os_schedule_06"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_07"
+      },
+      {
+        "source": "os_schedule_04",
+        "target": "os_schedule_07"
+      },
+      {
+        "source": "os_schedule_01",
+        "target": "os_schedule_08"
+      },
+      {
+        "source": "os_schedule_04",
+        "target": "os_schedule_08"
+      },
+      {
+        "source": "os_schedule_09",
+        "target": "os_schedule_10"
+      },
+      {
+        "source": "os_process_03",
+        "target": "os_sync_01"
+      },
+      {
+        "source": "os_sync_01",
+        "target": "os_sync_02"
+      },
+      {
+        "source": "os_sync_02",
+        "target": "os_sync_03"
+      },
+      {
+        "source": "os_sync_01",
+        "target": "os_sync_04"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_05"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_06"
+      },
+      {
+        "source": "os_sync_05",
+        "target": "os_sync_06"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_07"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_08"
+      },
+      {
+        "source": "os_sync_04",
+        "target": "os_sync_09"
+      },
+      {
+        "source": "os_memory_01",
+        "target": "os_memory_03"
+      },
+      {
+        "source": "os_memory_02",
+        "target": "os_memory_04"
+      },
+      {
+        "source": "os_memory_02",
+        "target": "os_memory_05"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_06"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_07"
+      },
+      {
+        "source": "os_memory_06",
+        "target": "os_memory_07"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_08"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_09"
+      },
+      {
+        "source": "os_memory_08",
+        "target": "os_memory_09"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_10"
+      },
+      {
+        "source": "os_memory_08",
+        "target": "os_memory_10"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_memory_11"
+      },
+      {
+        "source": "os_memory_01",
+        "target": "os_virtual_01"
+      },
+      {
+        "source": "os_memory_05",
+        "target": "os_virtual_02"
+      },
+      {
+        "source": "os_virtual_01",
+        "target": "os_virtual_02"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_03"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_04"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_05"
+      },
+      {
+        "source": "os_virtual_05",
+        "target": "os_virtual_06"
+      },
+      {
+        "source": "os_virtual_06",
+        "target": "os_virtual_07"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_08"
+      },
+      {
+        "source": "os_virtual_03",
+        "target": "os_virtual_09"
+      },
+      {
+        "source": "os_virtual_04",
+        "target": "os_virtual_09"
+      },
+      {
+        "source": "os_virtual_05",
+        "target": "os_virtual_09"
+      },
+      {
+        "source": "os_virtual_06",
+        "target": "os_virtual_09"
+      },
+      {
+        "source": "os_memory_08",
+        "target": "os_virtual_10"
+      },
+      {
+        "source": "os_virtual_01",
+        "target": "os_virtual_10"
+      },
+      {
+        "source": "os_virtual_10",
+        "target": "os_virtual_11"
+      },
+      {
+        "source": "os_virtual_02",
+        "target": "os_virtual_12"
+      },
+      {
+        "source": "os_virtual_10",
+        "target": "os_virtual_12"
+      },
+      {
+        "source": "os_io_01",
+        "target": "os_io_02"
+      },
+      {
+        "source": "os_io_02",
+        "target": "os_io_03"
+      },
+      {
+        "source": "os_io_02",
+        "target": "os_io_04"
+      },
+      {
+        "source": "os_io_03",
+        "target": "os_io_04"
+      },
+      {
+        "source": "os_io_04",
+        "target": "os_io_05"
+      },
+      {
+        "source": "os_io_02",
+        "target": "os_io_06"
+      },
+      {
+        "source": "os_io_05",
+        "target": "os_io_06"
+      },
+      {
+        "source": "os_io_06",
+        "target": "os_io_07"
+      },
+      {
+        "source": "os_io_07",
+        "target": "os_io_08"
+      },
+      {
+        "source": "os_io_01",
+        "target": "os_io_09"
+      },
+      {
+        "source": "os_io_04",
+        "target": "os_io_10"
+      },
+      {
+        "source": "os_io_10",
+        "target": "os_io_11"
+      },
+      {
+        "source": "os_io_07",
+        "target": "os_io_12"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_02"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_03"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_04"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_05"
+      },
+      {
+        "source": "os_file_05",
+        "target": "os_file_06"
+      },
+      {
+        "source": "os_file_05",
+        "target": "os_file_07"
+      },
+      {
+        "source": "os_file_01",
+        "target": "os_file_08"
+      },
+      {
+        "source": "os_file_08",
+        "target": "os_file_09"
+      },
+      {
+        "source": "os_file_08",
+        "target": "os_file_10"
+      },
+      {
+        "source": "os_file_05",
+        "target": "os_file_11"
+      },
+      {
+        "source": "os_file_05",
+        "target": "os_file_12"
+      },
+      {
+        "source": "os_file_09",
+        "target": "os_file_12"
+      },
+      {
+        "source": "os_disk_01",
+        "target": "os_disk_02"
+      },
+      {
+        "source": "os_disk_01",
+        "target": "os_disk_03"
+      },
+      {
+        "source": "os_disk_02",
+        "target": "os_disk_03"
+      },
+      {
+        "source": "os_disk_02",
+        "target": "os_disk_05"
+      },
+      {
+        "source": "os_disk_03",
+        "target": "os_disk_06"
+      },
+      {
+        "source": "os_disk_07",
+        "target": "os_disk_08"
+      },
+      {
+        "source": "os_disk_09",
+        "target": "os_disk_10"
+      },
+      {
+        "source": "os_disk_07",
+        "target": "os_disk_13"
+      },
+      {
+        "source": "os_io_10",
+        "target": "os_disk_13"
+      },
+      {
+        "source": "os_io_11",
+        "target": "os_disk_13"
+      }
+    ],
+    "timestamp": "2026-07-18T19:38:40.778271"
+  },
+  "updated_at": "2026-07-18T19:38:40.795963"
+}

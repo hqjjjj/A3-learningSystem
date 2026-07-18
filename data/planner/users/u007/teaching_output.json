@@ -1,0 +1,25 @@
+{
+  "learning_style": "auditory",
+  "weak_points": [
+    "文件操作"
+  ],
+  "cognitive_level": {
+    "level": "intermediate",
+    "understanding_avg": 0.54
+  },
+  "error_patterns": [],
+  "preference": {
+    "resource_type": [
+      "explanation",
+      "mindmap",
+      "exercise"
+    ],
+    "difficulty": "easy"
+  },
+  "learning_pace": "normal",
+  "current_topic": {
+    "id": "os_mp_01",
+    "name": "多处理机系统的引入与类型",
+    "is_review": true
+  }
+}

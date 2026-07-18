@@ -315,7 +315,7 @@ class Orchestrator:
         self._state_cache[user_id] = result
         return result
 
-    @debounce(30)
+
     def submit_answer_result(self, user_id: str, topic: str, correct_rate: float, duration: int) -> Dict:
         print(f"【总控】用户 {user_id} 提交 {topic} 的答题结果，正确率: {correct_rate}，用时: {duration} 秒")
         self._log_behavior(user_id, "submit_answer", topic, duration, correct_rate)
@@ -326,6 +326,8 @@ class Orchestrator:
         try:
             analyzed_data = analyze_behavior(user_id)
             print(f"【总控】分析用户 {user_id} 的答题行为数据")
+            # 将本次 correct_rate 合并到 behavior 中
+            analyzed_data["correct_rate"] = correct_rate
         except Exception as e:
             print(f"【总控】⚠️ analyzer分析失败: {e}, 使用兜底数据")
             analyzed_data = {"correct_rate": correct_rate}
@@ -333,8 +335,9 @@ class Orchestrator:
         profile = self._update_profile(
             user_id,
             f"做了{topic}的题目，正确率{correct_rate}，用时{duration}秒",
-            behavior=analyzed_data
+            behavior=analyzed_data   # ← 现在包含了 correct_rate
         )
+    
 
         path_data = self._call_plan_agent(user_id, profile)
         resources = self._call_source_agent(profile, path_data, user_id=user_id)

@@ -1,0 +1,47 @@
+{
+  "user_id": "u007",
+  "major": "软件工程",
+  "grade": "大三",
+  "course": "操作系统",
+  "knowledge_level": {
+    "文件操作": 0.6
+  },
+  "weak_points": [],
+  "error_tags": [],
+  "learning_style": "text",
+  "cognitive_style": {
+    "visual": 0.33,
+    "textual": 0.33,
+    "auditory": 0.34
+  },
+  "learning_pace": "normal",
+  "resource_type": [
+    "explanation",
+    "mindmap",
+    "exercise",
+    [
+      "explanation",
+      "exercise",
+      "mindmap"
+    ]
+  ],
+  "difficulty": "easy",
+  "progress": {
+    "current_topic": "文件操作",
+    "completed_topics": []
+  },
+  "learning_goal": null,
+  "created_at": "2026-07-18T18:47:51.812793",
+  "updated_at": "2026-07-18T19:38:40.780591",
+  "last_message": "做了文件操作的题目，正确率1.0，用时76秒",
+  "last_behavior": {
+    "knowledge_level": {},
+    "resource_type": [
+      "explanation",
+      "exercise",
+      "mindmap"
+    ],
+    "learning_pace": "normal",
+    "correct_rate": 1.0
+  }
+}
