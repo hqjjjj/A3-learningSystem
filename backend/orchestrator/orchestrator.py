@@ -12,17 +12,17 @@ from typing import Dict, Optional, List
 from datetime import datetime
 from functools import wraps
 import time
-import threading  # ✅ 新增
+import threading  
 
 # 导入画像Agent
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'agents', 'agent_profile'))
 from profile_agent import ProfileAgent
 
-# 导入队友A 路径规划
+# 导入路径规划
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'agents', 'agent_plan'))
 from agentplan import run_planner
 
-# 导入队友C 资源生成
+# 导入资源生成
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'agents', 'agent_source'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from backend.agents.agent_source.kn_agent import agentkn as kn_agent_class
@@ -47,7 +47,7 @@ def debounce(wait_time):
                 user_id = args[0] if args else kwargs.get("user_id", "unknown")
                 resource_id = kwargs.get("resource_id", "default")
 
-            key = f"{user_id}_{resource_id}"  # ✅ 组合键
+            key = f"{user_id}_{resource_id}"  #  组合键
             now = time.time()
 
             if key in last_called:
@@ -73,12 +73,12 @@ class Orchestrator:
         self.memory_path = os.path.join(
             os.path.dirname(__file__), '..', '..', 'data', 'knowledge'
         )
-        # ✅ 防抖和缓存
+        #  防抖和缓存
         self._last_profile_update = {}   # user_id -> timestamp
         self._last_plan_cache = {}       # user_id -> (timestamp, result)
         self._plan_locks = {}            # user_id -> threading.Lock
         self._lock = threading.Lock()    # 保护 _plan_locks 的锁
-        # ✅ 新增：全局状态缓存，用于快速返回完整状态（含推荐资源）
+        # 全局状态缓存，用于快速返回完整状态（含推荐资源）
         self._state_cache = {}           # user_id -> 完整状态字典
 
     # ==================== 五个核心函数 ====================
@@ -140,7 +140,7 @@ class Orchestrator:
             "topic": profile_dict.get("progress", {}).get("current_topic", ""),
             "current_progress": raw_path_data.get("current_progress", "")
         }
-        # ✅ 缓存本次完整状态，供后续快速浏览使用
+        # 缓存本次完整状态，供后续快速浏览使用
         self._state_cache[user_id] = result
         return result
 
@@ -248,7 +248,7 @@ class Orchestrator:
         - duration >= 10 秒：记录行为，更新画像，并重新生成推荐资源。
         - 每个资源独立防抖，互不干扰。
         """
-        # ✅ 快速浏览直接返回缓存，不触发任何更新
+        #  快速浏览直接返回缓存，不触发任何更新
         if duration < 10:
             print(f"【总控】用户 {user_id} 浏览资源 {resource_id} 时长 {duration} 秒，小于10秒，忽略")
             cached = self._state_cache.get(user_id)
@@ -262,7 +262,7 @@ class Orchestrator:
         print(f"【总控】用户 {user_id} 完成查看资源 {resource_id}，用时 {duration} 秒")
         self._log_behavior(user_id, "view_resource", f"resource:{resource_id}", duration)
 
-        # ✅ 行为记录中明确包含 topic 和 resource_type，便于后续分析
+        #  行为记录中明确包含 topic 和 resource_type，便于后续分析
         behavior_data = {
             "topic": topic or "unknown",
             "resource_type": resource_id,   # resource_id 实际是资源类型名
@@ -275,7 +275,7 @@ class Orchestrator:
                      topic=topic, resource_type=resource_id)
         cleanup_events(user_id)
 
-        # ✅ 根据浏览时长决定是否进行深度分析
+        #  根据浏览时长决定是否进行深度分析
         if duration >= 30:
             try:
                 analyzed_data = analyze_behavior(user_id)
@@ -286,7 +286,7 @@ class Orchestrator:
                 print(f"【总控】⚠️ analyzer分析失败: {e}, 使用兜底数据")
                 behavior_data["correct_rate"] = None  # 无数据
 
-        # ✅ 生成差异化的 message，使每次画像更新都能被识别
+        #  生成差异化的 message，使每次画像更新都能被识别
         message = f"浏览了资源 {resource_id}，用时 {duration} 秒，主题：{topic or '未知'}"
 
         # 更新画像（传入详细行为数据）
@@ -311,7 +311,7 @@ class Orchestrator:
             "current_progress": path_data.get("current_progress", "")
         }
 
-        # ✅ 缓存本次完整状态，供后续快速浏览使用
+        #  缓存本次完整状态，供后续快速浏览使用
         self._state_cache[user_id] = result
         return result
 
@@ -351,14 +351,14 @@ class Orchestrator:
             "topic": profile.get("progress", {}).get("current_topic", ""),
             "current_progress": path_data.get("current_progress", "")
         }
-        # ✅ 缓存本次完整状态
+        #  缓存本次完整状态
         self._state_cache[user_id] = result
         return result
 
     # ==================== 内部方法 ====================
 
     def _update_profile(self, user_id: str, message: str, behavior: Dict = None) -> Dict:
-        # ✅ 防抖：5秒内重复调用则跳过
+        #  防抖：5秒内重复调用则跳过
         now = time.time()
         if user_id in self._last_profile_update:
             if now - self._last_profile_update[user_id] < 5:
@@ -417,14 +417,14 @@ class Orchestrator:
         return profile.model_dump() if profile else {}
 
     def _call_plan_agent(self, user_id: str, profile: Dict) -> Dict:
-        print(f"【调试】_call_plan_agent 被调用，user_id={user_id}")  # ✅ 添加这行
-        # ✅ 获取或创建该用户的锁
+        print(f"【调试】_call_plan_agent 被调用，user_id={user_id}")  
+        #  获取或创建该用户的锁
         with self._lock:
             if user_id not in self._plan_locks:
                 self._plan_locks[user_id] = threading.Lock()
             user_lock = self._plan_locks[user_id]
 
-        # ✅ 使用锁保护路径规划
+        #  使用锁保护路径规划
         with user_lock:
             # 双重检查：获取锁后再次检查缓存
             now = time.time()
@@ -564,7 +564,7 @@ class Orchestrator:
     def _build_resource_input(self, profile: Dict, path_data: Optional[Dict], resource_types: List[str] = None) -> Dict:
         if resource_types is None:
             resource_types = profile.get("resource_type", ["explanation"])
-         # ✅ 防御：确保每个元素都是字符串，若出现嵌套则展平
+         # 确保每个元素都是字符串，若出现嵌套则展平
         if isinstance(resource_types, list):
             flat = []
             for item in resource_types:
@@ -703,7 +703,7 @@ class Orchestrator:
                 "topic": profile_dict.get("progress", {}).get("current_topic", ""),
                 "current_progress": raw_path_data.get("current_progress", "learning")
             }
-            # ✅ 缓存完整状态
+            #  缓存完整状态
             self._state_cache[user_id] = result
             return result
 

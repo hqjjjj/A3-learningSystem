@@ -8,7 +8,7 @@ const PathPanel = ({ learningPath, topic, onTopicChange }) => {
     return <div>加载中...</div>;
   }
   
-  // ✅ 兼容两种字段名
+  //  兼容两种字段名
   const pathList = learningPath.path_list || learningPath.learning_path || [];
   
   if (!pathList || pathList.length === 0) {

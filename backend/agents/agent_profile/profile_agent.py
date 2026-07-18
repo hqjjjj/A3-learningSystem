@@ -38,7 +38,7 @@ class StudentProfile(BaseModel):
     created_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
     updated_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
     
-    # ✅ 新增：用于防抖检查的字段
+    # 用于防抖检查的字段
     last_message: Optional[str] = None
     last_behavior: Optional[dict] = None
 
@@ -81,10 +81,9 @@ class ProfileAgent:
     """学习画像构建智能体"""
 
     def __init__(self, api_password: str = None):
-        # 🔥 根据官方文档修正配置
-        self.api_password = api_password or "RsgGrlvXfBMNuLCrewHn:LocQjXtrcchLshPHORMf"  # 你的APIPassword
+        self.api_password = api_password or "RsgGrlvXfBMNuLCrewHn:LocQjXtrcchLshPHORMf"  # APIPassword
         self.base_url = "https://spark-api-open.xf-yun.com/agent/v1/chat/completions"
-        self.model = "spark-x"  # 🔥 关键修正：X2-flash版本对应的model必须填 "spark-x"
+        self.model = "spark-x" 
         
         self.profiles: Dict[str, StudentProfile] = {}
         
@@ -118,12 +117,12 @@ class ProfileAgent:
                 resp = requests.post(self.base_url, headers=headers, json=payload, timeout=60)
                 result = resp.json()
 
-                # 🔥 根据文档，code为0表示成功
+                #  根据文档，code为0表示成功
                 if result.get("code") == 0 and "choices" in result and len(result["choices"]) > 0:
                     msg = result["choices"][0].get("message", {})
                     content = msg.get("content", "").strip()
                     
-                    # 🔥 兼容深度思考模型：如果content为空，尝试从reasoning_content中提取
+                    #  兼容深度思考模型：如果content为空，尝试从reasoning_content中提取
                     if not content:
                         reasoning = msg.get("reasoning_content", "")
                         start = reasoning.rfind('{')
@@ -230,7 +229,7 @@ class ProfileAgent:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
 
-                # ✅ 修复 resource_type 字段：确保它是字符串列表，扁平化并去重
+                # resource_type 字段：确保它是字符串列表，扁平化并去重
                 if "resource_type" in data and isinstance(data["resource_type"], list):
                     flat = []
                     for item in data["resource_type"]:
@@ -240,7 +239,7 @@ class ProfileAgent:
                             flat.append(item)
                     # 去重并保持顺序
                     data["resource_type"] = list(dict.fromkeys(flat))
-                    # 确保至少包含三种基础类型（可选，但推荐）
+                    # 确保至少包含三种基础类型
                     required = ["explanation", "mindmap", "exercise"]
                     for r in required:
                         if r not in data["resource_type"]:
@@ -254,7 +253,7 @@ class ProfileAgent:
                 return profile
             except Exception as e:
                 print(f"【画像Agent】⚠️ 读取用户 {user_id} 历史画像失败: {e}")
-                # 还可以尝试用更激进的修复方式（如删除 resource_type 字段），但上述修复已足够
+                
         return None
 
     def _ensure_basic_info(self, profile: StudentProfile):
@@ -389,7 +388,7 @@ class ProfileAgent:
             if extraction.get("learning_pace"):
                 profile.learning_pace = extraction["learning_pace"]
 
-            # ✅ 增强：根据行为自动补充 resource_type
+            # 根据行为自动补充 resource_type
             if behavior:
                 # 从行为中提取资源类型（若有）
                 if "resource_type" in behavior:
@@ -416,12 +415,12 @@ class ProfileAgent:
                     if rt not in profile.resource_type:
                         profile.resource_type.append(rt)
 
-            # ✅ 确保至少包含三种资源类型
+            #  确保至少包含三种资源类型
             min_types = ["explanation", "mindmap", "exercise"]
             for required in min_types:
                 if required not in profile.resource_type:
                     profile.resource_type.append(required)
-            # 可选：限制最多5种，避免过多
+            # 限制最多5种，避免过多
             if len(profile.resource_type) > 5:
                 profile.resource_type = profile.resource_type[:5]
 
