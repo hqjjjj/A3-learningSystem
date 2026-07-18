@@ -184,8 +184,45 @@ const handlePathNodeClick = useCallback(async (newTopic) => {
   return (
     <div className="main-page">
       {/* 左侧栏：可折叠 */}
-      <aside className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
-        <div className="sidebar-toggle" onClick={toggleSidebar}>
+      <aside 
+      className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}
+     
+      >
+        <div 
+          className="sidebar-toggle" 
+          onClick={toggleSidebar}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            right: isSidebarCollapsed ? '-8px' : '-6px',
+            width: '32px',
+            height: '32px',
+            background: '#ffffff',
+            border: '1px solid #e2e8f0',
+            borderRadius: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            fontSize: '12px',
+            color: '#64748b',
+            zIndex: 10,
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.35)';
+            e.target.style.borderColor = '#3b82f6';
+            e.target.style.background = '#3b82f6';
+            e.target.style.color = '#ffffff';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            e.target.style.borderColor = '#e2e8f0';
+            e.target.style.background = '#ffffff';
+            e.target.style.color = '#64748b';
+          }}
+        >
           {isSidebarCollapsed ? '▶' : '◀'}
         </div>
         {!isSidebarCollapsed && (
@@ -229,12 +266,14 @@ const handlePathNodeClick = useCallback(async (newTopic) => {
                 <button
                   className={activePathTab === 'learningPath' ? 'active' : ''}
                   onClick={() => setActivePathTab('learningPath')}
+                  style={{flex:1}}
                 >
                   学习路径
                 </button>
                 <button
                   className={activePathTab === 'knowledgeGraph' ? 'active' : ''}
                   onClick={() => setActivePathTab('knowledgeGraph')}
+                  style={{flex:1}}
                 >
                   知识图谱
                 </button>

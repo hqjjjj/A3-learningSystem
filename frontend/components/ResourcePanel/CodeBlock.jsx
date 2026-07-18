@@ -9,9 +9,8 @@ const CodeBlock = ({ code, language = 'javascript' }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // ========== 改动6：添加语法高亮功能 ==========
-  // 目的：代码示例显示更专业，关键词有颜色区分
-  // ==============================================
+  // 添加语法高亮功能 
+  
   const highlightCode = (code, lang) => {
     let highlighted = code;
     
@@ -77,7 +76,7 @@ const CodeBlock = ({ code, language = 'javascript' }) => {
           }}
           onClick={handleCopy}
         >
-          {copied ? '✅ 已复制' : '📋 复制'}
+          {copied ? ' 已复制' : ' 复制'}
         </button>
       </div>
       <pre style={{

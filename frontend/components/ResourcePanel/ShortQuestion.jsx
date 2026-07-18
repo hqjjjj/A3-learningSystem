@@ -68,7 +68,7 @@ const ShortQuestion = ({ question, onSubmit, resetTrigger }) => {
           borderRadius: '8px',
           borderLeft: '4px solid #22c55e'
         }}>
-          <strong style={{ fontSize: '13px', color: '#166534' }}>📖 参考答案：</strong>
+          <strong style={{ fontSize: '13px', color: '#166534' }}> 参考答案：</strong>
           <p style={{ margin: '8px 0 0 0', fontSize: '13px', color: '#374151', lineHeight: 1.5 }}>
             {question.correctAnswer}
           </p >

@@ -1,33 +1,21 @@
 {
-<<<<<<< HEAD
   "learning_style": "auditory",
-  "weak_points": [],
-  "cognitive_level": {
-    "level": "intermediate",
-    "understanding_avg": 0.65
-=======
-  "learning_style": "textual",
   "weak_points": [
-    "进程的基本状态与转换"
+    "多处理机系统的引入与类型"
   ],
   "cognitive_level": {
     "level": "intermediate",
-    "understanding_avg": 0.6
->>>>>>> 我的生成
+    "understanding_avg": 0.45
   },
   "error_patterns": [],
   "preference": {
     "resource_type": [
-      "exercise",
       "explanation",
-<<<<<<< HEAD
       "mindmap",
+      "exercise",
       "materials"
-=======
-      "mindmap"
->>>>>>> 我的生成
     ],
-    "difficulty": "medium"
+    "difficulty": "easy"
   },
   "learning_pace": "normal",
   "current_topic": {

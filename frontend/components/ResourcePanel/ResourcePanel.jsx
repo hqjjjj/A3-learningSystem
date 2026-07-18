@@ -16,9 +16,6 @@ const ResourcePanel = ({
   const [showProgress, setShowProgress] = useState(false);
   const [generatingType, setGeneratingType] = useState('explanation');
 
-  // ========== 改动8：统一处理 generatedResources 为数组 ==========
-  // 目的：generatedResources 可能是对象或数组，统一转为数组方便遍历
-  // ================================================================
   const getGeneratedList = () => {
     if (!generatedResources) return [];
     if (Array.isArray(generatedResources)) return generatedResources;
@@ -83,6 +80,7 @@ const ResourcePanel = ({
       }}>
         <button
           style={{
+            flex: 1,
             padding: '12px 0',
             background: 'none',
             border: 'none',
@@ -98,6 +96,7 @@ const ResourcePanel = ({
         </button>
         <button
           style={{
+            flex: 1,
             padding: '12px 0',
             background: 'none',
             border: 'none',
@@ -128,7 +127,7 @@ const ResourcePanel = ({
                 padding: '60px 20px',
                 color: '#9ca3af'
               }}>
-                <div style={{ fontSize: '48px', marginBottom: '12px' }}>⏳</div>
+            
                 <p style={{ margin: 0, fontSize: '14px' }}>加载推荐资源中...</p >
               </div>
             ) : displayResources.length === 0 ? (
@@ -137,7 +136,7 @@ const ResourcePanel = ({
                 padding: '60px 20px',
                 color: '#9ca3af'
               }}>
-                <div style={{ fontSize: '48px', marginBottom: '12px' }}>✨</div>
+                
                 <p style={{ margin: 0, fontSize: '14px' }}>暂无推荐资源</p >
                 <p style={{ margin: '8px 0 0 0', fontSize: '12px' }}>
                   发送消息后，系统会为您推荐丰富的学习资源

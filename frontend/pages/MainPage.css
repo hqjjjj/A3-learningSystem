@@ -17,15 +17,15 @@
 /* ========= 左侧栏 ========= */
 .sidebar {
   background-color: #f8f9fc;
-  border: 1px solid #679add; /* 改动1：四边完整边框，替代单边右侧线 */
-  border-radius: 12px;        /* 改动2：新增圆角，去掉四角尖角 */
+  border: 1px solid #679add; 
+  border-radius: 12px;      
   display: flex;
   flex-direction: column;
   transition: width 0.2s ease;
   width: 427px;      
   position: relative;
-  overflow: hidden; /* 改动3：关闭上下+左右全部滚动，替代overflow-y:auto */
-  margin: 12px 0 12px 12px; /* 改动4：新增外边距，让圆角不贴页面边缘 */
+  overflow: hidden; 
+  margin: 12px 0 12px 12px; 
 }
 
 .sidebar.collapsed {
@@ -125,9 +125,9 @@ flex-shrink: 0;
   overflow: hidden;
   background-color: #f8f9fc;
   /* 新增方框样式 */
-  border: 1px solid #679add;    /* 四周边框，和左侧线条颜色一致 */
-  border-radius: 12px;          /* 圆角去尖角，和左侧统一 */
-  margin: 12px 12px 12px 0;     /* 外边距：右上左下留白，和左侧左右对称 */
+  border: 1px solid #679add;   
+  border-radius: 12px;       
+  margin: 12px 12px 12px 0;     
 }
 
 /* 主 TabBar */

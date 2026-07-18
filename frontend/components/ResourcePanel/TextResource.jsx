@@ -1,9 +1,9 @@
 import React from 'react';
 
 const TextResource = ({ content, title }) => {
-  // ========== 改动7：添加文本格式化功能 ==========
+  // 添加文本格式化功能
   // 目的：知识点讲解和扩展材料显示更清晰（标题、加粗、段落）
-  // =================================================
+ 
   const formatText = (text) => {
     if (!text) return '';
     

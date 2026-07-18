@@ -11,6 +11,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
   const [showResult, setShowResult] = useState(false);
   const [resultData, setResultData] = useState(null);
   const [resetTrigger, setResetTrigger] = useState(0);
+  const [iframeSrc, setIframeSrc] = useState('');
 
   if (!resource) return null;
 
@@ -22,6 +23,18 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       }
     };
   }, []);
+
+    useEffect(() => {
+      if (resource.type === 'html' && resource.subtype === 'animation' && resource.html_content) {
+        const blob = new Blob([resource.html_content], { type: 'text/html; charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        setIframeSrc(url);
+      
+        return () => {
+          URL.revokeObjectURL(url);
+        };
+      }
+    }, [resource.html_content]);
 
   const handleSubmitAnswer = async (correct_rate, duration) => {
     const result = await onSubmitAnswer(correct_rate, duration);
@@ -49,7 +62,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
         cursor: 'pointer'
       }}>
         <summary style={{ fontWeight: 500, fontSize: '13px' }}>
-          📚 知识来源（{resource.knowledge_base_quote.length}个引用）
+          知识来源（{resource.knowledge_base_quote.length}个引用）
         </summary>
         <ul style={{ margin: '8px 0 0 0', paddingLeft: '18px' }}>
           {resource.knowledge_base_quote.map((source, idx) => (
@@ -62,11 +75,9 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
     );
   };
 
-  // ========== 改动1：完善 renderContent 函数，识别全部六种资源类型 ==========
-  // 目的：根据 type 和 subtype 组合判断资源类型，使用对应的渲染组件
-  // =========================================================================
+
   const renderContent = () => {
-    // 1️⃣ 动画演示 (type: html, subtype: animation)
+    // 动画演示 (type: html, subtype: animation)
     if (resource.type === 'html' && resource.subtype === 'animation') {
       return (
         <div>
@@ -87,7 +98,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
               alignItems: 'center',
               gap: '8px'
             }}>
-              <span>🎬</span>
+              
               <span>{resource.title || '动画演示'}</span>
               <span style={{ 
                 fontSize: '11px', 
@@ -101,7 +112,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
               </span>
             </div>
             <iframe
-              srcDoc={resource.html_content}
+              src={iframeSrc}
               title={resource.title}
               style={{
                 width: '100%',
@@ -129,7 +140,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       );
     }
 
-    // 2️⃣ 思维导图 (type: markdown, subtype: mindmap)
+    // 思维导图 (type: markdown, subtype: mindmap)
     if (resource.type === 'markdown') {
       return (
         <div>
@@ -139,10 +150,8 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       );
     }
 
-    // 3️⃣ 代码示例 (type: code, subtype: code_example)
-    // 改动2：支持 code_lines 数组格式
-    // 目的：后端可能返回 code_lines 数组或 content 字符串，需要兼容
-    // =====================================================================
+    // 代码示例 (type: code, subtype: code_example)
+
     if (resource.type === 'code') {
       const codeContent = resource.code_lines 
         ? resource.code_lines.join('\n') 
@@ -155,7 +164,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       );
     }
 
-    // 4️⃣ 练习题 (type: choice, subtype: exercise)
+    //练习题 (type: choice, subtype: exercise)
     if (resource.type === 'choice') {
       return (
         <div>
@@ -175,7 +184,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       );
     }
 
-    // 5️⃣ 简答题 (type: short)
+    // 简答题 (type: short)
     if (resource.type === 'short') {
       return (
         <div>
@@ -194,7 +203,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       );
     }
 
-    // 6️⃣ 知识点讲解 和 扩展材料 (type: text)
+    // 知识点讲解 和 扩展材料 (type: text)
     // subtype: explanation 或 materials
     if (resource.type === 'text') {
       const content = resource.content || '';
@@ -215,21 +224,8 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
     );
   };
 
-  // ========== 改动3：添加类型图标和标签函数 ==========
-  // 目的：在标题栏显示资源类型标识，方便用户识别
-  // ==================================================
-  const getTypeIcon = () => {
-    if (resource.type === 'html' && resource.subtype === 'animation') return '🎬';
-    if (resource.type === 'markdown' && resource.subtype === 'mindmap') return '🧠';
-    if (resource.type === 'code') return '💻';
-    if (resource.type === 'choice') return '✏️';
-    if (resource.type === 'short') return '📋';
-    if (resource.type === 'text') {
-      if (resource.subtype === 'explanation') return '📖';
-      if (resource.subtype === 'materials') return '📚';
-    }
-    return '📄';
-  };
+
+
 
   const getTypeLabel = () => {
     if (resource.type === 'html' && resource.subtype === 'animation') return '动画演示';
@@ -261,7 +257,6 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
           alignItems: 'center',
           gap: '8px'
         }}>
-          <span style={{ fontSize: '18px' }}>{getTypeIcon()}</span>
           <span style={{ fontWeight: 600, fontSize: '14px' }}>{resource.title}</span>
           <span style={{ 
             fontSize: '11px', 
@@ -288,9 +283,8 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
       marginBottom: '16px',
       overflow: 'hidden'
     }}>
-      {/* ========== 改动4：标题栏显示类型标签 ========== */}
-      {/* 目的：用户一眼就能看出这是什么类型的资源 */}
-      {/* ============================================== */}
+   
+      
       <div style={{
         padding: '12px 16px',
         background: '#f9fafb',
@@ -300,7 +294,7 @@ const ResourceCard = ({ resource, onFinishResource, onSubmitAnswer, userId }) =>
         gap: '8px',
         flexWrap: 'wrap'
       }}>
-        <span style={{ fontSize: '18px' }}>{getTypeIcon()}</span>
+
         <span style={{ fontWeight: 600, fontSize: '14px' }}>{resource.title}</span>
         <span style={{ 
           fontSize: '11px', 

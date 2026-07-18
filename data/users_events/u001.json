@@ -398,5 +398,115 @@
     "correct_rate": null,
     "duration": 230,
     "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "exercise",
+    "time": "2026-07-18T06:16:43.287091",
+    "topic": null,
+    "resource_type": null,
+    "correct_rate": 0.0,
+    "duration": 7,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T06:17:35.955436",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 22,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T06:17:35.957958",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 22,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T06:17:35.957958",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 22,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T06:20:10.829591",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 153,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T06:21:21.834885",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 224,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T06:38:03.149641",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 946,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T08:02:20.868431",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 339,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T08:02:20.878940",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 339,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T08:02:20.879936",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 339,
+    "message": null
+  },
+  {
+    "user_id": "u001",
+    "event_type": "view_resource",
+    "time": "2026-07-18T08:02:20.880971",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "materials",
+    "correct_rate": null,
+    "duration": 339,
+    "message": null
   }
 ]
