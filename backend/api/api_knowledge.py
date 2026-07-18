@@ -4,10 +4,14 @@
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 from typing import Optional, Dict, List
+import json
+import os
 
 router = APIRouter()
 
 # ========== 请求/响应模型 ==========
+
+
 
 class KnowledgeMatchRequest(BaseModel):
     """纯知识点匹配请求"""
@@ -47,6 +51,58 @@ def get_kb_manager(request: Request):
     return request.app.state.kb_manager
 
 # ========== API 路由 ==========
+
+@router.get("/chapters")
+async def get_chapters():
+    """
+    获取知识图谱所有章节列表
+    从 data/knowledge/index.json 读取
+    """
+    try:
+        # 获取 knowledge 目录路径
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        knowledge_dir = os.path.join(current_dir, '..', '..', 'data', 'knowledge')
+        index_path = os.path.join(knowledge_dir, 'index.json')
+        
+        with open(index_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        return data
+    except FileNotFoundError:
+        return {
+            "error": "index.json not found",
+            "course": "操作系统",
+            "totalChapters": 0,
+            "chapters": []
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "course": "操作系统",
+            "totalChapters": 0,
+            "chapters": []
+        }
+
+
+@router.get("/chapter/{filename}")
+async def get_chapter(filename: str):
+    """
+    获取单个章节内容
+    从 data/knowledge/{filename} 读取
+    """
+    try:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        knowledge_dir = os.path.join(current_dir, '..', '..', 'data', 'knowledge')
+        file_path = os.path.join(knowledge_dir, filename)
+        
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        return data
+    except FileNotFoundError:
+        return {"error": f"文件 {filename} 不存在", "topics": []}
+    except Exception as e:
+        return {"error": str(e), "topics": []}
 
 @router.post("/match", response_model=KnowledgeMatchResponse)
 async def match_knowledge(request: Request, req: KnowledgeMatchRequest):

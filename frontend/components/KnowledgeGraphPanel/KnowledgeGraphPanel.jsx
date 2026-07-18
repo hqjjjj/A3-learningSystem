@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-// ========== 仅新增静态导入，其余头部不动 ==========
-import indexData from './knowledge/index.json';
-const allChapterFiles = import.meta.glob('./knowledge/*.json', { eager: true });
 
-// 【下方所有子组件、样式、渲染逻辑完全保留你原来代码，只改两处数据读取】
-// ========== 子组件部分原样不动（你原本的LeafNode、TextNode、AnswerContainer、QuestionNode、LazyContentNode、TopicNode全部保留） ==========
+// ========== 后端 API 基础 URL ==========
+const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:8080' : '';
+
+// ========== 所有子组件保持不变 ==========
 const LeafNode = ({ icon, label, onClick, customStyle }) => {
   return (
     <li className="tree-node leaf-node" style={{ paddingLeft: '28px' }}>
@@ -70,7 +69,7 @@ const QuestionNode = ({ question, index }) => {
       {expanded && (
         <div className="children" style={{ marginLeft: '28px' }}>
           {question?.options?.length > 0 && (
-            <LeafNode  label={`选项：${question.options.join(' ｜ ')}`} />
+            <LeafNode icon="" label={`选项：${question.options.join(' ｜ ')}`} />
           )}
           <AnswerContainer question={question} />
         </div>
@@ -211,7 +210,7 @@ const TopicNode = ({ topic }) => {
   );
 };
 
-// ========== 仅修改章节文件读取逻辑，其余交互样式不动 ==========
+// ========== ChapterNode ==========
 const ChapterNode = ({ chapter, chapterCache }) => {
   const [expanded, setExpanded] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -228,15 +227,19 @@ const ChapterNode = ({ chapter, chapterCache }) => {
       try {
         let data = chapterCache.current[chapter.id];
         if (!data) {
-          const fileName = chapter.file;
-          const matchKey = Object.keys(allChapterFiles).find(k => k.endsWith(fileName));
-          data = matchKey ? allChapterFiles[matchKey].default : {};
+          console.log(`📚 加载章节: ${chapter.file}`);
+          // ========== 使用完整 URL ==========
+          const response = await fetch(`${API_BASE_URL}/api/knowledge/chapter/${chapter.file}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          data = await response.json();
           chapterCache.current[chapter.id] = data;
         }
         setTopics(data.topics || []);
         setLoaded(true);
       } catch (err) {
-        console.error('章节加载失败:', err);
+        console.error(`❌ 章节加载失败 (${chapter.file}):`, err);
         setTopics([]);
         setLoaded(true);
       }
@@ -254,7 +257,7 @@ const ChapterNode = ({ chapter, chapterCache }) => {
       {expanded && loaded && (
         <div className="children" style={{ marginLeft: '28px' }}>
           {topics.length === 0 ? (
-            <LeafNode label="暂无知识点" />
+            <LeafNode icon="" label="暂无知识点" />
           ) : (
             topics.map((topic, idx) => <TopicNode key={idx} topic={topic} />)
           )}
@@ -264,16 +267,37 @@ const ChapterNode = ({ chapter, chapterCache }) => {
   );
 };
 
-// ========== 主组件：仅修改useEffect数据读取，其余布局样式完全不变 ==========
+// ========== KnowledgeGraphPanel 主组件 ==========
 const KnowledgeGraphPanel = () => {
   const [chapters, setChapters] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [rootExpanded, setRootExpanded] = useState(false);
   const chapterCache = useRef({});
 
+  // ========== 加载索引 - 使用完整 URL ==========
   useEffect(() => {
-    setChapters(indexData?.chapters || []);
-    setLoaded(true);
+    const loadIndex = async () => {
+      try {
+        console.log('📚 开始加载知识库索引...');
+        const response = await fetch(`${API_BASE_URL}/api/knowledge/chapters`);
+        
+        console.log('📡 响应状态:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('✅ 成功加载章节数据:', data.chapters?.length || 0, '章');
+        setChapters(data.chapters || []);
+        setLoaded(true);
+      } catch (error) {
+        console.error('❌ 加载知识库索引失败:', error);
+        setChapters([]);
+        setLoaded(true);
+      }
+    };
+    loadIndex();
   }, []);
 
   const handleRootClick = () => setRootExpanded(!rootExpanded);

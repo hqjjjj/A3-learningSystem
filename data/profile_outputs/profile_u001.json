@@ -21,12 +21,7 @@
     "explanation",
     "mindmap",
     "exercise",
-    "materials",
-    [
-      "exercise",
-      "explanation",
-      "materials"
-    ]
+    "materials"
   ],
   "difficulty": "easy",
   "progress": {
