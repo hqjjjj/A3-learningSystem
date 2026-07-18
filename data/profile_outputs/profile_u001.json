@@ -21,7 +21,8 @@
     "explanation",
     "mindmap",
     "exercise",
-    "materials"
+    "materials",
+    "code_example"
   ],
   "difficulty": "easy",
   "progress": {
@@ -30,17 +31,11 @@
   },
   "learning_goal": null,
   "created_at": "2026-07-18T00:54:44.365145",
-  "updated_at": "2026-07-18T08:02:28.936817",
-  "last_message": "浏览了资源 explanation，用时 339 秒，主题：多处理机系统的引入与类型",
+  "updated_at": "2026-07-18T15:44:27.981513",
+  "last_message": "浏览了资源 explanation，用时 12 秒，主题：多处理机系统的引入与类型",
   "last_behavior": {
     "topic": "多处理机系统的引入与类型",
-    "resource_type": [
-      "exercise",
-      "explanation",
-      "materials"
-    ],
-    "duration": 339,
-    "knowledge_level": {},
-    "learning_pace": "normal"
+    "resource_type": "explanation",
+    "duration": 12
   }
 }

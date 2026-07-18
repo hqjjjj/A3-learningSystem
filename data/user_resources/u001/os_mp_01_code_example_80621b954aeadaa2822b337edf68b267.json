@@ -1,0 +1,32 @@
+{
+  "type": "code",
+  "title": "多处理机系统类型分类演示",
+  "language": "python",
+  "code_lines": [
+    "class TightlyCoupledMPS:",
+    "    def __init__(self):",
+    "        self.connection = 'bus/crossbar'",
+    "        self.memory = 'shared'",
+    "    def communicate(self):",
+    "        return f'Communication via {self.connection}, shared memory access time: low'",
+    "",
+    "class LooselyCoupledMPS:",
+    "    def __init__(self):",
+    "        self.connection = 'channel/network'",
+    "        self.os = 'independent'",
+    "    def communicate(self):",
+    "        return f'Communication via {self.connection}, message passing latency: high'",
+    "",
+    "# 创建实例并测试",
+    "tcp = TightlyCoupledMPS()",
+    "lcp = LooselyCoupledMPS()",
+    "print('紧密耦合系统通信:', tcp.communicate())",
+    "print('松散耦合系统通信:', lcp.communicate())"
+  ],
+  "description": "通过类比展示紧密耦合与松散耦合多处理机系统的通信机制差异，帮助理解两种类型的主要区别。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《操作系统》多处理机系统的引入与类型",
+    "紧密耦合通过总线/交叉开关互连，共享内存，访问时间短；松散耦合通过通道/通信线路互连，各有独立内存和OS，消息传递时间长。"
+  ],
+  "subtype": "code_example"
+}

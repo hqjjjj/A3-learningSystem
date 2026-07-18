@@ -13,7 +13,8 @@
       "explanation",
       "mindmap",
       "exercise",
-      "materials"
+      "materials",
+      "code_example"
     ],
     "difficulty": "easy"
   },

@@ -7,10 +7,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 #  导入路由 
-from api_chat import router as chat_router
-from api_path import router as path_router
-from api_resource import router as resource_router
-from api_knowledge import router as knowledge_router
+from backend.api.api_chat import router as chat_router
+from backend.api.api_path import router as path_router
+from backend.api.api_resource import router as resource_router
+from backend.api.api_knowledge import router as knowledge_router
+from backend.api.api_user import router as user_router
 
 #  导入 KnowledgeBaseManager 
 knowledge_path = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'knowledge')
@@ -18,7 +19,7 @@ if knowledge_path not in sys.path:
     sys.path.insert(0, knowledge_path)
 
 from KnowledgeBaseManager import KnowledgeBaseManager
-from api_user import router as user_router
+from backend.api.api_user import router as user_router
 
 app = FastAPI()
 
@@ -54,11 +55,12 @@ app.include_router(knowledge_router, prefix="/api/knowledge", tags=["knowledge"]
 #  健康检查 
 @app.get("/api/health")
 async def health_check():
+    kb = app.state.kb_manager
     return {
         "status": "healthy",
-        "knowledge_topics": len(app.state.kb_manager.topics_index),
-        "vector_index_ready": app.state.kb_manager._vector_index_ready,
-        "embedding_model_loaded": app.state.kb_manager._embedding_model is not None,
+        "knowledge_topics": len(kb.topics_index) if kb else 0,
+        "vector_index_ready": getattr(kb, '_vector_index_ready', False),
+        "embedding_model_loaded": getattr(kb, '_embedding_model', None) is not None,
     }
 
 @app.get("/")

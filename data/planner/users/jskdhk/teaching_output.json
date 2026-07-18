@@ -1,0 +1,24 @@
+{
+  "learning_style": "auditory",
+  "weak_points": [],
+  "cognitive_level": {
+    "level": "intermediate",
+    "understanding_avg": 0.62
+  },
+  "error_patterns": [],
+  "preference": {
+    "resource_type": [
+      "explanation",
+      "mindmap",
+      "exercise",
+      "animation"
+    ],
+    "difficulty": "medium"
+  },
+  "learning_pace": "fast",
+  "current_topic": {
+    "id": "os_virt_01",
+    "name": "虚拟化的基本概念",
+    "is_review": true
+  }
+}

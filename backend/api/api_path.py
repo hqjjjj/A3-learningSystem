@@ -1,7 +1,7 @@
 #D:\软件杯\UserModelingAgent\backend\api\api_path.py
 from fastapi import APIRouter
 from pydantic import BaseModel
-from orchestrator.orchestrator import get_orchestrator
+from backend.orchestrator.orchestrator import get_orchestrator
 
 router = APIRouter()
 

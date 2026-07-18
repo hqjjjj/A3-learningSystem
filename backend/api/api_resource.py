@@ -2,7 +2,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from orchestrator.orchestrator import (
+from backend.orchestrator.orchestrator import (
     generate_single_resource,
     finish_view_resource,
     submit_answer_result

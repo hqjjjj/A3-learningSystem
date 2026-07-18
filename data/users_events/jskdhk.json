@@ -1,0 +1,102 @@
+[
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:05:27.157445",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 21,
+    "message": null
+  },
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:09:47.111186",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 67,
+    "message": null
+  },
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:11:15.200194",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:11:15.203993",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:11:15.204995",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 11,
+    "message": null
+  },
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:11:29.549641",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "animation",
+    "correct_rate": null,
+    "duration": 14,
+    "message": null
+  },
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:17:28.938180",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "exercise",
+    "correct_rate": null,
+    "duration": 26,
+    "message": null
+  },
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:17:28.939183",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "mindmap",
+    "correct_rate": null,
+    "duration": 26,
+    "message": null
+  },
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:17:28.940186",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "explanation",
+    "correct_rate": null,
+    "duration": 26,
+    "message": null
+  },
+  {
+    "user_id": "jskdhk",
+    "event_type": "view_resource",
+    "time": "2026-07-18T16:17:28.940186",
+    "topic": "多处理机系统的引入与类型",
+    "resource_type": "animation",
+    "correct_rate": null,
+    "duration": 26,
+    "message": null
+  }
+]

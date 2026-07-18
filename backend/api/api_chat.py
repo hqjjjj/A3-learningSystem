@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from orchestrator.orchestrator import handle_chat
+from backend.orchestrator.orchestrator import handle_chat
 
 router = APIRouter()
 
