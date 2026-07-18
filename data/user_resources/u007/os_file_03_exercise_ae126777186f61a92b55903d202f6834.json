@@ -1,0 +1,19 @@
+{
+  "type": "choice",
+  "title": "文件创建与打开操作辨析",
+  "question": "以下哪个系统调用用于创建新的空文件？",
+  "options": [
+    "open()",
+    "close()",
+    "creat()",
+    "lseek()"
+  ],
+  "answer": "creat()",
+  "analysis": "creat()系统调用专门用于创建新文件，而open()用于访问已存在的文件。两者的核心区别在于creat会触发文件创建流程，而open仅建立访问通道。",
+  "knowledge_base_quote": [
+    "源于教材知识库：《操作系统》文件操作",
+    "最基本的文件操作包括：创建文件、删除文件、读文件、写文件、设置文件的读/写位置",
+    "引入文件'打开'(open)和'关闭'(close)操作是为了避免多次重复检索目录"
+  ],
+  "subtype": "exercise"
+}
