@@ -19,13 +19,13 @@ const ResourceGenerationProgress = ({
   };
 
   const steps = [
-    { progress: 10, status: '📝 正在分析知识点...' },
-    { progress: 30, status: '🔍 正在检索知识库...' },
-    { progress: 50, status: '📋 正在生成内容结构...' },
-    { progress: 70, status: '✍️ 正在编写具体内容...' },
-    { progress: 85, status: '🎨 正在优化格式...' },
-    { progress: 95, status: '⏳ 即将完成...' },
-    { progress: 100, status: '✅ 生成完成！' }
+    { progress: 10, status: '正在分析知识点...' },
+    { progress: 30, status: '正在检索知识库...' },
+    { progress: 50, status: '正在生成内容结构...' },
+    { progress: 70, status: '正在编写具体内容...' },
+    { progress: 85, status: '正在优化格式...' },
+    { progress: 95, status: '即将完成...' },
+    { progress: 100, status: '生成完成！' }
   ];
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const ResourceGenerationProgress = ({
 
     let currentStep = 0;
     setProgress(0);
-    setStatus('🚀 开始生成...');
+    setStatus('开始生成...');
 
     const interval = setInterval(() => {
       currentStep++;
@@ -87,7 +87,7 @@ const ResourceGenerationProgress = ({
           gap: '12px',
           marginBottom: '20px'
         }}>
-          <span style={{ fontSize: '28px' }}>🚀</span>
+          
           <div>
             <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>
               正在生成{label}
@@ -135,7 +135,7 @@ const ResourceGenerationProgress = ({
           color: '#374151',
           textAlign: 'center'
         }}>
-          {progress < 100 ? '⏳ 请稍候...' : '✅ 资源已生成！'}
+          {progress < 100 ? '请稍候...' : '资源已生成！'}
         </div>
 
         {progress < 100 && (

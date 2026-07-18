@@ -5,10 +5,12 @@
   "grade": "大二",
   "course": "操作系统",
   "knowledge_level": {
-    "多处理机系统的引入与类型": 0.45
+    "多处理机系统的引入与类型": 0.45,
+    "多处理机操作系统的特征与类型": 0.45
   },
   "weak_points": [
-    "多处理机系统的引入与类型"
+    "多处理机系统的引入与类型",
+    "多处理机操作系统的特征与类型"
   ],
   "error_tags": [],
   "learning_style": "text",
@@ -25,18 +27,24 @@
     "materials",
     "code_example"
   ],
-  "difficulty": "easy",
+  "difficulty": "medium",
   "progress": {
-    "current_topic": "多处理机系统的引入与类型",
+    "current_topic": "多处理机操作系统的特征与类型",
     "completed_topics": []
   },
   "learning_goal": null,
   "created_at": "2026-07-18T00:54:44.365145",
-  "updated_at": "2026-07-18T15:44:27.981513",
-  "last_message": "浏览了资源 explanation，用时 12 秒，主题：多处理机系统的引入与类型",
+  "updated_at": "2026-07-18T20:58:45.889525",
+  "last_message": "浏览了资源 mindmap，用时 35 秒，主题：多处理机操作系统的特征与类型",
   "last_behavior": {
-    "topic": "多处理机系统的引入与类型",
-    "resource_type": "explanation",
-    "duration": 12
+    "topic": "多处理机操作系统的特征与类型",
+    "resource_type": [
+      "exercise",
+      "explanation",
+      "mindmap"
+    ],
+    "duration": 35,
+    "knowledge_level": {},
+    "learning_pace": "normal"
   }
 }

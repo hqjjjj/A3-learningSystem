@@ -13,10 +13,12 @@ const App = () => {
 
   // 登录时获取用户数据
   const handleLoginSuccess = async (userId) => {
-    setIsLoading(true);
+    setIsLoading(true); // 显示加载弹窗
+    
     try {
       // 1. 从后端加载用户状态
       const data = await api.loadUserState(userId);
+      
       // 2. 合并到 appState
       setAppState(prev => ({
         ...prev,
@@ -26,24 +28,26 @@ const App = () => {
         recommended_resources: data.recommended_resources || [],
         topic: data.topic || '',
         current_progress: data.current_progress || 0,
-        // chat_history 根据需要保留，后端不持久化则置空
         chat_history: [],
         generated_resource:{},
       }));
+      
+      // 3. 标记为已登录，跳转到 MainPage
+      // 同时关闭弹窗（因为 LoginPage 会被卸载）
       setIsLoggedIn(true);
+      setIsLoading(false); // 立即关闭弹窗
+      
     } catch (error) {
       console.error('加载用户状态失败:', error);
-      // 即使加载失败，也允许登录（显示空白状态）
-      setAppState(prev => ({ ...prev, user_id: userId }));
-      setIsLoggedIn(true);
-    } finally {
+      // 登录失败，关闭弹窗并显示错误
       setIsLoading(false);
+      alert('登录失败，请重试');
     }
   };
 
   // 未登录显示登录页
-  if (!isLoggedIn && !appState.user_id) {
-    return <LoginPage onLogin={handleLoginSuccess} loading={isLoading} />;
+  if (!isLoggedIn) {
+    return <LoginPage onLogin={handleLoginSuccess} isLoading={isLoading} />;
   }
 
   // 已登录显示主页
@@ -55,5 +59,9 @@ const App = () => {
     />
   );
 };
+
+
+
+
 
 export default App;

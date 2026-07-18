@@ -1,0 +1,25 @@
+{
+  "type": "code",
+  "title": "多处理机操作系统类型特征对比",
+  "language": "python",
+  "code_lines": [
+    "class MultiProcessorSystem:",
+    "    def __init__(self):",
+    "        self.systems = {",
+    "            'master_slave': {'features': ['单OS副本', '主故障导致崩溃'], 'reliability': '低'},",
+    "            'independent': {'features': ['独立OS副本', '自主性强'], 'load_balance': '差'},",
+    "            'floating': {'features': ['可移动OS', '高可用性'], 'complexity': '最高'}",
+    "        }",
+    "    def show_types(self):",
+    "        for name, info in self.systems.items():",
+    "            print(f\"\\n{name.upper()}模式:\")",
+    "            for key, value in info.items():",
+    "                print(f\"  {key}: {value}\")"
+  ],
+  "description": "通过类比展示三种多处理机系统的核心差异：主从式（可靠性低）、独立式（负载不均）、浮动式（复杂度高）",
+  "knowledge_base_quote": [
+    "源于教材知识库：《操作系统》多处理机操作系统的特征与类型",
+    "主从式由单一OS控制所有处理器，浮动监督式允许OS在任意处理器上运行"
+  ],
+  "subtype": "code_example"
+}
